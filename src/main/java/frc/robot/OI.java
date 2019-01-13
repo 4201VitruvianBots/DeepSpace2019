@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -39,4 +43,40 @@ public class OI {
   // Start the command when the button is released and let it run the command
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
+    Joystick leftJoystick = new Joystick(RobotMap.leftJoystick);
+    Joystick rightJoystick = new Joystick(RobotMap.rightJoystick);
+    Joystick xBoxController = new Joystick(RobotMap.xBoxController);
+    public Button[] leftButtons = new Button[7];
+    public Button[] rightButtons = new Button[7];
+    public Button[] xBoxButtons = new Button[10];
+
+    public OI() {
+        initializeButtons();
+    }
+
+    void initializeButtons() {
+        for(int i = 0; i < leftButtons.length; i++)
+            leftButtons[i] = new JoystickButton(leftJoystick, (i + 1));
+        for(int i = 0; i < rightButtons.length; i++)
+            rightButtons[i] = new JoystickButton(rightJoystick, (i + 1));
+        for(int i = 0; i < xBoxButtons.length; i++)
+            xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
+    }
+
+    public double getLeftJoystickX(){
+        return leftJoystick.getX();
+    }
+
+    public double getLeftJoystickY(){
+        return -leftJoystick.getY();
+    }
+
+    public double getRightJoystickX(){
+        return rightJoystick.getX();
+    }
+
+    public double getRightJoystickY(){
+        return -rightJoystick.getY();
+    }
+
 }

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -26,10 +27,10 @@ public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private TalonSRX[] driveMotors = {
-    FactoryTalonSRX.createDefaultTalon(RobotMap.leftFrontDriveMotor),
-    FactoryTalonSRX.createPermanentSlaveTalon(RobotMap.leftRearDriveMotor, RobotMap.leftFrontDriveMotor),
-    FactoryTalonSRX.createDefaultTalon(RobotMap.rightFrontDriveMotor),
-    FactoryTalonSRX.createPermanentSlaveTalon(RobotMap.rightRearDriveMotor, RobotMap.rightFrontDriveMotor)
+    new TalonSRX(RobotMap.leftFrontDriveMotor),
+      new TalonSRX(RobotMap.leftRearDriveMotor),
+      new TalonSRX(RobotMap.rightFrontDriveMotor),
+      new TalonSRX(RobotMap.rightRearDriveMotor),
   };
 
   DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
@@ -38,10 +39,19 @@ public class DriveTrain extends Subsystem {
   public DriveTrain(){
     super("DriveTrain");
 
+    for(TalonSRX motor:driveMotors)
+      motor.configFactoryDefault();
+
     driveMotors[0].setInverted(false);
     driveMotors[1].setInverted(false);
     driveMotors[2].setInverted(true);
     driveMotors[3].setInverted(true);
+
+    driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
+    driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
+    driveMotors[3].set(ControlMode.Follower, driveMotors[0].getDeviceID());
   }
 
   public int getLeftEncoderCount(){
@@ -64,8 +74,39 @@ public class DriveTrain extends Subsystem {
     setMotorPercentOutput(leftOutput, rightOutput);
   }
 
+  public void setMotorGains(double kP, double kI, double kD, double kF) {
+    for(TalonSRX motor:driveMotors) {
+      motor.config_kF(0, kF, 30);
+      motor.config_kP(0, kP, 30);
+      motor.config_kI(0, kI, 30);
+      motor.config_kD(0, kD, 30);
+    }
+  }
+
+  public void setArcadeDriveVelocity(double throttle, double turn) {
+    double leftPWM = throttle + turn;
+    double rightPWM = throttle - turn;
+
+    if(rightPWM > 1.0) {
+      leftPWM -= rightPWM - 1.0;
+      rightPWM = 1.0;
+    } else if(rightPWM < -1.0) {
+      leftPWM -= rightPWM + 1.0;
+      rightPWM = -1.0;
+    } else if(leftPWM > 1.0) {
+      rightPWM -= leftPWM - 1.0;
+      leftPWM = 1.0;
+    } else if(leftPWM < -1.0) {
+      rightPWM -= leftPWM + 1.0;
+      leftPWM = -1.0;
+    }
+
+    setMotorVelocityOutput(leftPWM, rightPWM);
+  }
+
   public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
-    double k_maxVelocity = 6;
+    double k_maxVelocity = 1.6035;
+
     double leftVelocity = leftOutput * k_maxVelocity;
     double rightVelocity = rightOutput * k_maxVelocity;
 

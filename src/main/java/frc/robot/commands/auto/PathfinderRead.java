@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import jaci.pathfinder.Pathfinder;
@@ -37,6 +38,10 @@ public class PathfinderRead extends Command {
   Waypoint[] points;
   boolean first = false;
   Notifier periodicRunnable;
+
+  double kP = 0.8;
+  double kD = 0.002;
+  double max_vel = 1.6035;
 
   public PathfinderRead(String filename) {
     // Use requires() here to declare subsystem dependencies
@@ -92,15 +97,15 @@ public class PathfinderRead extends Command {
 
     Shuffleboard.putString("Pathfinder", "PathFinder Status", "Enabling...");
 
-    left.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 1440, 0.1667); //0.1823	// 360 enc ticks per rev * 4x quad enc ?  0.1016
-    right.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 1440, 0.1667); //0.1823	// 0.1016 4 inches in meters - undershoot
+    left.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
+    right.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
 
     // The A value here != max_accel. A here is an acceleration gain (adjusting acceleration to go faster/slower), while max_accel is the max acceleration of the robot.
     // Leave A here alone until robot is reaching its target, then adjust to get it to go faster/slower (typically a small value like ~0.03 is used).
     // Usually, you wont have to adjust this though.
     //TODO:
-    //left.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
-    //right.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
+    left.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
+    right.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
 
     // Initialize the timer & Notifier
     stopwatch = new Timer();

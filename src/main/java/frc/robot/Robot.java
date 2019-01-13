@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -27,8 +27,9 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
 
   Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  Command m_teleopCommand;
+  SendableChooser<Command> m_teleopChooser = new SendableChooser<>();
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -36,9 +37,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
-    m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
+    //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    SmartDashboard.putData("Auto mode", m_autoChooser);
+
+    m_teleopChooser.setDefaultOption("Arcade Drive", new setArcadeDrive());
+    m_teleopChooser.setDefaultOption("Tank Drive", new setTankDrive());
+    m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new setArcadeDriveVelocity());
+    SmartDashboard.putData("TeleOpDrive", m_teleopChooser);
   }
 
   /**
@@ -81,7 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    m_autonomousCommand = m_autoChooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",

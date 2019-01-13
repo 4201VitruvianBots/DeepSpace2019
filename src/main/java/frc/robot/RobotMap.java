@@ -24,6 +24,10 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
+    public static int leftJoystick = 0;
+    public static int rightJoystick = 1;
+    public static int xBoxController = 2;
+
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
@@ -32,4 +36,9 @@ public class RobotMap {
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
     public static int rightRearDriveMotor = 23;
+
+
+    // Pathfinder
+    public static double wheel_diameter = 0.5104167;
+
 }
