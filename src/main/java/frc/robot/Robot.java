@@ -23,7 +23,7 @@ import frc.robot.subsystems.DriveTrain;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveTrain m_subsystem = new DriveTrain();
+  public static DriveTrain driveTrain = new DriveTrain();
   public static OI m_oi;
 
   Command m_autonomousCommand;
@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    driveTrain.updateSmartDashboard();
   }
 
   /**

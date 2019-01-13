@@ -9,9 +9,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.drivers.FactoryTalonSRX;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -25,6 +31,9 @@ public class DriveTrain extends Subsystem {
     FactoryTalonSRX.createDefaultTalon(RobotMap.rightFrontDriveMotor),
     FactoryTalonSRX.createPermanentSlaveTalon(RobotMap.rightRearDriveMotor, RobotMap.rightFrontDriveMotor)
   };
+
+  DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
+  public AHRS navX = new AHRS(SPI.Port.kMXP);
 
   public DriveTrain(){
     super("DriveTrain");
@@ -50,6 +59,11 @@ public class DriveTrain extends Subsystem {
     setMotorPercentOutput(leftOutput, rightOutput);
   }
 
+  public void setMotorTankDrive(double leftOutput, double rightOutput) {
+
+    setMotorPercentOutput(leftOutput, rightOutput);
+  }
+
   public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
     double k_maxVelocity = 6;
     double leftVelocity = leftOutput * k_maxVelocity;
@@ -65,9 +79,17 @@ public class DriveTrain extends Subsystem {
     driveMotors[2].set(ControlMode.Velocity, rightVelocity);
   }
 
-  private void setMotorPercentOutput(double leftOutput, double rightOutput) {
+  public void setMotorPercentOutput(double leftOutput, double rightOutput) {
     driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
     driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
+  }
+
+  public boolean getDriveShifterStatus() {
+    return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
+  }
+  public void updateSmartDashboard() {
+    SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+    SmartDashboard.putNumber("Angle", navX.getAngle());
   }
   @Override
   public void initDefaultCommand() {

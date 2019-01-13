@@ -101,17 +101,17 @@ public class VitruvianLogger {
             e.printStackTrace();
 
             counter = 1;
-            logPath = "/media/sda1/4201Robot/Logs/UnsortedLogs/"
+            logPath = "/media/sda1/4201Robot/Logs/UnsortedLogs/";
             while (folderPath.exists() && folderPath.isDirectory() && counter < 99) {
                 String newPath = logPath + "_" + String.format("%02d", counter++);
                 folderPath = new File(newPath);
             }
             try {
                 folderPath.mkdirs();
-            } catch(Exception e) {
+            } catch(Exception ex) {
                 System.out.println("VitruvianLogger Error: Could not default to backup folder. " +
                         "Logger will not start");
-                e.printStackTrace();
+                ex.printStackTrace();
                 startLogger = false;
             }
         }

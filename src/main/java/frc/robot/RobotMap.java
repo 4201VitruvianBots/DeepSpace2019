@@ -24,6 +24,10 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
+    public static int PCMOne = 11;
+        public static int driveTrainShifterForward = 0;
+        public static int driveTrainShifterReverse = 1;
+
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
