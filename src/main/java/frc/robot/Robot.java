@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -41,10 +42,13 @@ public class Robot extends TimedRobot {
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_autoChooser);
 
-    m_teleopChooser.setDefaultOption("Arcade Drive", new setArcadeDrive());
-    m_teleopChooser.setDefaultOption("Tank Drive", new setTankDrive());
-    m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new setArcadeDriveVelocity());
+    m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDrive());
+    m_teleopChooser.setDefaultOption("Tank Drive", new SetTankDrive());
+    m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
     SmartDashboard.putData("TeleOpDrive", m_teleopChooser);
+
+
+    CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**
@@ -87,6 +91,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    driveTrain.setDriveMotorsState(false);
     m_autonomousCommand = m_autoChooser.getSelected();
 
     /*
@@ -119,6 +124,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    driveTrain.setDriveMotorsState(true);
+
+    m_teleopCommand = m_teleopChooser.getSelected();
+    if(m_teleopCommand != null)
+      Robot.driveTrain.setDefaultCommand(m_teleopCommand);
   }
 
   /**

@@ -9,16 +9,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.vitruvianlib.drivers.FactoryTalonSRX;
-import frc.vitruvianlib.driverstation.Shuffleboard;
+import frc.robot.commands.SetArcadeDriveVelocity;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -36,6 +36,10 @@ public class DriveTrain extends Subsystem {
   DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
   public AHRS navX = new AHRS(SPI.Port.kMXP);
 
+
+  private double DriveAlpha = 0.125;
+  private static double m_lastL = 0, m_lastR = 0;
+
   public DriveTrain(){
     super("DriveTrain");
 
@@ -51,7 +55,7 @@ public class DriveTrain extends Subsystem {
     driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
-    driveMotors[3].set(ControlMode.Follower, driveMotors[0].getDeviceID());
+    driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
   }
 
   public int getLeftEncoderCount(){
@@ -60,6 +64,11 @@ public class DriveTrain extends Subsystem {
 
   public int getRightEncoderCount(){
     return driveMotors[2].getSelectedSensorPosition();
+  }
+
+  public void setDriveMotorsState(boolean state) {
+    for(TalonSRX driveMotor: driveMotors)
+      driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
   }
 
   public void setMotorArcadeDrive(double throttle, double turn) {
@@ -84,8 +93,8 @@ public class DriveTrain extends Subsystem {
   }
 
   public void setArcadeDriveVelocity(double throttle, double turn) {
-    double leftPWM = throttle + turn;
-    double rightPWM = throttle - turn;
+    double leftPWM = throttle - turn;
+    double rightPWM = throttle + turn;
 
     if(rightPWM > 1.0) {
       leftPWM -= rightPWM - 1.0;
@@ -101,11 +110,16 @@ public class DriveTrain extends Subsystem {
       leftPWM = -1.0;
     }
 
-    setMotorVelocityOutput(leftPWM, rightPWM);
+    double m_targetL = DriveAlpha*leftPWM+m_lastL*(1-DriveAlpha);
+    double m_targetR = DriveAlpha*rightPWM+m_lastR*(1-DriveAlpha);
+    m_lastL = m_targetL;
+    m_lastR = m_targetR;
+
+    setMotorVelocityOutput(m_targetL, m_targetR);
   }
 
   public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
-    double k_maxVelocity = 1.6035;
+      double k_maxVelocity = 18555;  // in encoder units/sec
 
     double leftVelocity = leftOutput * k_maxVelocity;
     double rightVelocity = rightOutput * k_maxVelocity;
@@ -131,10 +145,15 @@ public class DriveTrain extends Subsystem {
   public void updateSmartDashboard() {
     SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
     SmartDashboard.putNumber("Angle", navX.getAngle());
+
+    SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
+    SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
+    SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
+    SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
   }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new SetArcadeDriveVelocity());
   }
 }

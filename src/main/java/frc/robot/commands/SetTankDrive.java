@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class setTankDrive extends Command {
-  public setTankDrive() {
+public class SetTankDrive extends Command {
+  public SetTankDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.driveTrain);
   }

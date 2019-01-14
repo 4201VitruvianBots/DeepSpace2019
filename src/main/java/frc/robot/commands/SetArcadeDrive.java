@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class setArcadeDriveVelocity extends Command {
-  public setArcadeDriveVelocity() {
+public class SetArcadeDrive extends Command {
+  public SetArcadeDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.driveTrain);
   }
@@ -22,13 +22,15 @@ public class setArcadeDriveVelocity extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.driveTrain.setMotorGains(0.25, 0.001, 20, 1023.0/72000.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.driveTrain.setArcadeDriveVelocity(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickX());
+    double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
+    double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.125;
+
+    Robot.driveTrain.setMotorArcadeDrive(joystickY, joystickX);
   }
 
   // Make this return true when this Command no longer needs to run execute()

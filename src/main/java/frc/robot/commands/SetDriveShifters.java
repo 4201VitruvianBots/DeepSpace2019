@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class setArcadeDrive extends Command {
-  public setArcadeDrive() {
+public class SetDriveShifters extends Command {
+  public SetDriveShifters() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.driveTrain);
   }
@@ -27,7 +27,6 @@ public class setArcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.driveTrain.setMotorArcadeDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickX());
   }
 
   // Make this return true when this Command no longer needs to run execute()
