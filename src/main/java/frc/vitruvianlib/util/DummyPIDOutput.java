@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 public class DummyPIDOutput implements PIDOutput {
     double output;
 
-    public DummyPIDOutput()
-    {
+    public DummyPIDOutput() {
         output = 0;
     }
 

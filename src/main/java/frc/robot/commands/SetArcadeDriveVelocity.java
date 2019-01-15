@@ -14,45 +14,45 @@ import frc.robot.Robot;
  * An example command.  You can replace me with your own command.
  */
 public class SetArcadeDriveVelocity extends Command {
-  public SetArcadeDriveVelocity() {
-    // Use requires() here to declare subsystem dependencies
-    requires(Robot.driveTrain);
-  }
+    public SetArcadeDriveVelocity() {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.driveTrain);
+    }
 
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-    //Robot.driveTrain.setMotorGains(0.25, 0.001, 20, 1023.0/72000.0);
-    Robot.driveTrain.setMotorGains(0.25,0,10,1023.0/72000.0);
-  }
+    // Called just before this Command runs the first time
+    @Override
+    protected void initialize() {
+        //Robot.driveTrain.setMotorGains(0.25, 0.001, 20, 1023.0/72000.0);
+        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
+    }
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
-    double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-    double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.125;
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
+        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.125;
 
-    double throttle = (Math.abs(joystickY) > 0.0) ? joystickY : 0;
-    double turn = (Math.abs(joystickX) > 0.0) ? joystickX : 0;
+        double throttle = (Math.abs(joystickY) > 0.0) ? joystickY : 0;
+        double turn = (Math.abs(joystickX) > 0.0) ? joystickX : 0;
 
 
-    Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
-  }
+        Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+    }
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return false;
-  }
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
 
-  // Called once after isFinished returns true
-  @Override
-  protected void end() {
-  }
+    // Called once after isFinished returns true
+    @Override
+    protected void end() {
+    }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-  }
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    @Override
+    protected void interrupted() {
+    }
 }

@@ -21,28 +21,28 @@ public class VitruvianLogger {
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-    private VitruvianLogger(){
+    private VitruvianLogger() {
 
     }
 
     public static VitruvianLogger getInstance() {
-        if(logger == null)
+        if (logger == null)
             logger = new VitruvianLogger();
         return logger;
     }
 
-    public void addLog(VitruvianLog log){
+    public void addLog(VitruvianLog log) {
         logList.add(log);
     }
 
-    public void removeLog(VitruvianLog log){
+    public void removeLog(VitruvianLog log) {
         // TODO: Check implementation
         logList.remove(log);
     }
 
     public void startLogger() {
         // Stop logging if its already running to avoid issues and to write logs to new directory
-        if(isRunning && !isMatch)
+        if (isRunning && !isMatch)
             stopLogger();
 
         // Determine where to save logs
@@ -51,12 +51,12 @@ public class VitruvianLogger {
         m_logStartTime = Timer.getFPGATimestamp();
         logPath = basePath;
 
-        if(matchType == DriverStation.MatchType.None) {
-            if(DriverStation.getInstance().isDisabled()){
+        if (matchType == DriverStation.MatchType.None) {
+            if (DriverStation.getInstance().isDisabled()) {
                 logPath += "Disabled/";
-            } else if(DriverStation.getInstance().isAutonomous()) {
+            } else if (DriverStation.getInstance().isAutonomous()) {
                 logPath += "Auto/";
-            } else if(DriverStation.getInstance().isOperatorControl()) {
+            } else if (DriverStation.getInstance().isOperatorControl()) {
                 logPath += "TeleOp/";
             } else {
                 logPath += "UnsortedLog/";
@@ -70,7 +70,7 @@ public class VitruvianLogger {
             logPath += eventString + "/";
             String matchNo = String.format("%02d", DriverStation.getInstance().getMatchNumber());
 
-            if(matchType == DriverStation.MatchType.Practice)
+            if (matchType == DriverStation.MatchType.Practice)
                 logPath += "Practice/" + matchNo + "/";
             else if (matchType == DriverStation.MatchType.Qualification)
                 logPath += "Qualification/" + matchNo + "/";
@@ -87,7 +87,7 @@ public class VitruvianLogger {
             String newPath = logPath + "_" + String.format("%02d", counter++);
             folderPath = new File(newPath);
         }
-        if(counter == 99)
+        if (counter == 99)
             System.out.println("VitruvianLogger Error: Counter has reached 99. " +
                     "Will start overwriting logs");
 
@@ -95,7 +95,7 @@ public class VitruvianLogger {
         boolean startLogger = true;
         try {
             folderPath.mkdirs();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("VitruvianLogger Error: Could not make log dirs. " +
                     "Defaulting to known path");
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class VitruvianLogger {
             }
             try {
                 folderPath.mkdirs();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("VitruvianLogger Error: Could not default to backup folder. " +
                         "Logger will not start");
                 ex.printStackTrace();
@@ -117,15 +117,15 @@ public class VitruvianLogger {
         }
 
         // Start all loggers
-        if(startLogger)
-            for(VitruvianLog log:logList)
+        if (startLogger)
+            for (VitruvianLog log : logList)
                 log.startLogging(logPath);
 
         isRunning = true;
     }
 
     public void stopLogger() {
-        for(VitruvianLog log:logList)
+        for (VitruvianLog log : logList)
             log.stopLogging();
 
         isRunning = false;

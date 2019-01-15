@@ -13,12 +13,12 @@ public class VitruvianLog implements Runnable {
     private String logName;
     private List<VitruvianLogField> logFields = new ArrayList<>();
     private double logPeriod;
-    Notifier notifier =  new Notifier(this);
+    Notifier notifier = new Notifier(this);
 
     File logFile;
     private FileWriter writeToLog;
 
-    public VitruvianLog(String logName, double logPeriod){
+    public VitruvianLog(String logName, double logPeriod) {
         this.logName = logName;
         this.logPeriod = logPeriod;
 
@@ -35,10 +35,10 @@ public class VitruvianLog implements Runnable {
     }
 
     public String getTimestamp() {
-        return String.format("%.2f",Timer.getFPGATimestamp() - VitruvianLogger.m_logStartTime);
+        return String.format("%.2f", Timer.getFPGATimestamp() - VitruvianLogger.m_logStartTime);
     }
 
-    public void startLogging(String logPath){
+    public void startLogging(String logPath) {
         try {
             // Initialize file writer
             logFile = new File(logPath + logName + ".csv");
@@ -46,7 +46,7 @@ public class VitruvianLog implements Runnable {
 
             // Write a header to define column names
             StringBuilder header = new StringBuilder();
-            for(VitruvianLogField value : logFields) {
+            for (VitruvianLogField value : logFields) {
                 header.append(value.name + ", ");
             }
             // Remove the last comma and space
@@ -55,14 +55,14 @@ public class VitruvianLog implements Runnable {
             writeToLog.append(header + "\n");
 
             notifier.startPeriodic(logPeriod);
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("VitruvianLog Error: " + logName + " Couldn't write to file");
             e.printStackTrace();
             stopLogging();
         }
     }
 
-    public void stopLogging(){
+    public void stopLogging() {
         notifier.stop();
         try {
             writeToLog.close();
@@ -85,7 +85,7 @@ public class VitruvianLog implements Runnable {
             resultsToWrite.delete(resultsToWrite.length() - 2, resultsToWrite.length());
 
             writeToLog.append(resultsToWrite + "\n");
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("VitruvianLog Error: " + logName + " Couldn't write to file");
             e.printStackTrace();
             stopLogging();

@@ -5,12 +5,12 @@ public class VitruvianLogField {
     public String name;
     public FunctionCall functionHandle;
 
-    public VitruvianLogField(String name, FunctionCall functionHandle){
+    public VitruvianLogField(String name, FunctionCall functionHandle) {
         this.name = name;
         this.functionHandle = functionHandle;
     }
 
-    public interface FunctionCall{
+    public interface FunctionCall {
         Object get();
     }
 }

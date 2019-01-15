@@ -24,136 +24,168 @@ import frc.robot.commands.SetArcadeDriveVelocity;
  * An example subsystem.  You can replace me with your own Subsystem.
  */
 public class DriveTrain extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  private TalonSRX[] driveMotors = {
-    new TalonSRX(RobotMap.leftFrontDriveMotor),
-      new TalonSRX(RobotMap.leftRearDriveMotor),
-      new TalonSRX(RobotMap.rightFrontDriveMotor),
-      new TalonSRX(RobotMap.rightRearDriveMotor),
-  };
+    // Put methods for controlling this subsystem
+    // here. Call these from Commands.
+    private TalonSRX[] driveMotors = {
+            new TalonSRX(RobotMap.leftFrontDriveMotor),
+            new TalonSRX(RobotMap.leftRearDriveMotor),
+            new TalonSRX(RobotMap.rightFrontDriveMotor),
+            new TalonSRX(RobotMap.rightRearDriveMotor),
+    };
 
-  DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
-  public AHRS navX = new AHRS(SPI.Port.kMXP);
+    DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
+    public AHRS navX = new AHRS(SPI.Port.kMXP);
 
+    private double DriveAlpha = 0.125;
+    private static double m_lastL = 0, m_lastR = 0;
 
-  private double DriveAlpha = 0.125;
-  private static double m_lastL = 0, m_lastR = 0;
+    public DriveTrain() {
+        super("DriveTrain");
 
-  public DriveTrain(){
-    super("DriveTrain");
+        for (TalonSRX motor : driveMotors)
+            motor.configFactoryDefault();
 
-    for(TalonSRX motor:driveMotors)
-      motor.configFactoryDefault();
+        driveMotors[0].setInverted(false);
+        driveMotors[1].setInverted(false);
+        driveMotors[2].setInverted(true);
+        driveMotors[3].setInverted(true);
 
-    driveMotors[0].setInverted(false);
-    driveMotors[1].setInverted(false);
-    driveMotors[2].setInverted(true);
-    driveMotors[3].setInverted(true);
+        driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
-    driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
-    driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
-  }
-
-  public int getLeftEncoderCount(){
-    return driveMotors[0].getSelectedSensorPosition();
-  }
-
-  public int getRightEncoderCount(){
-    return driveMotors[2].getSelectedSensorPosition();
-  }
-
-  public void setDriveMotorsState(boolean state) {
-    for(TalonSRX driveMotor: driveMotors)
-      driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
-  }
-
-  public void setMotorArcadeDrive(double throttle, double turn) {
-    double leftOutput = throttle + turn;
-    double rightOutput = throttle - turn;
-
-    setMotorPercentOutput(leftOutput, rightOutput);
-  }
-
-  public void setMotorTankDrive(double leftOutput, double rightOutput) {
-
-    setMotorPercentOutput(leftOutput, rightOutput);
-  }
-
-  public void setMotorGains(double kP, double kI, double kD, double kF) {
-    for(TalonSRX motor:driveMotors) {
-      motor.config_kF(0, kF, 30);
-      motor.config_kP(0, kP, 30);
-      motor.config_kI(0, kI, 30);
-      motor.config_kD(0, kD, 30);
-    }
-  }
-
-  public void setArcadeDriveVelocity(double throttle, double turn) {
-    double leftPWM = throttle - turn;
-    double rightPWM = throttle + turn;
-
-    if(rightPWM > 1.0) {
-      leftPWM -= rightPWM - 1.0;
-      rightPWM = 1.0;
-    } else if(rightPWM < -1.0) {
-      leftPWM -= rightPWM + 1.0;
-      rightPWM = -1.0;
-    } else if(leftPWM > 1.0) {
-      rightPWM -= leftPWM - 1.0;
-      leftPWM = 1.0;
-    } else if(leftPWM < -1.0) {
-      rightPWM -= leftPWM + 1.0;
-      leftPWM = -1.0;
+        driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
+        driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
     }
 
-    double m_targetL = DriveAlpha*leftPWM+m_lastL*(1-DriveAlpha);
-    double m_targetR = DriveAlpha*rightPWM+m_lastR*(1-DriveAlpha);
-    m_lastL = m_targetL;
-    m_lastR = m_targetR;
+    public int getLeftEncoderCount() {
+        return driveMotors[0].getSelectedSensorPosition();
+    }
 
-    setMotorVelocityOutput(m_targetL, m_targetR);
-  }
+    public int getRightEncoderCount() {
+        return driveMotors[2].getSelectedSensorPosition();
+    }
 
-  public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
-      double k_maxVelocity = 18555;  // in encoder units/sec
+    // Using the pulse width measurement, check if the encoders are healthy
+    public boolean isLeftEncoderHealthy() {
+        return driveMotors[0].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    }
 
-    double leftVelocity = leftOutput * k_maxVelocity;
-    double rightVelocity = rightOutput * k_maxVelocity;
+    public boolean isRightEncoderHealthy() {
+        return driveMotors[2].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    }
 
-    if(Math.abs(leftVelocity) > k_maxVelocity)
-      leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
 
-    if(Math.abs(rightVelocity) > k_maxVelocity)
-        rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
+    public void setDriveMotorsState(boolean state) {
+        for (TalonSRX driveMotor : driveMotors)
+            driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
+    }
 
-    driveMotors[0].set(ControlMode.Velocity, leftVelocity);
-    driveMotors[2].set(ControlMode.Velocity, rightVelocity);
-  }
+    public void setMotorArcadeDrive(double throttle, double turn) {
+        double leftPWM = throttle - turn;
+        double rightPWM = throttle + turn;
 
-  public void setMotorPercentOutput(double leftOutput, double rightOutput) {
-    driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
-    driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
-  }
+        if (rightPWM > 1.0) {
+            leftPWM -= rightPWM - 1.0;
+            rightPWM = 1.0;
+        } else if (rightPWM < -1.0) {
+            leftPWM -= rightPWM + 1.0;
+            rightPWM = -1.0;
+        } else if (leftPWM > 1.0) {
+            rightPWM -= leftPWM - 1.0;
+            leftPWM = 1.0;
+        } else if (leftPWM < -1.0) {
+            rightPWM -= leftPWM + 1.0;
+            leftPWM = -1.0;
+        }
 
-  public boolean getDriveShifterStatus() {
-    return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
-  }
-  public void updateSmartDashboard() {
-    SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-    SmartDashboard.putNumber("Angle", navX.getAngle());
+        setMotorPercentOutput(leftPWM, rightPWM);
+    }
 
-    SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
-    SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
-    SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
-    SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
-  }
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    setDefaultCommand(new SetArcadeDriveVelocity());
-  }
+    public void setMotorTankDrive(double leftOutput, double rightOutput) {
+
+        setMotorPercentOutput(leftOutput, rightOutput);
+    }
+
+    public void setMotorGains(double kP, double kI, double kD, double kF) {
+        for (TalonSRX motor : driveMotors) {
+            motor.config_kF(0, kF, 30);
+            motor.config_kP(0, kP, 30);
+            motor.config_kI(0, kI, 30);
+            motor.config_kD(0, kD, 30);
+        }
+    }
+
+    public void setArcadeDriveVelocity(double throttle, double turn) {
+        double leftPWM = throttle - turn;
+        double rightPWM = throttle + turn;
+
+        if (rightPWM > 1.0) {
+            leftPWM -= rightPWM - 1.0;
+            rightPWM = 1.0;
+        } else if (rightPWM < -1.0) {
+            leftPWM -= rightPWM + 1.0;
+            rightPWM = -1.0;
+        } else if (leftPWM > 1.0) {
+            rightPWM -= leftPWM - 1.0;
+            leftPWM = 1.0;
+        } else if (leftPWM < -1.0) {
+            rightPWM -= leftPWM + 1.0;
+            leftPWM = -1.0;
+        }
+
+        double m_targetL = DriveAlpha * leftPWM + m_lastL * (1 - DriveAlpha);
+        double m_targetR = DriveAlpha * rightPWM + m_lastR * (1 - DriveAlpha);
+        m_lastL = m_targetL;
+        m_lastR = m_targetR;
+
+        setMotorVelocityOutput(m_targetL, m_targetR);
+    }
+
+    public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
+        double k_maxVelocity = 18555;  // in encoder units/sec
+
+        double leftVelocity = leftOutput * k_maxVelocity;
+        double rightVelocity = rightOutput * k_maxVelocity;
+
+        if (Math.abs(leftVelocity) > k_maxVelocity)
+            leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
+
+        if (Math.abs(rightVelocity) > k_maxVelocity)
+            rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
+
+        driveMotors[0].set(ControlMode.Velocity, leftVelocity);
+        driveMotors[2].set(ControlMode.Velocity, rightVelocity);
+    }
+
+    public void setMotorPercentOutput(double leftOutput, double rightOutput) {
+        driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
+        driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
+    }
+
+    public boolean getDriveShifterStatus() {
+        return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
+    }
+
+    public void setDriveShifterStatus(boolean state) {
+        if(state)
+            driveTrainShifters.set(DoubleSolenoid.Value.kForward);
+        else
+            driveTrainShifters.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+        SmartDashboard.putNumber("Angle", navX.getAngle());
+
+        SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
+        SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
+        SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
+        SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
+    }
+
+    @Override
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        setDefaultCommand(new SetArcadeDriveVelocity());
+    }
 }
