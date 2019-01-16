@@ -45,10 +45,10 @@ public class DriveTrain extends Subsystem {
         for (TalonSRX motor : driveMotors)
             motor.configFactoryDefault();
 
-        driveMotors[0].setInverted(false);
-        driveMotors[1].setInverted(false);
-        driveMotors[2].setInverted(true);
-        driveMotors[3].setInverted(true);
+        driveMotors[0].setInverted(true);
+        driveMotors[1].setInverted(true);
+        driveMotors[2].setInverted(false);
+        driveMotors[3].setInverted(false);
 
         driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -81,8 +81,8 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setMotorArcadeDrive(double throttle, double turn) {
-        double leftPWM = throttle - turn;
-        double rightPWM = throttle + turn;
+        double leftPWM = throttle + turn;
+        double rightPWM = throttle - turn;
 
         if (rightPWM > 1.0) {
             leftPWM -= rightPWM - 1.0;
@@ -116,8 +116,8 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setArcadeDriveVelocity(double throttle, double turn) {
-        double leftPWM = throttle - turn;
-        double rightPWM = throttle + turn;
+        double leftPWM = throttle + turn;
+        double rightPWM = throttle - turn;
 
         if (rightPWM > 1.0) {
             leftPWM -= rightPWM - 1.0;
