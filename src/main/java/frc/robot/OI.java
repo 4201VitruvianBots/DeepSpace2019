@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.ResetNavXAngle;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -62,7 +63,7 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
 
-
+        leftButtons[1].whenPressed(new ResetNavXAngle());
     }
 
     public double getLeftJoystickX() {
