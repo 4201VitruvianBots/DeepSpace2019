@@ -144,7 +144,7 @@ public class DriveTrain extends Subsystem {
 
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
         //TODO: Update values to match robot with full load.
-        double k_maxVelocity = (getDriveShifterStatus() ? 8789: 18555;  // in encoder units/sec
+        double k_maxVelocity = getDriveShifterStatus() ? 8789: 18555;  // in encoder units/sec
 
         double leftVelocity = leftOutput * k_maxVelocity;
         double rightVelocity = rightOutput * k_maxVelocity;

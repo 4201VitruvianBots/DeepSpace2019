@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -24,6 +25,7 @@ import frc.robot.subsystems.Vision;
  * project.
  */
 public class Robot extends TimedRobot {
+    public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Vision vision = new Vision();
     public static OI m_oi;
