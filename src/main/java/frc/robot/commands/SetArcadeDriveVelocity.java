@@ -30,7 +30,7 @@ public class SetArcadeDriveVelocity extends Command {
     @Override
     protected void execute() {
         double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.125;
+        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.5;
 
         double throttle = (Math.abs(joystickY) > 0.0) ? joystickY : 0;
         double turn = (Math.abs(joystickX) > 0.0) ? joystickX : 0;

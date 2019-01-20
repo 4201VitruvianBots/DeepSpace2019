@@ -162,3 +162,7 @@ bin/
 \.idea/
 
 \.vscode/
+
+PathWeaver/output/
+
+src/main/deploy/output/

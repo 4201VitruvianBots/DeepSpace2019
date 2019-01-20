@@ -57,11 +57,11 @@ public class PathfinderRead extends Command {
 
         try {
             // Try to read the .csv files
-            File leftFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Left.csv");
+            File leftFile = new File("/home/lvuser/deploy/output/" + filename + "left.pf1.csv");
             Trajectory lT = Pathfinder.readFromCSV(leftFile);
             leftTrajectory = lT;
 
-            File rightFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Right.csv");
+            File rightFile = new File("/home/lvuser/deploy/output/" + filename + "right.pf1.csv");
             Trajectory rT = Pathfinder.readFromCSV(rightFile);
             rightTrajectory = rT;
             Shuffleboard.putString("Pathfinder", "PathFinder Read", "Trajectory Read Success!");
