@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.drivers.FactoryTalonSRX;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -56,16 +57,40 @@ public class Vision extends Subsystem {
         return limelightTable.getEntry("tx").getDouble(0);
     }
 
+    public double getTargetY() {
+        return limelightTable.getEntry("ty").getDouble(0);
+    }
+
+    public double getTargetArea() {
+        return limelightTable.getEntry("ta").getDouble(0);
+    }
+
     public boolean isValidTarget() {
         return (limelightTable.getEntry("tv").getDouble(0) == 1) ? true : false;
     }
 
+    public boolean IsTargetGood() {
+        // TODO: Update with valid values
+        boolean isAlignedX = Math.abs(getTargetX()) < 1;
+        boolean isAlignedY = Math.abs(getTargetY()) < 5;
+        boolean isAreaValid = getTargetArea() > 0.85;
+
+        return isAlignedX && isAlignedY & isAreaValid;
+    }
+
     public void initUSBCamera() {
-        usbCamera = CameraServer.getInstance().startAutomaticCapture();
+        try {
+            usbCamera = CameraServer.getInstance().startAutomaticCapture();
+        } catch(Exception e) {
+
+        }
         //usbCamera.setc
     }
 
-
+    public void updateSmartDashboard() {
+        Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
+        Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
+    }
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.

@@ -31,6 +31,11 @@ public class RobotMap {
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
+        // TODO: Update when solenoid is fixed
+        public static int hatchIntakeForward = 6;
+        public static int hatchIntakeReverse = 7;
+     //  public static int driveTrainShifterReverse = 1;
+     //  public static int driveTrainShifterReverse = 1;
 
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
@@ -40,5 +45,7 @@ public class RobotMap {
 
     // Pathfinder
     public static double wheel_diameter = 0.5104167;
-
+    public static double wheelbase = 2.20833;
+    public static double max_vel_high = 0.5104167;
+    public static double max_vel_low = 0.5104167;
 }
