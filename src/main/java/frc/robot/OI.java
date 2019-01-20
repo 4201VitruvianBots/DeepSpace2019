@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.ResetNavXAngle;
+import frc.robot.commands.SetDriveShifters;
 import frc.robot.commands.TestControllerRumble;
+import frc.robot.commands.ToggleHarpoon;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -64,6 +66,8 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
 
+        rightButtons[0].whenPressed(new ToggleHarpoon());
+        leftButtons[0].whenPressed(new SetDriveShifters());
         leftButtons[1].whenPressed(new ResetNavXAngle());
         leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
         rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
