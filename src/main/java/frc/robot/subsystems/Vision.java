@@ -72,10 +72,10 @@ public class Vision extends Subsystem {
     public boolean IsTargetGood() {
         // TODO: Update with valid values
         boolean isAlignedX = Math.abs(getTargetX()) < 1;
-        boolean isAlignedY = Math.abs(getTargetY()) < 5;
-        boolean isAreaValid = getTargetArea() > 0.85;
+        //boolean isAlignedY = Math.abs(getTargetY()) < 5;
+        //boolean isAreaValid = getTargetArea() > 0.85;
 
-        return isAlignedX && isAlignedY & isAreaValid;
+        return isAlignedX; //&& isAlignedY & isAreaValid;
     }
 
     public void initUSBCamera() {

@@ -8,6 +8,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -57,14 +58,13 @@ public class PathfinderRead extends Command {
 
         try {
             // Try to read the .csv files
-            File leftFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Left.csv");
+            File leftFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".left.pf1.csv");
             Trajectory lT = Pathfinder.readFromCSV(leftFile);
             leftTrajectory = lT;
 
-            File rightFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Right.csv");
+            File rightFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".right.pf1.csv");
             Trajectory rT = Pathfinder.readFromCSV(rightFile);
             rightTrajectory = rT;
-            Shuffleboard.putString("Pathfinder", "PathFinder Read", "Trajectory Read Success!");
 
             this.setTimeout(lT.segments.length * 0.05 * 1.1);
         } catch (Exception e) {

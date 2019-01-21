@@ -10,10 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.ResetNavXAngle;
-import frc.robot.commands.SetDriveShifters;
-import frc.robot.commands.TestControllerRumble;
-import frc.robot.commands.ToggleHarpoon;
+import frc.robot.commands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -66,26 +63,45 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
 
+        //leftButtons[0].whileHeld(new HoldToAlignWithTarget());
+        leftButtons[0].whileHeld(new HoldToFollowTarget());
+
         rightButtons[0].whenPressed(new ToggleHarpoon());
-        leftButtons[0].whenPressed(new SetDriveShifters());
-        leftButtons[1].whenPressed(new ResetNavXAngle());
+        leftButtons[1].whenPressed(new SetDriveShifters());
+        //leftButtons[1].whenPressed(new ResetNavXAngle());
         leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
         rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
     }
 
     public double getLeftJoystickX() {
-        return leftJoystick.getX();
+        return Math.pow(leftJoystick.getX(), 1);
     }
 
     public double getLeftJoystickY() {
-        return -leftJoystick.getY();
+        return Math.pow(-leftJoystick.getY(), 1);
     }
 
     public double getRightJoystickX() {
-        return rightJoystick.getX();
+        return Math.pow(rightJoystick.getX(), 1);
     }
 
     public double getRightJoystickY() {
+        return Math.pow(-rightJoystick.getY(), 3);
+    }
+
+    public double getRawLeftJoystickX() {
+        return leftJoystick.getX();
+    }
+
+    public double getRawLeftJoystickY() {
+        return -leftJoystick.getY();
+    }
+
+    public double getRawRightJoystickX() {
+        return rightJoystick.getX();
+    }
+
+    public double getRawRightJoystickY() {
         return -rightJoystick.getY();
     }
 

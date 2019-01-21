@@ -32,8 +32,8 @@ public class RobotMap {
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
         // TODO: Update when solenoid is fixed
-        public static int hatchIntakeForward = 6;
-        public static int hatchIntakeReverse = 7;
+        public static int hatchIntakeForward = 4;
+        public static int hatchIntakeReverse = 5;
      //  public static int driveTrainShifterReverse = 1;
      //  public static int driveTrainShifterReverse = 1;
 
@@ -47,5 +47,5 @@ public class RobotMap {
     public static double wheel_diameter = 0.5104167;
     public static double wheelbase = 2.20833;
     public static double max_vel_high = 0.5104167;
-    public static double max_vel_low = 0.5104167;
+    public static double max_vel_low = 1.6;
 }

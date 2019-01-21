@@ -4,7 +4,7 @@
   "maxVelocity": 1.6035,
   "maxAcceleration": 6.56,
   "maxJerk": 197.0,
-  "wheelBase": 2.208333,
-  "gameName": "FIRST Power Up",
-  "outputDir": ""
+  "wheelBase": 2.20833,
+  "gameName": "Destination: Deep Space",
+  "outputDir": "../src/main/deploy"
 }

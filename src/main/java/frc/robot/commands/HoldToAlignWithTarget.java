@@ -7,13 +7,31 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.vitruvianlib.util.DummyPIDOutput;
+import frc.vitruvianlib.util.LimelightPIDTurn;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class HoldToAlignWithTarget extends InstantCommand {
+public class HoldToAlignWithTarget extends Command {
+    double kP = 0.04;   //0.1
+    double kI = 0;
+    double kD = 0;  //10
+    double kF = 0;  //1023.0 / 72000.0;
+    LimelightPIDTurn limelightX = new LimelightPIDTurn();
+    DummyPIDOutput turnOutput = new DummyPIDOutput();
+    //PIDController turnPID = new PIDController(kP, kI, kD, kF, Robot.driveTrain.navX, turnOutput);
+    PIDController turnPID = new PIDController(kP, kI, kD, kF, limelightX, turnOutput);
+    double lastLimelightAngle = 0;
+
+    Notifier periodicRunnable;
+    boolean isFinished = false;
+
     public HoldToAlignWithTarget() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
@@ -24,19 +42,29 @@ public class HoldToAlignWithTarget extends InstantCommand {
     @Override
     protected void initialize() {
         Robot.driveTrain.setDriveMotorsState(false);
+        turnPID.setOutputRange(-0.5, 0.5);
+        turnPID.setSetpoint(Robot.driveTrain.navX.getAngle() + Robot.vision.getTargetX());
+        turnPID.enable();
+        periodicRunnable = new Notifier(new PeriodicRunnable());
+        periodicRunnable.startPeriodic(0.02);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.vision.isValidTarget()) {
-
-        }
     }
 
+    @Override
+    protected boolean isFinished(){
+        return isFinished;
+    }
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        turnPID.disable();
+        periodicRunnable.stop();
+        Robot.driveTrain.leftAdjustment = 0;
+        Robot.driveTrain.rightAdjustment = 0;
         Robot.driveTrain.setDriveMotorsState(true);
     }
 
@@ -45,5 +73,41 @@ public class HoldToAlignWithTarget extends InstantCommand {
     @Override
     protected void interrupted() {
         end();
+    }
+
+    public class PeriodicRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            double throttle = Robot.m_oi.getLeftJoystickY();
+            double turn;
+
+            if (Robot.vision.isValidTarget()) {
+                /*
+
+                double limelightAngle = Robot.vision.getTargetX();
+                lastLimelightAngle = limelightAngle;
+                if(limelightAngle != lastLimelightAngle) {
+                    double currentNavXAngle = Robot.driveTrain.navX.getAngle();
+                    double setpoint = currentNavXAngle + lastLimelightAngle;
+                    turnPID.setSetpoint(setpoint);
+                }
+                */
+                turnPID.enable();
+                turnPID.setSetpoint(0);
+                turn = -turnOutput.getOutput();
+            } else {
+                turnPID.disable();
+                turn = Robot.m_oi.getRightJoystickX();
+            }
+
+            if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
+                Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+            else
+                Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+
+            if(Robot.vision.IsTargetGood())
+                isFinished = true;
+        }
     }
 }
