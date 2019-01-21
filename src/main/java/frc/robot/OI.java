@@ -64,7 +64,10 @@ public class OI {
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
 
         //leftButtons[0].whileHeld(new HoldToAlignWithTarget());
-        leftButtons[0].whileHeld(new HoldToFollowTarget());
+        leftButtons[0].whileHeld(new HoldToAlignWithTarget());
+        leftButtons[1].whileHeld(new TurnToAngle(-90));
+        leftButtons[2].whileHeld(new TurnToAngle(180));
+        leftButtons[3].whileHeld(new TurnToAngle(90));
 
         rightButtons[0].whenPressed(new ToggleHarpoon());
         leftButtons[1].whenPressed(new SetDriveShifters());
