@@ -162,3 +162,5 @@ bin/
 \.idea/
 
 \.vscode/
+
+src/main/deploy/output/

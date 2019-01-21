@@ -29,12 +29,12 @@ public class SetArcadeDriveVelocity extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.125;
+        double joystickY = Robot.m_oi.getLeftJoystickY();
+        double joystickX = Robot.m_oi.getRightJoystickX() * 0.125;
 
+        // Deadzone code, not really used ATM
         double throttle = (Math.abs(joystickY) > 0.0) ? joystickY : 0;
         double turn = (Math.abs(joystickX) > 0.0) ? joystickX : 0;
-
 
         Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
     }
@@ -49,6 +49,8 @@ public class SetArcadeDriveVelocity extends Command {
     @Override
     protected void end() {
         Robot.driveTrain.setMotorVelocityOutput(0, 0);
+        Robot.driveTrain.setMotorGains(0, 0, 0, 0);
+
     }
 
     // Called when another command which requires one or more of the same

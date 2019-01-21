@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.PathfinderReadTest;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Vision;
@@ -43,7 +44,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
-        // chooser.addOption("My Auto", new MyAutoCommand());
+        m_autoChooser.addOption("Pathfinder Test", new PathfinderReadTest("Calibration"));
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
         m_teleopChooser.addOption("Arcade Drive", new SetArcadeDrive());
@@ -53,6 +54,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
         vision.initUSBCamera();
+
+        // Default VP Pipeline
+        vision.setPipeline(1);
     }
 
     /**

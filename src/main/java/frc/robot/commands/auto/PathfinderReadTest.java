@@ -8,6 +8,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,6 +16,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -53,14 +55,16 @@ public class PathfinderReadTest extends Command {
     protected void initialize() {
         // Used to print status to dashboard for debugging
         Shuffleboard.putString("Pathfinder", "PathFinder Status", "Initializing...");
+        Shuffleboard.putString("Pathfinder", "Filepath", Filesystem.getDeployDirectory() + "/output/" + filename + ".left.pf1.csv");
 
         try {
             // Try to read the .csv files
-            File leftFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Left.csv");
+
+            File leftFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".left.pf1.csv");
             Trajectory lT = Pathfinder.readFromCSV(leftFile);
             leftTrajectory = lT;
 
-            File rightFile = new File("/media/sda1/4201Robot/Pathfinder/" + filename + "_Right.csv");
+            File rightFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".right.pf1.csv");
             Trajectory rT = Pathfinder.readFromCSV(rightFile);
             rightTrajectory = rT;
             Shuffleboard.putString("Pathfinder", "PathFinder Read", "Trajectory Read Success!");
@@ -78,29 +82,13 @@ public class PathfinderReadTest extends Command {
         } catch (Exception e) {
         }
 
-        // Configure encoder classes to follow the trajectories
-        left = new EncoderFollower(leftTrajectory);
-        right = new EncoderFollower(rightTrajectory);
-
-        Shuffleboard.putString("Pathfinder", "PathFinder Status", "Enabling...");
-
-        left.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
-        right.configureEncoder(Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
-
-        // The A value here != max_accel. A here is an acceleration gain (adjusting acceleration to go faster/slower), while max_accel is the max acceleration of the robot.
-        // Leave A here alone until robot is reaching its target, then adjust to get it to go faster/slower (typically a small value like ~0.03 is used).
-        // Usually, you wont have to adjust this though.
-        //TODO:
-        left.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
-        right.configurePIDVA(kP, 0, kD, 1 / max_vel, 0);
-
         // Initialize the timer & Notifier
-        stopwatch = new Timer();
-        periodicRunnable = new Notifier(new PeriodicRunnable());
+        //stopwatch = new Timer();
+        //periodicRunnable = new Notifier(new PeriodicRunnable());
 
         // Start the stopwatch and the notifier (notifier will be called every 0.05 second to ensure trajectory is read properly)
-        stopwatch.start();
-        periodicRunnable.startPeriodic(0.02);
+        //stopwatch.start();
+        //periodicRunnable.startPeriodic(0.02);
     }
 
     // Called repeatedly when this Command is scheduled to run

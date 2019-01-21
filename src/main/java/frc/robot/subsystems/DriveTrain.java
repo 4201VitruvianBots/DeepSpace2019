@@ -14,11 +14,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.SetArcadeDriveVelocity;
+
+import javax.naming.ldap.Control;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -27,10 +30,10 @@ public class DriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     private TalonSRX[] driveMotors = {
-            new TalonSRX(RobotMap.leftFrontDriveMotor),
-            new TalonSRX(RobotMap.leftRearDriveMotor),
-            new TalonSRX(RobotMap.rightFrontDriveMotor),
-            new TalonSRX(RobotMap.rightRearDriveMotor),
+        new TalonSRX(RobotMap.leftFrontDriveMotor),
+        new TalonSRX(RobotMap.leftRearDriveMotor),
+        new TalonSRX(RobotMap.rightFrontDriveMotor),
+        new TalonSRX(RobotMap.rightRearDriveMotor),
     };
 
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
@@ -38,6 +41,9 @@ public class DriveTrain extends Subsystem {
 
     private double DriveAlpha = 0.125;
     private static double m_lastL = 0, m_lastR = 0;
+    public static double leftAdjustment = 0, rightAdjustment = 0;
+
+    private Command defaultCommand;
 
     public DriveTrain() {
         super("DriveTrain");
@@ -65,6 +71,17 @@ public class DriveTrain extends Subsystem {
         return driveMotors[2].getSelectedSensorPosition();
     }
 
+    public double getLeftEncoderVelocity() {
+        return driveMotors[0].getSelectedSensorVelocity();
+    }
+
+    public double getRightEncoderVelocity() {
+        return driveMotors[2].getSelectedSensorVelocity();
+    }
+
+    public ControlMode getTalonControlMode() {
+        return driveMotors[0].getControlMode();
+    }
     // Using the pulse width measurement, check if the encoders are healthy
     public boolean isLeftEncoderHealthy() {
         return driveMotors[0].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
@@ -133,6 +150,7 @@ public class DriveTrain extends Subsystem {
             leftPWM = -1.0;
         }
 
+        // Ramp Rate
         double m_targetL = DriveAlpha * leftPWM + m_lastL * (1 - DriveAlpha);
         double m_targetR = DriveAlpha * rightPWM + m_lastR * (1 - DriveAlpha);
         m_lastL = m_targetL;
@@ -141,25 +159,29 @@ public class DriveTrain extends Subsystem {
         setMotorVelocityOutput(m_targetL, m_targetR);
     }
 
-
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
         //TODO: Update values to match robot with full load.
         double k_maxVelocity = getDriveShifterStatus() ? 8789: 18555;  // in encoder units/sec
 
+        // TODO: Normalize this
         double leftVelocity = leftOutput * k_maxVelocity;
         double rightVelocity = rightOutput * k_maxVelocity;
 
         if (Math.abs(leftVelocity) > k_maxVelocity)
-            leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
+            leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : leftVelocity;
 
         if (Math.abs(rightVelocity) > k_maxVelocity)
-            rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : k_maxVelocity;
+            rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : rightVelocity;
 
         driveMotors[0].set(ControlMode.Velocity, leftVelocity);
         driveMotors[2].set(ControlMode.Velocity, rightVelocity);
     }
 
     public void setMotorPercentOutput(double leftOutput, double rightOutput) {
+        // TODO: Normalize this
+        leftOutput = leftOutput + leftAdjustment;
+        rightOutput = rightOutput + rightAdjustment;
+
         driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
         driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
     }
@@ -169,7 +191,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveShifterStatus(boolean state) {
-        if(state)
+        if (state)
             driveTrainShifters.set(DoubleSolenoid.Value.kForward);
         else
             driveTrainShifters.set(DoubleSolenoid.Value.kReverse);
@@ -188,6 +210,7 @@ public class DriveTrain extends Subsystem {
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
+        //defaultCommand = new SetArcadeDriveVelocity();
         setDefaultCommand(new SetArcadeDriveVelocity());
     }
 }
