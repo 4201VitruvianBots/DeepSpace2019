@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.PathfinderReadTest;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,6 +24,7 @@ import frc.robot.subsystems.Vision;
  * project.
  */
 public class Robot extends TimedRobot {
+    public static Elevator elevator = new Elevator();
     public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Vision vision = new Vision();
