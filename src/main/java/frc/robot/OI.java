@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.IntakeControl;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -74,6 +75,9 @@ public class OI {
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
         rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
+
+        xBoxButtons[0].whileHeld(new IntakeControl(true));
+        xBoxButtons[1].whileHeld(new IntakeControl(false));
     }
 
     public double getLeftJoystickX() {
