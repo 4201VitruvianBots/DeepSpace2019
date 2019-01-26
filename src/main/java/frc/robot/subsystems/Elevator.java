@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.ElevatorClosedLoop;
+import frc.robot.commands.UpdateElevatorSetpoint;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -127,6 +127,6 @@ public class Elevator extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-        setDefaultCommand(new ElevatorClosedLoop());
+        setDefaultCommand(new UpdateElevatorSetpoint());
     }
 }

@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ElevatorClosedLoop extends InstantCommand {
-    public ElevatorClosedLoop() {
+public class UpdateElevatorSetpoint extends InstantCommand {
+    public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
     }
@@ -37,8 +37,13 @@ public class ElevatorClosedLoop extends InstantCommand {
                 Robot.elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
         }
 
-        Robot.elevator.zeroEncoder(Robot.elevator.getUpperLimitSensor(), Robot.elevator.getLowerLimitSensor());
-        Robot.elevator.setClosedLoop(Robot.elevator.elevatorSetPoint);
+    }
+
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 
     // Called once after isFinished returns true

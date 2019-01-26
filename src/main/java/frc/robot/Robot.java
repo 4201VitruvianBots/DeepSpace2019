@@ -150,6 +150,9 @@ public class Robot extends TimedRobot {
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
+
+        new UpdateElevatorSetpoint();
+        new ElevatorClosedLoopControl();
     }
 
     /**
