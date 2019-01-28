@@ -41,6 +41,7 @@ public class RobotMap {
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
     public static int rightRearDriveMotor = 23;
+    public static int wristMotor = 24;
 
 
     // Pathfinder
