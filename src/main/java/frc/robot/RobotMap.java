@@ -41,7 +41,10 @@ public class RobotMap {
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
     public static int rightRearDriveMotor = 23;
+    public static int wristMotor = 24;
 
+    public static int leftElevator = 30;
+    public static int rightElevator = 31;
 
     // Pathfinder
     public static double wheel_diameter = 0.5104167;

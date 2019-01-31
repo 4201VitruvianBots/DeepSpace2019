@@ -7,16 +7,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDrive extends Command {
-    public SetTankDrive() {
+public class ElevatorClosedLoopControl extends InstantCommand {
+    public ElevatorClosedLoopControl() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
@@ -27,8 +27,9 @@ public class SetTankDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.driveTrain.setMotorTankDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickY());
+        Robot.elevator.setClosedLoop(Robot.elevator.elevatorSetPoint);
     }
+
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
@@ -39,13 +40,12 @@ public class SetTankDrive extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorTankDrive(0, 0);
+
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }
