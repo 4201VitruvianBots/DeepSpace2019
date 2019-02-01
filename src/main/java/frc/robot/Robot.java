@@ -13,11 +13,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.auto.PathfinderReadTest;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.Wrist;
+import frc.robot.commands.auto.PathfinderRead;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,8 +24,10 @@ import frc.robot.subsystems.Wrist;
  * project.
  */
 public class Robot extends TimedRobot {
+    public static Elevator elevator = new Elevator();
     public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
+    public static Elevator elevator = new Elevator();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;
@@ -46,7 +45,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
-        m_autoChooser.addOption("Pathfinder Test", new PathfinderReadTest("Calibration"));
+        // chooser.addOption("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
         m_teleopChooser.addOption("Arcade Drive", new SetArcadeDrive());
@@ -153,6 +152,9 @@ public class Robot extends TimedRobot {
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
+
+        new UpdateElevatorSetpoint();
+        new ElevatorClosedLoopControl();
     }
 
     /**

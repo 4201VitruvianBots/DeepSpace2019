@@ -163,4 +163,6 @@ bin/
 
 \.vscode/
 
+PathWeaver/output/
+
 src/main/deploy/output/

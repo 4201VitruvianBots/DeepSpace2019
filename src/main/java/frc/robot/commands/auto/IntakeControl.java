@@ -5,73 +5,47 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class TurnToAngle extends PIDCommand {
-    static double kP = 0.04;   //0.1
-    static double kI = 0;
-    static double kD = 0;  //10
-    static double kF = 0;  //1023.0 / 72000.0;
-    static double period = 0.02;
-
-    double targetAngle;
-    double output;
-    public TurnToAngle(double targetAngle) {
-        super(kP, kI, kD, period);
-
+public class IntakeControl extends Command {
+    public int pickup;
+    public IntakeControl(boolean pickup) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
-        this.targetAngle = targetAngle;
+        // requires(Robot.m_subsystem);
+        requires(Robot.intake);
+        if(pickup == true)
+            this.pickup = 1;
+        else
+            this.pickup = -1;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveMotorsState(false);
-        getPIDController().setF(kF);
-        getPIDController().setContinuous(true);
-        getPIDController().setAbsoluteTolerance(1.5);
-        getPIDController().setOutputRange(-1, 1); // +/- 0.8
-
-        double currentAngle = Robot.driveTrain.navX.getAngle();
-        setSetpoint(currentAngle + targetAngle);
-        getPIDController().enable();
     }
-
-    @Override
-    protected double returnPIDInput() {
-        return Robot.driveTrain.navX.getAngle();
-    }
-
-    @Override
-    protected void usePIDOutput(double output) {
-        this.output = output;
-    }
-
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        Robot.intake.setIntakeOutput(1*pickup);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return getPIDController().onTarget();
+        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        getPIDController().disable();
-        Robot.driveTrain.setMotorTankDrive(0, 0);
-        Robot.driveTrain.setDriveMotorsState(true);
+        Robot.intake.setIntakeOutput(0);
     }
 
     // Called when another command which requires one or more of the same
@@ -80,6 +54,4 @@ public class TurnToAngle extends PIDCommand {
     protected void interrupted() {
         end();
     }
-
-
 }

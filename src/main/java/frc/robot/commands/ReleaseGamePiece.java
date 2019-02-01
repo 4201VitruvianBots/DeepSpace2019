@@ -8,15 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDrive extends Command {
-    public SetTankDrive() {
+public class ReleaseGamePiece extends Command {
+    public ReleaseGamePiece() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
@@ -27,10 +29,19 @@ public class SetTankDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.driveTrain.setMotorTankDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickY());
+        switch (Intake.intakeState) {
+            case 1:
+                break;
+            case 0:
+            default:
+                if (Robot.intake.getHarpoonStatus())
+                    Robot.intake.setHarpoonReverse();
+                else
+                    Robot.intake.setHarpoonForward();
+                break;
+        }
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
         return false;
@@ -39,12 +50,12 @@ public class SetTankDrive extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorTankDrive(0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

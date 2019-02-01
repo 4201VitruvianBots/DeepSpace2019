@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
@@ -21,9 +23,23 @@ import frc.robot.RobotMap;
 public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
+    public static int intakeState = 0;
     DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeForward, RobotMap.hatchIntakeReverse);
+
+    private TalonSRX[] intakeMotors = {
+        new TalonSRX(RobotMap.hatchIntakeForward),
+        new TalonSRX(RobotMap.hatchIntakeReverse)
+    };
+
     public Intake() {
         super("Intake");
+        for (int i = 0; i < intakeMotors.length; i++) {
+            intakeMotors[i].configFactoryDefault();
+        }
+    }
+
+    public void setIntakeOutput(double output){
+        intakeMotors[0].set(ControlMode.PercentOutput, output);
     }
 
     public boolean getHarpoonStatus(){

@@ -10,7 +10,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.IntakeControl;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -50,6 +53,8 @@ public class OI {
     public Button[] leftButtons = new Button[7];
     public Button[] rightButtons = new Button[7];
     public Button[] xBoxButtons = new Button[10];
+    public Button[] xBoxPOVButtons = new Button[4];
+    public Button xBoxLeftTrigger, xBoxRightTrigger;
 
     public OI() {
         initializeButtons();
@@ -62,18 +67,33 @@ public class OI {
             rightButtons[i] = new JoystickButton(rightJoystick, (i + 1));
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
+        for (int i = 0; i < xBoxPOVButtons.length; i++)
+            xBoxButtons[i] = new POVButton(xBoxController, ((i + 1) * 90));
+        xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
+        xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
 
-        //leftButtons[0].whileHeld(new HoldToAlignWithTarget());
-        leftButtons[0].whileHeld(new HoldToAlignWithTarget());
-        leftButtons[1].whileHeld(new TurnToAngle(-90));
-        leftButtons[2].whileHeld(new TurnToAngle(180));
-        leftButtons[3].whileHeld(new TurnToAngle(90));
+        leftButtons[0].whileHeld(new DeployIntake());
+        leftButtons[1].whileHeld(new HomeAllMechanisms());
+        leftButtons[2].whileHeld(new SetDriveShifters(true));
+        leftButtons[3].whileHeld(new SetDriveShifters(false));
 
-        rightButtons[0].whenPressed(new ToggleHarpoon());
-        leftButtons[1].whenPressed(new SetDriveShifters());
+        rightButtons[0].whenPressed(new ReleaseGamePiece());
+        rightButtons[1].whenPressed(new TurnToAngle(180));
+        rightButtons[2].whenPressed(new TurnToAngle(-90));
+        rightButtons[3].whenPressed(new TurnToAngle(90));
+
+        xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints());
+        // Select: Kill elevator PIDController (Check button assignment)
+        xBoxButtons[7].whenPressed(new KillAll());
+
+        //xBoxButtons[8].whenPressed(new SetIntakeState(0));
+        xBoxRightTrigger.whenPressed(new SetIntakeState(1));
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
         rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
+
+        xBoxButtons[0].whileHeld(new IntakeControl(true));
+        xBoxButtons[1].whileHeld(new IntakeControl(false));
     }
 
     public double getLeftJoystickX() {
@@ -106,6 +126,22 @@ public class OI {
 
     public double getRawRightJoystickY() {
         return -rightJoystick.getY();
+    }
+
+    public double getXBoxLeftX(){
+        return xBoxController.getRawAxis(2);
+    }
+
+    public double getXBoxLeftY(){
+        return xBoxController.getRawAxis(3);
+    }
+
+    public double getXBoxRightX(){
+        return xBoxController.getRawAxis(4);
+    }
+
+    public double getXBoxRightY(){
+        return xBoxController.getRawAxis(5);
     }
 
 }

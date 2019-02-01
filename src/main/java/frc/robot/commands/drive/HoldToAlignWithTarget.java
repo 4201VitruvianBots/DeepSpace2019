@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.PIDCommand;
@@ -29,7 +29,6 @@ public class HoldToAlignWithTarget extends PIDCommand {
         super(kP, kI, kD, period);
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
-        requires(Robot.vision);
     }
 
     // Called just before this Command runs the first time
@@ -40,6 +39,8 @@ public class HoldToAlignWithTarget extends PIDCommand {
         getPIDController().setContinuous(true);
         getPIDController().setAbsoluteTolerance(1.5);
         getPIDController().setOutputRange(-1, 1);
+
+        Robot.vision.setPipeline(1);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -88,6 +89,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.vision.setPipeline(0);
         getPIDController().disable();
         Robot.driveTrain.leftAdjustment = 0;
         Robot.driveTrain.rightAdjustment = 0;
