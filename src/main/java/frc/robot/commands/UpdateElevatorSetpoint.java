@@ -10,6 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 
 /**
  * An example command.  You can replace me with your own command.

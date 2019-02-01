@@ -13,8 +13,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.UpdateElevatorSetpoint;
+import frc.robot.util.Controls;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -57,6 +61,18 @@ public class Elevator extends Subsystem {
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         }
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+
+
+        VitruvianLog controlsLog = new VitruvianLog("Elevator", 0.5);
+        controlsLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
+        controlsLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
+        controlsLog.addLogField("elevatorTalonLeftCurrent", () -> getMotorCurrent(0));
+        controlsLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(1));
+        controlsLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
+        controlsLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
+        controlsLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
+        controlsLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
+        VitruvianLogger.getInstance().addLog(controlsLog);
     }
 
     public boolean getUpperLimitSensor(){
@@ -65,6 +81,18 @@ public class Elevator extends Subsystem {
 
     public boolean getLowerLimitSensor(){
         return limitSwitches[1].get();
+    }
+
+    public double getMotorCurrent(int motorIndex) {
+        return elevatorMotors[motorIndex].getOutputCurrent();
+    }
+
+    public double getMotorVoltage(int motorIndex) {
+        return elevatorMotors[motorIndex].getMotorOutputVoltage();
+    }
+
+    public double getMotorOutput(int motorIndex) {
+        return elevatorMotors[motorIndex].getMotorOutputPercent();
     }
 
     public void zeroEncoder() {

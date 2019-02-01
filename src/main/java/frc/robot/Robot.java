@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.auto.PathfinderRead;
+import frc.robot.commands.auto.*;
+import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
+import frc.robot.util.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,10 +26,10 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-    public static Elevator elevator = new Elevator();
-    public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
+    public static Intake intake = new Intake();
+    public static Controls controls = new Controls();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;

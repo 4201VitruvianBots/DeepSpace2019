@@ -28,6 +28,7 @@ public class RobotMap {
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
 
+    public static int pdp = 0;
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
@@ -52,6 +53,14 @@ public class RobotMap {
     public static int elevatorTop = 2;
     public static int intakeBottom = 3;
     public static int intakeTop = 4;
+
+    // PDP Channels
+    public static int pdpChannelDriveTrainLeftForward = 14;
+    public static int pdpChannelDriveTrainLeftReverse = 15;
+    public static int pdpChannelDriveTrainRightForward = 1;
+    public static int pdpChannelDriveTrainRightReverse = 0;
+    public static int pdpChannelElevatorLeft = 13;
+    public static int pdpChannelElevatorRight = 2;
 
     // Pathfinder
     public static double wheel_diameter = 0.5104167;
