@@ -46,6 +46,13 @@ public class RobotMap {
     public static int leftElevator = 30;
     public static int rightElevator = 31;
 
+    // DIOs
+    public static int intakeSensor = 0;
+    public static int elevatorBottom = 1;
+    public static int elevatorTop = 2;
+    public static int intakeBottom = 3;
+    public static int intakeTop = 4;
+
     // Pathfinder
     public static double wheel_diameter = 0.5104167;
     public static double wheelbase = 2.20833;
