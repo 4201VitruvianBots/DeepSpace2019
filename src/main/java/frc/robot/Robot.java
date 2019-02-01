@@ -17,6 +17,7 @@ import frc.robot.commands.auto.*;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -82,6 +83,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        VitruvianLogger.getInstance().startLogger();
     }
 
     @Override
@@ -116,6 +118,8 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.start();
         }
+
+        VitruvianLogger.getInstance().startLogger();
     }
 
     /**
@@ -140,6 +144,8 @@ public class Robot extends TimedRobot {
         m_teleopCommand = m_teleopChooser.getSelected();
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+
+        VitruvianLogger.getInstance().startLogger();
     }
 
     /**
