@@ -7,31 +7,32 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleHarpoon extends InstantCommand {
-    public ToggleHarpoon() {
+public class ExampleCommand extends Command {
+    public ExampleCommand() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+        // requires(Robot.m_subsystem);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if (Robot.intake.getHarpoonStatus())
-            Robot.intake.setHarpoonReverse();
-        else
-            Robot.intake.setHarpoonForward();
-
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 
     // Called once after isFinished returns true
@@ -43,6 +44,5 @@ public class ToggleHarpoon extends InstantCommand {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }

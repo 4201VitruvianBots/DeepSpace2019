@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -39,45 +40,71 @@ public class Elevator extends Subsystem {
     public int lowerLimitEncoderCounts = 0;
     private int encoderCountsPerInch = 0;
 
-    public double elevatorSetPoint = 0;
+    public static double elevatorSetPoint = 0;
+    public static int controlMode = 1;
 
+    DigitalInput[] limitSwitches = {
+        new DigitalInput(RobotMap.elevatorBottom),
+        new DigitalInput(RobotMap.elevatorTop)
+    };
 
     public Elevator() {
         super("Elevator");
 
-        for (TalonSRX motor : elevatorMotors)
+        for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
-
+            motor.setInverted(true);
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        }
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-        elevatorMotors[1].setInverted(true);
-        elevatorMotors[0].setInverted(false);
-
-        elevatorMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
     }
 
     public boolean getUpperLimitSensor(){
-        return false;
+        return limitSwitches[0].get();
     }
 
     public boolean getLowerLimitSensor(){
-        return false;
+        return limitSwitches[1].get();
     }
 
-    public void zeroEncoder(boolean upperSensor, boolean lowerSensor) {
-        if(upperSensor){
-            elevatorMotors[0].setSelectedSensorPosition(upperLimitEncoderCounts,0,0);
-        } else if(lowerSensor){
-            elevatorMotors[0].setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
+    public void zeroEncoder() {
+        if(getUpperLimitSensor()) {
+            for (TalonSRX motor : elevatorMotors)
+                motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+        } else if(getLowerLimitSensor()) {
+            for (TalonSRX motor : elevatorMotors)
+                motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
         }
     }
 
+    public boolean getLeftElevatorEncoderHealth() {
+        return elevatorMotors[0].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    }
+
+    public boolean getRightElevatorEncoderHealth() {
+        return elevatorMotors[1].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    }
+
     public double getPositionEncoderCounts() {
-        return elevatorMotors[0].getSelectedSensorPosition(0);
+        if(getLeftElevatorEncoderHealth() && getRightElevatorEncoderHealth())
+            return (elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition()) / 2;
+        else if(getLeftElevatorEncoderHealth())
+            return elevatorMotors[0].getSelectedSensorPosition();
+        else if(getLeftElevatorEncoderHealth())
+            return elevatorMotors[1].getSelectedSensorPosition();
+        else //TODO: Make this return an obviously bad value, e.g. 999999999
+            return 0;
     }
 
     public double getVelocityEncoderCounts(){
-        return elevatorMotors[0].getSelectedSensorVelocity(0);
+        if(getLeftElevatorEncoderHealth() && getRightElevatorEncoderHealth())
+            return (elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[1].getSelectedSensorVelocity()) / 2;
+        else if(getLeftElevatorEncoderHealth())
+            return elevatorMotors[0].getSelectedSensorVelocity();
+        else if(getLeftElevatorEncoderHealth())
+            return elevatorMotors[1].getSelectedSensorVelocity();
+        else //TODO: Make this return an obviously bad value, e.g. 999999999
+            return 0;
     }
 
     public double encoderCountsToInches(double encoderCounts){
@@ -121,7 +148,7 @@ public class Elevator extends Subsystem {
 
     public void updateSmartDashboard() {
         //Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
-        }
+    }
 
     @Override
     public void initDefaultCommand() {

@@ -5,43 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 import frc.vitruvianlib.util.DummyPIDOutput;
-import frc.vitruvianlib.util.LimelightPIDTurn;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class HoldToAlignWithTarget extends Command {
+public class HoldToAlignWithTargetNotifier extends Command {
     double kP = 0.04;   //0.1
     double kI = 0;
     double kD = 0;  //10
     double kF = 0;  //1023.0 / 72000.0;
-    LimelightPIDTurn limelightX = new LimelightPIDTurn();
     DummyPIDOutput turnOutput = new DummyPIDOutput();
-    //PIDController turnPID = new PIDController(kP, kI, kD, kF, Robot.driveTrain.navX, turnOutput);
-    PIDController turnPID = new PIDController(kP, kI, kD, kF, limelightX, turnOutput);
+    PIDController turnPID = new PIDController(kP, kI, kD, kF, Robot.driveTrain.navX, turnOutput);
     double lastLimelightAngle = 0;
 
     Notifier periodicRunnable;
     boolean isFinished = false;
 
-    public HoldToAlignWithTarget() {
+    public HoldToAlignWithTargetNotifier() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
-        requires(Robot.vision);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
         Robot.driveTrain.setDriveMotorsState(false);
+
         turnPID.setOutputRange(-0.5, 0.5);
         turnPID.setSetpoint(Robot.driveTrain.navX.getAngle() + Robot.vision.getTargetX());
         turnPID.enable();
@@ -74,6 +72,7 @@ public class HoldToAlignWithTarget extends Command {
     protected void interrupted() {
         end();
     }
+
 
     public class PeriodicRunnable implements Runnable {
 
