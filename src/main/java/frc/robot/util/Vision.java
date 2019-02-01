@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.util;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -21,14 +21,13 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
-public class Vision extends Subsystem {
+public class Vision {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     private NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     static UsbCamera usbCamera;
 
     public Vision() {
-        super("Vision");
     }
 
     public int getPipeline() {
@@ -90,10 +89,5 @@ public class Vision extends Subsystem {
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
         Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
-    }
-    @Override
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
     }
 }

@@ -13,19 +13,19 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleHarpoon extends InstantCommand {
-    public ToggleHarpoon() {
+public class ToggleDriveShifters extends InstantCommand {
+    public ToggleDriveShifters() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+        requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if (Robot.intake.getHarpoonStatus())
-            Robot.intake.setHarpoonReverse();
+        if (Robot.driveTrain.getDriveShifterStatus())
+            Robot.driveTrain.setDriveShifterStatus(false);
         else
-            Robot.intake.setHarpoonForward();
+            Robot.driveTrain.setDriveShifterStatus(true);
 
     }
 

@@ -12,11 +12,15 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
 import frc.robot.commands.auto.PathfinderReadTest;
+import frc.robot.commands.drive.SetArcadeDrive;
+import frc.robot.commands.drive.SetArcadeDriveVelocity;
+import frc.robot.commands.drive.SetTankDrive;
+import frc.robot.commands.drive.SetTankDriveVelocity;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Vision;
+import frc.robot.util.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +32,7 @@ import frc.robot.subsystems.Vision;
 public class Robot extends TimedRobot {
     public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
+    public static Elevator elevator = new Elevator();
     public static Vision vision = new Vision();
     public static OI m_oi;
 

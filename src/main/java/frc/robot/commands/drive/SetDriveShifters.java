@@ -15,19 +15,17 @@ import frc.robot.Robot;
  * An example command.  You can replace me with your own command.
  */
 public class SetDriveShifters extends InstantCommand {
-    public SetDriveShifters() {
+    boolean state;
+    public SetDriveShifters(boolean state) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if (Robot.driveTrain.getDriveShifterStatus())
-            Robot.driveTrain.setDriveShifterStatus(false);
-        else
-            Robot.driveTrain.setDriveShifterStatus(true);
-
+        Robot.driveTrain.setDriveShifterStatus(state);
     }
 
     // Called repeatedly when this Command is scheduled to run
