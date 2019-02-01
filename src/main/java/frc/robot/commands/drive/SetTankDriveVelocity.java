@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -44,6 +44,7 @@ public class SetTankDriveVelocity extends Command {
     @Override
     protected void end() {
         Robot.driveTrain.setMotorVelocityOutput(0, 0);
+        //Robot.driveTrain.setMotorGains(0, 0, 0, 0);
     }
 
     // Called when another command which requires one or more of the same

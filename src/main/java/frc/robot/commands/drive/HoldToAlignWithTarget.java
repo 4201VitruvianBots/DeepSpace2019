@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.PIDCommand;
@@ -29,7 +29,6 @@ public class HoldToAlignWithTarget extends PIDCommand {
         super(kP, kI, kD, period);
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
-        requires(Robot.vision);
     }
 
     // Called just before this Command runs the first time

@@ -8,32 +8,31 @@
 package frc.robot.commands.operate;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Intake;
+
+import java.time.Instant;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class KillAll extends Command {
-    public KillAll() {
-        //requires(Robot.elevator);
-        //requires(Robot.wrist);
+public class SetIntakeState extends InstantCommand {
+    int state;
+    public SetIntakeState(int state) {
+        requires(Robot.intake);
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Intake.intakeState = state;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 
     // Called once after isFinished returns true

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -23,7 +23,6 @@ public class HoldToFollowTarget extends Command {
     public HoldToFollowTarget() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
-        requires(Robot.vision);
     }
 
     // Called just before this Command runs the first time
