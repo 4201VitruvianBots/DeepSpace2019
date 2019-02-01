@@ -23,6 +23,7 @@ import frc.robot.RobotMap;
 public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
+    public static int intakeState = 0;
     DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeForward, RobotMap.hatchIntakeReverse);
 
     private TalonSRX[] intakeMotors = {

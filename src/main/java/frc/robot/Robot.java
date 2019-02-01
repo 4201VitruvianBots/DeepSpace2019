@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
     public static Elevator elevator = new Elevator();
     public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
+    public static Elevator elevator = new Elevator();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;

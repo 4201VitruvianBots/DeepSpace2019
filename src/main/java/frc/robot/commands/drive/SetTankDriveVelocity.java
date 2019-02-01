@@ -5,62 +5,51 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class HoldToFollowTarget extends Command {
-    double kP = 0.04; //Proportion for turning
-    double kPB = 1.4; //Proportion for moving
-    double ds = 0.5; //Default speed multiplier
-    double tta = 0.85; //Target TA val
-
-    public HoldToFollowTarget() {
+public class SetTankDriveVelocity extends Command {
+    public SetTankDriveVelocity() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
-        requires(Robot.vision);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveMotorsState(false);
+        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.vision.isValidTarget()) {
-            double correction = Robot.vision.getTargetX() * kP;
-            double paddingCorrection = ds*((tta - Robot.vision.getTargetX()) * kPB);
-            Robot.driveTrain.setMotorVelocityOutput(-paddingCorrection + correction, -paddingCorrection - correction);
-        }
+        double leftOutput = Robot.m_oi.getLeftJoystickY();
+        double rightOutput = Robot.m_oi.getRightJoystickY();
+
+        Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
     }
 
+    // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        if(Robot.driveTrain.getLeftEncoderVelocity() <= 0 && Robot.driveTrain.getLeftEncoderVelocity() <= 0){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return false;
     }
+
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setDriveMotorsState(true);
+        Robot.driveTrain.setMotorVelocityOutput(0, 0);
+        //Robot.driveTrain.setMotorGains(0, 0, 0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetArcadeDriveVelocity extends Command {
-    public SetArcadeDriveVelocity() {
+public class SetTankDrive extends Command {
+    public SetTankDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
     }
@@ -22,21 +22,12 @@ public class SetArcadeDriveVelocity extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //Robot.driveTrain.setMotorGains(0.25, 0.001, 20, 1023.0/72000.0);
-        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 0.5;
-
-        // Deadzone code, not really used ATM
-        double throttle = (Math.abs(joystickY) > 0.0) ? joystickY : 0;
-        double turn = (Math.abs(joystickX) > 0.0) ? joystickX : 0;
-
-        Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+        Robot.driveTrain.setMotorTankDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickY());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -48,14 +39,13 @@ public class SetArcadeDriveVelocity extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorVelocityOutput(0, 0);
-        Robot.driveTrain.setMotorGains(0, 0, 0, 0);
-
+        Robot.driveTrain.setMotorTankDrive(0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

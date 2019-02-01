@@ -5,49 +5,81 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetArcadeDrive extends Command {
-    public SetArcadeDrive() {
+public class TurnToAngle extends PIDCommand {
+    static double kP = 0.04;   //0.1
+    static double kI = 0;
+    static double kD = 0;  //10
+    static double kF = 0;  //1023.0 / 72000.0;
+    static double period = 0.02;
+
+    double targetAngle;
+    double output;
+    public TurnToAngle(double targetAngle) {
+        super(kP, kI, kD, period);
+
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
+        this.targetAngle = targetAngle;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Robot.driveTrain.setDriveMotorsState(false);
+        getPIDController().setF(kF);
+        getPIDController().setContinuous(true);
+        getPIDController().setAbsoluteTolerance(1.5);
+        getPIDController().setOutputRange(-1, 1); // +/- 0.8
+
+        double currentAngle = Robot.driveTrain.navX.getAngle();
+        setSetpoint(currentAngle + targetAngle);
+        getPIDController().enable();
     }
+
+    @Override
+    protected double returnPIDInput() {
+        return Robot.driveTrain.navX.getAngle();
+    }
+
+    @Override
+    protected void usePIDOutput(double output) {
+        this.output = output;
+    }
+
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
-
-        Robot.driveTrain.setMotorArcadeDrive(joystickY, joystickX);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        return getPIDController().onTarget();
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        getPIDController().disable();
         Robot.driveTrain.setMotorTankDrive(0, 0);
+        Robot.driveTrain.setDriveMotorsState(true);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
+
+
 }
