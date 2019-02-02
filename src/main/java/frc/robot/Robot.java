@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
         m_autoChooser.addOption("Pathfinder Test", new PathfinderReadTest("Calibration"));
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDrive());
+        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDriveVelocity());
         m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
         }
         driveTrain.setDriveMotorsState(true);
 
-        m_teleopCommand = m_teleopChooser.getSelected();
+        m_teleopCommand = new SetArcadeDrive();//m_teleopChooser.getSelected();
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
     }
@@ -147,12 +147,12 @@ public class Robot extends TimedRobot {
 
         // TODO: Update logic to specify tank/arcade drive
         // If drivetrain encoders are bad, revert to default arcade drive.
-        if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
-            Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
-        }
-
-        new UpdateElevatorSetpoint();
-        new ElevatorClosedLoopControl();
+        //if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
+        //    Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
+        //}
+        new SetTankDrive();
+        //new UpdateElevatorSetpoint();
+        //new ElevatorClosedLoopControl();
     }
 
     /**
