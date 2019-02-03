@@ -174,6 +174,9 @@ public class Elevator extends Subsystem {
         return voltage;
     }
 
+    public void setCurrentPositionHold() {
+        elevatorMotors[0].set(ControlMode.Position, getPositionEncoderCounts());
+    }
 
     public void setClosedLoop(double setPoint){
         driveOpenLoop(setClosedLoopFeedForward(setPoint) + setClosedLoopPositionStep(setPoint));

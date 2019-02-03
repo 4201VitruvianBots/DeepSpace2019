@@ -45,8 +45,12 @@ public class UpdateElevatorSetpoint extends InstantCommand {
             double joystickOutput = Robot.m_oi.getXBoxLeftY();
             if (Math.abs(joystickOutput) > 0.05)
                 voltage = 12 * joystickOutput;
-            else
-                voltage = 2;
+            else {
+                if(Robot.elevator.getLeftElevatorEncoderHealth() || Robot.elevator.getRightElevatorEncoderHealth())
+                    Robot.elevator.setCurrentPositionHold();
+                else
+                    voltage = 2;
+            }
 
             //voltage = (voltage <= 0 && Robot.elevator.getLowerLimitSensor()) ? 0 : voltage;
             //voltage = (voltage >= 0 && Robot.elevator.getUpperLimitSensor()) ? 0 : voltage;

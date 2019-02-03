@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.UpdateWristSetpoint;
 
+import javax.naming.ldap.Control;
+
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
@@ -67,8 +69,14 @@ public class Wrist extends PIDSubsystem {
         wristMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
     }
 
-    public void setDirectOutput(double output){
-        wristMotor.set(ControlMode.PercentOutput, output);
+    public void setDirectOutput(double output) {
+        if (output == 0) {
+            if(isEncoderHealthy())
+                wristMotor.set(ControlMode.Position, getEncoderCount());
+            else
+                wristMotor.set(ControlMode.PercentOutput, 0);
+        } else
+            wristMotor.set(ControlMode.PercentOutput, output);
     }
 
     @Override
