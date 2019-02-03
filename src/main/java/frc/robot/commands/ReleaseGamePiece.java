@@ -7,8 +7,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 
@@ -16,6 +16,8 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class ReleaseGamePiece extends Command {
+    Timer pause = new Timer();
+
     public ReleaseGamePiece() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.intake);
@@ -31,13 +33,12 @@ public class ReleaseGamePiece extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 1:
+                Robot.intake.setIntakeOutput(0.8);
                 break;
             case 0:
             default:
-                if (Robot.intake.getHarpoonStatus())
-                    Robot.intake.setHarpoonReverse();
-                else
-                    Robot.intake.setHarpoonForward();
+                Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -50,6 +51,22 @@ public class ReleaseGamePiece extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        pause.reset();
+        switch (Intake.intakeState) {
+            case 1:
+                Robot.intake.setIntakeOutput(0);
+                break;
+            case 0:
+            default:
+                Robot.intake.setHarpoonSecure(false);
+                pause.start();
+                while(pause.get() < 0.15) {
+
+                }
+                Robot.intake.setHarpoonExtend(false);
+                pause.stop();
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

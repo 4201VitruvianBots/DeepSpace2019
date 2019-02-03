@@ -16,7 +16,7 @@ public class VitruvianLogger {
     boolean isRunning = false;
     boolean isMatch = false;
     String basePath = "/media/sda1/4201Robot/Logs/";
-    String roboRioPath = Filesystem.getDeployDirectory() + "/Logs/";
+    String roboRioPath = "/home/lvuser/4201Robot/Logs/";
     String logPath;
     List<VitruvianLog> logList = new ArrayList<>();
     public static double m_logStartTime;
@@ -34,6 +34,7 @@ public class VitruvianLogger {
     }
 
     public void addLog(VitruvianLog log) {
+        // TODO: check if a log with the same name exits already before adding to avoid overwritng yourself
         logList.add(log);
     }
 

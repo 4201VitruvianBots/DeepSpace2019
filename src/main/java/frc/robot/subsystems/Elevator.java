@@ -45,7 +45,7 @@ public class Elevator extends Subsystem {
     private int encoderCountsPerInch = 0;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 1;
+    public static int controlMode = 0;
 
     DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
@@ -62,17 +62,18 @@ public class Elevator extends Subsystem {
         }
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
-
-        VitruvianLog controlsLog = new VitruvianLog("Elevator", 0.5);
-        controlsLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
-        controlsLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
-        controlsLog.addLogField("elevatorTalonLeftCurrent", () -> getMotorCurrent(0));
-        controlsLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(1));
-        controlsLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
-        controlsLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
-        controlsLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
-        controlsLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
-        VitruvianLogger.getInstance().addLog(controlsLog);
+        VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
+        elevatorLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
+        elevatorLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
+        elevatorLog.addLogField("elevatorTalonLeftCurrent", () -> getMotorCurrent(0));
+        elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(1));
+        elevatorLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
+        elevatorLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
+        elevatorLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
+        elevatorLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
+        elevatorLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
+        elevatorLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        VitruvianLogger.getInstance().addLog(elevatorLog);
     }
 
     public boolean getUpperLimitSensor(){
@@ -95,6 +96,10 @@ public class Elevator extends Subsystem {
         return elevatorMotors[motorIndex].getMotorOutputPercent();
     }
 
+    public void resetEncoderCount() {
+        for(TalonSRX talon:elevatorMotors)
+            talon.setSelectedSensorPosition(0);
+    }
     public void zeroEncoder() {
         if(getUpperLimitSensor()) {
             for (TalonSRX motor : elevatorMotors)

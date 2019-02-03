@@ -7,17 +7,16 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
-
-import java.time.Instant;
 
 /**
  * An example command.  You can replace me with your own command.
  */
 public class DeployIntake extends Command {
+    Timer pause = new Timer();
     public DeployIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.intake);
@@ -26,30 +25,66 @@ public class DeployIntake extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                // TODO: Set wrist retract
+                break;
+        }
     }
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
         switch (Intake.intakeState) {
+            case 2:
+
+                break;
             case 1:
+                Robot.intake.setIntakeOutput(-0.8);
                 break;
             case 0:
             default:
-                if (Robot.intake.getHarpoonStatus())
-                    Robot.intake.setHarpoonReverse();
-                else
-                    Robot.intake.setHarpoonForward();
+                Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(false);
                 break;
         }
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+        if(Intake.intakeState == 1)
+            return !Robot.intake.bannerIR.get();
+        else
+            return false;
     }
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        pause.reset();
+        switch (Intake.intakeState) {
+            case 1:
+                Robot.intake.setIntakeOutput(0);
+                pause.start();
+                while (pause.get() < 0.15) {
+
+                }
+                //TODO: Retract wrist to home.
+                pause.stop();
+                break;
+            case 0:
+            default:
+                Robot.intake.setHarpoonSecure(true);
+                pause.start();
+                while(pause.get() < 0.15) {
+
+                }
+                Robot.intake.setHarpoonExtend(false);
+                pause.stop();
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

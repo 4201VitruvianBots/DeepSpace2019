@@ -22,10 +22,10 @@ public class HomeAllMechanisms extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if (Robot.intake.getHarpoonStatus())
-            Robot.intake.setHarpoonReverse();
+        if (Robot.intake.getHarpoonSecureStatus())
+            Robot.intake.setHarpoonSecure(false);
         else
-            Robot.intake.setHarpoonForward();
+            Robot.intake.setHarpoonSecure(true);
 
     }
 

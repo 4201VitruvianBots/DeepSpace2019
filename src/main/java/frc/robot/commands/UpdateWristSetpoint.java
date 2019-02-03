@@ -9,17 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class WristManualMode extends Command {
+public class UpdateWristSetpoint extends Command {
     double output;
 
-    public WristManualMode(double output) {
+    public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
-        this.output = output;
     }
 
     // Called just before this Command runs the first time
@@ -30,7 +30,13 @@ public class WristManualMode extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.wrist.setDirectOutput(output);
+        if (Wrist.controlMode == 1) {
+
+        } else {
+            double joystickOutput = Robot.m_oi.getXBoxRightY();
+
+            Robot.wrist.setDirectOutput(joystickOutput * 0.5);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

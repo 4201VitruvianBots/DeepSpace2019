@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.UpdateWristSetpoint;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -28,6 +29,7 @@ public class Wrist extends PIDSubsystem {
 
     double encoderCountRatio = 1; //Ratio for angle over encoder count.
 
+    public static int controlMode = 0;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 
     public Wrist() {
@@ -89,6 +91,6 @@ public class Wrist extends PIDSubsystem {
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //defaultCommand = new SetArcadeDriveVelocity();
+        setDefaultCommand(new UpdateWristSetpoint());
     }
 }

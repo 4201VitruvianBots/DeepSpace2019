@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         driveTrain.updateSmartDashboard();
+        intake.updateSmartDashboard();
     }
 
     /**
@@ -145,6 +146,7 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
+        Robot.elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
     }
 
@@ -160,9 +162,6 @@ public class Robot extends TimedRobot {
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
-
-        new UpdateElevatorSetpoint();
-        new ElevatorClosedLoopControl();
     }
 
     /**

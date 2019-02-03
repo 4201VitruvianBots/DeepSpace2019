@@ -32,9 +32,11 @@ public class RobotMap {
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
+        public static int hatchIntakeExtendForward = 2;
+        public static int hatchIntakeExtendReverse = 3;
+        public static int hatchIntakeSecureForward = 4;
+        public static int hatchIntakeSecureReverse = 5;
         // TODO: Update when solenoid is fixed
-        public static int hatchIntakeForward = 4;
-        public static int hatchIntakeReverse = 5;
      //  public static int driveTrainShifterReverse = 1;
      //  public static int driveTrainShifterReverse = 1;
 
@@ -42,13 +44,17 @@ public class RobotMap {
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
     public static int rightRearDriveMotor = 23;
-    public static int wristMotor = 24;
 
     public static int leftElevator = 30;
     public static int rightElevator = 31;
 
+    public static int wristMotor = 40;
+
+    public static int cargoIntakeA = 60;
+    public static int cargoIntakeB = 61;
+
     // DIOs
-    public static int intakeSensor = 0;
+    public static int bannerIR = 0;
     public static int elevatorBottom = 1;
     public static int elevatorTop = 2;
     public static int intakeBottom = 3;
