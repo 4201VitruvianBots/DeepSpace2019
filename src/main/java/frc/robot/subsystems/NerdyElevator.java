@@ -34,9 +34,11 @@ public class NerdyElevator extends Subsystem {
           new DigitalInput(RobotMap.elevatorTop)
   };
 
-  public int upperLimitEncoderCounts = 0; //position of upper limit in encoder counts
-  public int lowerLimitEncoderCounts = 0; //position of lower limit in encoder counts
-
+  //position of upper limit in encoder counts
+  public int upperLimitEncoderCounts = 0;
+  //position of lower limit in encoder counts
+  public int lowerLimitEncoderCounts = 0;
+  //Distance ratio is encoder counts to inche. Distance offset is offset from zero(should always be zero).
   private double m_distanceRatio, m_distanceOffset;
 
   // This is in STU (Stupid Talon Units, AKA ticks/decisecond)
