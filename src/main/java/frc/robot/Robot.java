@@ -12,16 +12,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.auto.PathfinderReadTest;
-import frc.robot.commands.drive.SetArcadeDrive;
-import frc.robot.commands.drive.SetArcadeDriveVelocity;
-import frc.robot.commands.drive.SetTankDrive;
-import frc.robot.commands.drive.SetTankDriveVelocity;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LEDOutput;
-import frc.robot.util.Vision;
+import frc.robot.commands.*;
+import frc.robot.commands.auto.*;
+import frc.robot.commands.drive.*;
+import frc.robot.subsystems.*;
+import frc.robot.util.*;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,11 +27,13 @@ import frc.robot.util.Vision;
  * project.
  */
 public class Robot extends TimedRobot {
-    public static Intake intake = new Intake();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
+    public static NerdyElevator nerdyElevator = new NerdyElevator();
+    public static Intake intake = new Intake();
+    public static Controls controls = new Controls();
     public static Vision vision = new Vision();
-    public static LEDOutput ledOutput = new LEDOutput();
+    public static Wrist wrist = new Wrist();
     public static OI m_oi;
 
     Command m_autonomousCommand;
@@ -51,10 +49,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
-        m_autoChooser.addOption("Pathfinder Test", new PathfinderReadTest("Calibration"));
+        // chooser.addOption("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDrive());
+        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDriveVelocity());
         m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
@@ -77,6 +75,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         driveTrain.updateSmartDashboard();
+        elevator.updateSmartDashboard();
+        wrist.updateSmartDashboard();
+        intake.updateSmartDashboard();
     }
 
     /**
@@ -86,6 +87,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        VitruvianLogger.getInstance().startLogger();
     }
 
     @Override
@@ -120,6 +122,8 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.start();
         }
+
+        VitruvianLogger.getInstance().startLogger();
     }
 
     /**
@@ -144,6 +148,9 @@ public class Robot extends TimedRobot {
         m_teleopCommand = m_teleopChooser.getSelected();
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+
+        Robot.elevator.resetEncoderCount();
+        VitruvianLogger.getInstance().startLogger();
     }
 
     /**
@@ -158,6 +165,7 @@ public class Robot extends TimedRobot {
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
+
     }
 
     /**

@@ -58,11 +58,11 @@ public class PathfinderRead extends Command {
 
         try {
             // Try to read the .csv files
-            File leftFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".left.pf1.csv");
+            File leftFile = new File("/home/lvuser/deploy/output/" + filename + "left.pf1.csv");
             Trajectory lT = Pathfinder.readFromCSV(leftFile);
             leftTrajectory = lT;
 
-            File rightFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".right.pf1.csv");
+            File rightFile = new File("/home/lvuser/deploy/output/" + filename + "right.pf1.csv");
             Trajectory rT = Pathfinder.readFromCSV(rightFile);
             rightTrajectory = rT;
 

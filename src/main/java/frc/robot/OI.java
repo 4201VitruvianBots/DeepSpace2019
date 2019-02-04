@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.operate.*;
+import frc.robot.commands.auto.IntakeControl;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -79,21 +80,26 @@ public class OI {
         leftButtons[2].whileHeld(new SetDriveShifters(true));
         leftButtons[3].whileHeld(new SetDriveShifters(false));
 
-        rightButtons[0].whenPressed(new ReleaseGamePiece());
+        rightButtons[0].whileHeld(new ReleaseGamePiece());
         rightButtons[1].whenPressed(new TurnToAngle(180));
         rightButtons[2].whenPressed(new TurnToAngle(-90));
         rightButtons[3].whenPressed(new TurnToAngle(90));
 
         xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints());
-        // Select: Kill elevator PIDController (Check button assignment)
+        //xBoxButtons[5].whileHeld(new UpdateWristSetpoint(0.3));
+        //xBoxButtons[5].whenReleased(new UpdateWristSetpoint(0));
+        //xBoxRightTrigger.whileHeld(new UpdateWristSetpoint(-0.3));
+        //xBoxRightTrigger.whenReleased(new UpdateWristSetpoint(0));
         xBoxButtons[7].whenPressed(new KillAll());
 
-        //xBoxButtons[8].whenPressed(new SetIntakeState(0));
+        xBoxButtons[5].whenPressed(new SetIntakeState(0));
         xBoxRightTrigger.whenPressed(new SetIntakeState(1));
         //leftButtons[1].whenPressed(new ResetNavXAngle());
-        //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
-        //rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
+        leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
+        rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
 
+        xBoxButtons[0].whileHeld(new IntakeControl(true));
+        xBoxButtons[1].whileHeld(new IntakeControl(false));
     }
 
     public double getLeftJoystickX() {
@@ -126,6 +132,22 @@ public class OI {
 
     public double getRawRightJoystickY() {
         return -rightJoystick.getY();
+    }
+
+    public double getXBoxLeftX(){
+        return xBoxController.getRawAxis(0);
+    }
+
+    public double getXBoxLeftY(){
+        return -xBoxController.getRawAxis(1);
+    }
+
+    public double getXBoxRightX(){
+        return xBoxController.getRawAxis(4);
+    }
+
+    public double getXBoxRightY(){
+        return -xBoxController.getRawAxis(5);
     }
 
 }

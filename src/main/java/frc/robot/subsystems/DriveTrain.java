@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.drive.SetArcadeDriveVelocity;
+import frc.robot.util.Controls;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -59,6 +62,21 @@ public class DriveTrain extends Subsystem {
 
         driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
         driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
+
+
+        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
+        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
+        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
+        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
+        //drivetrainLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
+        //drivetrainLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        VitruvianLogger.getInstance().addLog(drivetrainLog);
+
     }
 
     public int getLeftEncoderCount() {
