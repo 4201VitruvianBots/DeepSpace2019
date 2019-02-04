@@ -29,6 +29,7 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
+    public static NerdyElevator nerdyElevator = new NerdyElevator();
     public static Intake intake = new Intake();
     public static Controls controls = new Controls();
     public static Vision vision = new Vision();
@@ -144,7 +145,7 @@ public class Robot extends TimedRobot {
         }
         driveTrain.setDriveMotorsState(true);
 
-        m_teleopCommand = new SetArcadeDrive();//m_teleopChooser.getSelected();
+        m_teleopCommand = m_teleopChooser.getSelected();
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
@@ -164,6 +165,7 @@ public class Robot extends TimedRobot {
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
+
     }
 
     /**
