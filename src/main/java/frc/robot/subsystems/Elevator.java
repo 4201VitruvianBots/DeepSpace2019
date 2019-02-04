@@ -19,6 +19,7 @@ import frc.robot.commands.UpdateElevatorSetpoint;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -60,6 +61,7 @@ public class Elevator extends Subsystem {
             motor.setInverted(true);
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         }
+        elevatorMotors[0].setSensorPhase(true);
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
@@ -77,11 +79,11 @@ public class Elevator extends Subsystem {
     }
 
     public boolean getUpperLimitSensor(){
-        return limitSwitches[0].get();
+        return !limitSwitches[0].get();
     }
 
     public boolean getLowerLimitSensor(){
-        return limitSwitches[1].get();
+        return !limitSwitches[1].get();
     }
 
     public double getMotorCurrent(int motorIndex) {
@@ -183,7 +185,11 @@ public class Elevator extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-        //Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
+        Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getLeftElevatorEncoderHealth());
+        Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getRightElevatorEncoderHealth());
+        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getUpperLimitSensor());
+        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLowerLimitSensor());
+        Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPositionEncoderCounts());
     }
 
     @Override

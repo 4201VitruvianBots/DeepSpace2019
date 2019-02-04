@@ -17,6 +17,8 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateElevatorSetpoint extends InstantCommand {
+    double alpha = 0.125;
+    double lastVoltage = 0;
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -51,11 +53,14 @@ public class UpdateElevatorSetpoint extends InstantCommand {
                 else
                     voltage = 2;
             }
+            voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
+            voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;
 
-            //voltage = (voltage <= 0 && Robot.elevator.getLowerLimitSensor()) ? 0 : voltage;
-            //voltage = (voltage >= 0 && Robot.elevator.getUpperLimitSensor()) ? 0 : voltage;
 
-            Robot.elevator.driveOpenLoop(voltage);
+            double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
+            lastVoltage = targetVoltage;
+
+            Robot.elevator.driveOpenLoop(targetVoltage);
         }
     }
 

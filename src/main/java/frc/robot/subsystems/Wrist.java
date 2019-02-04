@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.UpdateWristSetpoint;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import javax.naming.ldap.Control;
 
@@ -91,9 +92,9 @@ public class Wrist extends PIDSubsystem {
     }
 
     public void updateSmartDashboard() {
-        SmartDashboard.putNumber("Wrist Encoder Count", getEncoderCount());
-        SmartDashboard.putNumber("Wrist Encoder Velocity", getEncoderVelocity());
-        SmartDashboard.putBoolean("Wrist Encoder Health", isEncoderHealthy());
+        Shuffleboard.putNumber("Wrist","Encoder Count", getEncoderCount());
+        Shuffleboard.putNumber("Wrist","Encoder Velocity", getEncoderVelocity());
+        Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
     }
 
     @Override

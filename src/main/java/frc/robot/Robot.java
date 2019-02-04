@@ -74,6 +74,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         driveTrain.updateSmartDashboard();
+        elevator.updateSmartDashboard();
+        wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
     }
 
