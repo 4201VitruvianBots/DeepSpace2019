@@ -28,6 +28,7 @@ public class RobotMap {
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
 
+    // Pneumatics
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
@@ -37,6 +38,7 @@ public class RobotMap {
      //  public static int driveTrainShifterReverse = 1;
      //  public static int driveTrainShifterReverse = 1;
 
+    // Drivetrain
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
@@ -48,4 +50,13 @@ public class RobotMap {
     public static double wheelbase = 2.20833;
     public static double max_vel_high = 0.5104167;
     public static double max_vel_low = 1.6;
+
+    // Intake
+    public static int IRPin = 0;  //IR's plugged into DIO port 0
+
+    //Bling
+    public static int LEDCh1 = 23;  //LED info channels start from 9 on NavX
+    public static int LEDCh2 = 22;  //and go down
+    public static int LEDCh3 = 21;
+    public static int LEDCh4 = 20;
 }

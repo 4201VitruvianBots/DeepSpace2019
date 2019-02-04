@@ -20,6 +20,7 @@ import frc.robot.commands.drive.SetTankDriveVelocity;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDOutput;
 import frc.robot.util.Vision;
 
 /**
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
     public static Vision vision = new Vision();
+    public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
 
     Command m_autonomousCommand;
