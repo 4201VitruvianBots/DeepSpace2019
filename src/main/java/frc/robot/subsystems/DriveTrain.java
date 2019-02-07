@@ -23,6 +23,7 @@ import frc.robot.commands.drive.SetArcadeDriveVelocity;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -43,8 +44,6 @@ public class DriveTrain extends Subsystem {
     private double DriveAlpha = 0.125;
     private static double m_lastL = 0, m_lastR = 0;
     public static double leftAdjustment = 0, rightAdjustment = 0;
-
-    private Command defaultCommand;
 
     public DriveTrain() {
         super("DriveTrain");
@@ -214,13 +213,17 @@ public class DriveTrain extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-        SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-        SmartDashboard.putNumber("Angle", navX.getAngle());
-
+        /*
         SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
         SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
         SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
         SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
+        */
+
+        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getLeftEncoderCount());
+        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getRightEncoderCount());
+        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+        SmartDashboard.putNumber("Angle", navX.getAngle());
     }
 
     @Override

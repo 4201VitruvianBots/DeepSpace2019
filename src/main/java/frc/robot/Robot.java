@@ -18,6 +18,7 @@ import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,7 +30,7 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
-    public static NerdyElevator nerdyElevator = new NerdyElevator();
+    //public static NerdyElevator nerdyElevator = new NerdyElevator();
     public static Intake intake = new Intake();
     public static Controls controls = new Controls();
     public static Vision vision = new Vision();
@@ -58,6 +59,8 @@ public class Robot extends TimedRobot {
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
+
+        Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
         vision.initUSBCamera();
 
         // Default VP Pipeline
@@ -78,6 +81,9 @@ public class Robot extends TimedRobot {
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
+
+        // TODO: Enable this when encoders are fixed
+        //elevator.zeroEncoder();
     }
 
     /**

@@ -50,8 +50,8 @@ public class RobotMap {
 
     public static int wristMotor = 40;
 
-    public static int cargoIntakeA = 60;
-    public static int cargoIntakeB = 61;
+    public static int cargoIntakeMotor = 60;
+    public static int hatchIntakeMotor = 61;
 
     // DIOs
     public static int bannerIR = 0;

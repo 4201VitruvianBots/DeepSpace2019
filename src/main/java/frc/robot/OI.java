@@ -16,6 +16,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.operate.*;
 import frc.robot.commands.auto.IntakeControl;
+import frc.robot.commands.test.SetElevatorVoltage;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -86,6 +87,8 @@ public class OI {
         rightButtons[3].whenPressed(new TurnToAngle(90));
 
         xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints());
+
+        //xBoxButtons[1].whileHeld(new SetElevatorVoltage());
         //xBoxButtons[5].whileHeld(new UpdateWristSetpoint(0.3));
         //xBoxButtons[5].whenReleased(new UpdateWristSetpoint(0));
         //xBoxRightTrigger.whileHeld(new UpdateWristSetpoint(-0.3));

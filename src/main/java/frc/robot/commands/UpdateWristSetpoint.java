@@ -17,6 +17,9 @@ import frc.robot.subsystems.Wrist;
 public class UpdateWristSetpoint extends Command {
     double output;
 
+    public static boolean override;
+
+
     public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
@@ -30,12 +33,12 @@ public class UpdateWristSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if (Wrist.controlMode == 1) {
+        if (Wrist.controlMode == 1 && !override) {
 
         } else {
             double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-            Robot.wrist.setDirectOutput(joystickOutput * 0.5);
+            Robot.wrist.setDirectOutput (joystickOutput * 0.5);
         }
     }
 

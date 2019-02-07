@@ -27,7 +27,7 @@ public class ElevatorClosedLoopControl extends InstantCommand {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.elevator.setClosedLoop(Robot.elevator.elevatorSetPoint);
+        Robot.elevator.setClosedLoopOutput(Robot.elevator.elevatorSetPoint);
     }
 
 

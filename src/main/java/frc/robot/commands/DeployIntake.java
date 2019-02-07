@@ -43,7 +43,7 @@ public class DeployIntake extends Command {
 
                 break;
             case 1:
-                Robot.intake.setIntakeOutput(-0.8);
+                Robot.intake.setCargoIntakeOutput(-0.8);
                 break;
             case 0:
             default:
@@ -66,7 +66,7 @@ public class DeployIntake extends Command {
         pause.reset();
         switch (Intake.intakeState) {
             case 1:
-                Robot.intake.setIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(0);
                 pause.start();
                 while (pause.get() < 0.15) {
 

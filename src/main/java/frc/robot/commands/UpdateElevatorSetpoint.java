@@ -10,8 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
-import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
-import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -19,6 +18,9 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 public class UpdateElevatorSetpoint extends InstantCommand {
     double alpha = 0.125;
     double lastVoltage = 0;
+
+    public static boolean override = false;
+
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -32,9 +34,11 @@ public class UpdateElevatorSetpoint extends InstantCommand {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        double joystickOutput = Robot.m_oi.getXBoxLeftY();
 
-        if(Elevator.controlMode == 1) {
-            if (Robot.elevator.getPositionEncoderCounts() > Robot.elevator.upperLimitEncoderCounts)
+        if(Elevator.controlMode == 1 && !override) {
+            /*
+            if (Robot.elevator.getPosition() > Robot.elevator.upperLimitEncoderCounts)
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) - 0.5;
 
             // We do this check to make sure co-driver is actually commanding the elevator and not due to minor movement of the joystick.
@@ -42,26 +46,34 @@ public class UpdateElevatorSetpoint extends InstantCommand {
             if (Math.abs(Robot.m_oi.getXBoxLeftY()) > 0.05) {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
+            */
+            Robot.elevator.setIncrementedPosition(joystickOutput * 4250 * 2);
         } else {
             double voltage = 0;
-            double joystickOutput = Robot.m_oi.getXBoxLeftY();
             if (Math.abs(joystickOutput) > 0.05)
                 voltage = 12 * joystickOutput;
             else {
-                if(Robot.elevator.getLeftElevatorEncoderHealth() || Robot.elevator.getRightElevatorEncoderHealth())
+                if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
                     Robot.elevator.setCurrentPositionHold();
                 else
                     voltage = 2;
             }
-            voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
-            voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;
+            //voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
+            //voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;
 
 
             double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
             lastVoltage = targetVoltage;
 
-            Robot.elevator.driveOpenLoop(targetVoltage);
+            Robot.elevator.setOpenLoopOutput(targetVoltage);
         }
+
+        if(Robot.m_oi.xBoxLeftTrigger.get()) {
+            Shuffleboard.putBoolean("Elevator", "Test Button", true);
+            Robot.elevator.setOpenLoopOutput(Shuffleboard.getNumber("Elevator", "Test Voltage", 0));
+        } else
+            Shuffleboard.putBoolean("Elevator", "Test Button", false);
+
     }
 
     // Make this return true when this Command no longer needs to run execute()

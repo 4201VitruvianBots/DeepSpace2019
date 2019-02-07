@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -27,8 +28,8 @@ public class Intake extends Subsystem {
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
-        new TalonSRX(RobotMap.cargoIntakeA),
-        new TalonSRX(RobotMap.cargoIntakeB)
+        new TalonSRX(RobotMap.cargoIntakeMotor),
+        new TalonSRX(RobotMap.hatchIntakeMotor)
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
@@ -41,12 +42,18 @@ public class Intake extends Subsystem {
             intakeMotor.setNeutralMode(NeutralMode.Coast);
         }
         intakeMotors[0].setInverted(true);
-        intakeMotors[1].setInverted(true);
-        intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
+        intakeMotors[1].setInverted(false);
+        //intakeMotors[1].setInverted(true);
+        //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 
-    public void setIntakeOutput(double output){
+    public void setCargoIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, output);
+        intakeMotors[1].set(ControlMode.PercentOutput, -output);
+    }
+
+    public void setHatchGroundIntakeOutput(double output){
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public boolean getHarpoonSecureStatus(){
@@ -72,6 +79,9 @@ public class Intake extends Subsystem {
     }
 
     public void updateSmartDashboard() {
+        Shuffleboard.putNumber("Intake","Intake State", intakeState);
+        Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
+
         SmartDashboard.putNumber("Intake State", intakeState);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }

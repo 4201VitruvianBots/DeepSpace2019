@@ -33,7 +33,7 @@ public class ReleaseGamePiece extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 1:
-                Robot.intake.setIntakeOutput(0.8);
+                Robot.intake.setCargoIntakeOutput(0.8);
                 break;
             case 0:
             default:
@@ -54,7 +54,7 @@ public class ReleaseGamePiece extends Command {
         pause.reset();
         switch (Intake.intakeState) {
             case 1:
-                Robot.intake.setIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 0:
             default:

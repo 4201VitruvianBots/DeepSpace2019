@@ -33,7 +33,7 @@ public class IntakeControl extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.intake.setIntakeOutput(1*pickup);
+        Robot.intake.setCargoIntakeOutput(1*pickup);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,7 +45,7 @@ public class IntakeControl extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.intake.setIntakeOutput(0);
+        Robot.intake.setCargoIntakeOutput(0);
     }
 
     // Called when another command which requires one or more of the same
