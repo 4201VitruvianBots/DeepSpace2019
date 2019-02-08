@@ -72,20 +72,46 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
         for (int i = 0; i < xBoxPOVButtons.length; i++)
-            xBoxButtons[i] = new POVButton(xBoxController, ((i + 1) * 90));
+            xBoxPOVButtons[i] = new POVButton(xBoxController, ((i + 1) * 90));
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
 
+        /*  Left Joystick Buttons:
+            0 - Trigger: Intake Game Piece
+            1 (?) - Center Button: Home all mechanisms
+            2 (?) - Right Button: Set DriveTrain Low Gear
+            3 (?) - Left Button: Set DriveTrain High Gear
+        */
         leftButtons[0].whileHeld(new DeployIntake());
         leftButtons[1].whileHeld(new HomeAllMechanisms());
         leftButtons[2].whileHeld(new SetDriveShifters(true));
         leftButtons[3].whileHeld(new SetDriveShifters(false));
 
+        /*  Right Joystick Buttons:
+            0 - Trigger: Deploy/Score Game Piece
+            1 (?) - Center Button: DriveTrain Turn 180
+            2 (?) - Right Button: DriveTrain turn 90
+            3 (?) - Left Button: DriveTrain turn -90
+        */
         rightButtons[0].whileHeld(new ReleaseGamePiece());
         rightButtons[1].whenPressed(new TurnToAngle(180));
         rightButtons[2].whenPressed(new TurnToAngle(-90));
         rightButtons[3].whenPressed(new TurnToAngle(90));
 
+        /*  xBox Controller Buttons:
+            0  - A Button: Set Mechanisms to Rocket Low
+            1 (?) - B Button: Set Mechanisms to Rocket Medium
+            2 (?) - X Button: Set Mechanisms to Cargo Ship
+            3 (?) - Y Button: Set Mechanisms to Rocket Low
+            4 (?) Left Button: Elevator Increment Up 5 (?) inches
+            LeftTrigger: Elevator Increment Down 5 (?) inches
+            5 - Right Button: Select Intake Hatch State
+            RightTrigger: Select Intake Cargo State
+
+            POV 1: Set Intake State Hatch Ground
+            10 - Start: KillAll
+            12 - R3: Home all mechanisms
+        */
         xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints());
 
         //xBoxButtons[1].whileHeld(new SetElevatorVoltage());
