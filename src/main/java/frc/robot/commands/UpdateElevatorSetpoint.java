@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
@@ -15,7 +16,7 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class UpdateElevatorSetpoint extends InstantCommand {
+public class UpdateElevatorSetpoint extends Command {
     double alpha = 0.125;
     static double lastVoltage = 0;
 
