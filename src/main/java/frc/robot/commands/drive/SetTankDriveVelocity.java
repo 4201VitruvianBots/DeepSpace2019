@@ -29,7 +29,7 @@ public class SetTankDriveVelocity extends Command {
     @Override
     protected void execute() {
         double leftInput = Robot.m_oi.getLeftJoystickY();
-        double rightInput = Robot.m_oi.getRightJoystickY() * 0.125;
+        double rightInput = Robot.m_oi.getRightJoystickY();
 
         double leftOutput = (Math.abs(leftInput) > 0.05) ? leftInput : 0;
         double rightOutput = (Math.abs(rightInput) > 0.05) ? rightInput : 0;
