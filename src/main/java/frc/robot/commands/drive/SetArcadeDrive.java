@@ -27,10 +27,15 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
+        //double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
+        //double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
+        double joystickY = Robot.m_oi.getLeftJoystickY();
+        double joystickX = Robot.m_oi.getRightJoystickX() * 0.125;
 
-        Robot.driveTrain.setMotorArcadeDrive(joystickY, joystickX);
+        double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
+        double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
+
+        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

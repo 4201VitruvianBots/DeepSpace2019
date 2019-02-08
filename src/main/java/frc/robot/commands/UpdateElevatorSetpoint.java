@@ -69,6 +69,7 @@ public class UpdateElevatorSetpoint extends Command {
             Robot.elevator.setOpenLoopOutput(targetVoltage);
         }
 
+        // TODO: Figure out why this only works on the trigger and not as a command on other xBox buttons
         if(Robot.m_oi.xBoxLeftTrigger.get()) {
             Shuffleboard.putBoolean("Elevator", "Test Button", true);
             Robot.elevator.setOpenLoopOutput(Shuffleboard.getNumber("Elevator", "Test Voltage", 0));
@@ -92,5 +93,6 @@ public class UpdateElevatorSetpoint extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

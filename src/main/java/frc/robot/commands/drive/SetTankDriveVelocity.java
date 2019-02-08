@@ -28,8 +28,11 @@ public class SetTankDriveVelocity extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double leftOutput = Robot.m_oi.getLeftJoystickY();
-        double rightOutput = Robot.m_oi.getRightJoystickY();
+        double leftInput = Robot.m_oi.getLeftJoystickY();
+        double rightInput = Robot.m_oi.getRightJoystickY() * 0.125;
+
+        double leftOutput = (Math.abs(leftInput) > 0.05) ? leftInput : 0;
+        double rightOutput = (Math.abs(rightInput) > 0.05) ? rightInput : 0;
 
         Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
     }
