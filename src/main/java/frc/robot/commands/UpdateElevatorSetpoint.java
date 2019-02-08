@@ -17,7 +17,7 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
  */
 public class UpdateElevatorSetpoint extends InstantCommand {
     double alpha = 0.125;
-    double lastVoltage = 0;
+    static double lastVoltage = 0;
 
     public static boolean override = false;
 
