@@ -14,12 +14,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.drive.SetArcadeDriveVelocity;
+import frc.robot.commands.drivetrain.SetArcadeDriveVelocity;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -67,7 +65,7 @@ public class DriveTrain extends Subsystem {
         drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
         drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
         drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
-        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
         drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
         drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
         drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
@@ -176,7 +174,7 @@ public class DriveTrain extends Subsystem {
 
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
         //TODO: Update values to match robot with full load.
-        double k_maxVelocity = getDriveShifterStatus() ? 8789: 18555;  // in encoder units/sec
+        double k_maxVelocity = getDriveShifterStatus() ? 8789 : 18555;  // in encoder units/sec
 
         // TODO: Normalize this
         double leftVelocity = leftOutput * k_maxVelocity;

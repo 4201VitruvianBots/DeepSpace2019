@@ -36,6 +36,7 @@ public class UpdateElevatorSetpoint extends Command {
     @Override
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxLeftY();
+        joystickOutput = Math.abs(joystickOutput) > 0.05 ? joystickOutput : 0;
 
         if(Elevator.controlMode == 1 && !override) {
             /*

@@ -18,6 +18,6 @@ public class Controls {
     }
 
     public static double getElevatorRightCurrent() {
-        return pdp.getCurrent(RobotMap.pdpChannelElevatorLeft);
+        return pdp.getCurrent(RobotMap.pdpChannelElevatorRight);
     }
 }

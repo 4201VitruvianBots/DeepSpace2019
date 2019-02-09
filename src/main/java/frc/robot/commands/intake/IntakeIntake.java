@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -19,6 +19,7 @@ public class DeployIntake extends Command {
     Timer pause = new Timer();
     public DeployIntake() {
         // Use requires() here to declare subsystem dependencies
+        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
@@ -40,10 +41,10 @@ public class DeployIntake extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-
+                Robot.intake.setCargoIntakeOutput(-0.8);
                 break;
             case 1:
-                Robot.intake.setCargoIntakeOutput(-0.8);
+                Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             case 0:
             default:
@@ -65,7 +66,7 @@ public class DeployIntake extends Command {
     protected void end() {
         pause.reset();
         switch (Intake.intakeState) {
-            case 1:
+            case 2:
                 Robot.intake.setCargoIntakeOutput(0);
                 pause.start();
                 while (pause.get() < 0.15) {
@@ -73,6 +74,9 @@ public class DeployIntake extends Command {
                 }
                 //TODO: Retract wrist to home.
                 pause.stop();
+                break;
+            case 1:
+
                 break;
             case 0:
             default:

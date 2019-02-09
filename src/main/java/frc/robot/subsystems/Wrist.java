@@ -12,9 +12,10 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.UpdateWristSetpoint;
+import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
@@ -29,13 +30,17 @@ public class Wrist extends Subsystem {
     static double kF = 0;
     static double arbitraryFF = 0;
 
-    double upperLimitEncoderCounts;
-    double lowerLimitEncoderCounts;
+    int upperLimitEncoderCounts;
+    int lowerLimitEncoderCounts;
     double encoderCountsToAngle;
-    
-    
+
     public static int controlMode = 0;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
+
+    private DigitalInput[] limitSwitches = {
+        new DigitalInput(RobotMap.wristBottom),
+        new DigitalInput(RobotMap.wristTop)
+    };
 
     public Wrist() {
         wristMotor.configFactoryDefault();
@@ -43,6 +48,9 @@ public class Wrist extends Subsystem {
         wristMotor.setInverted(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        wristMotor.config_kP(0, kP, 30);
+        wristMotor.config_kI(0, kI, 30);
+        wristMotor.config_kD(0, kD, 30);
     }
 
     public int getPosition() {
@@ -63,11 +71,20 @@ public class Wrist extends Subsystem {
         return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
+    public boolean getLimitSwitchState(int limitSwitchIndex){
+        return !limitSwitches[limitSwitchIndex].get();
+    }
+
+    public void zeroEncoder() {
+        if(getLimitSwitchState(1)) {
+            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+        } else if(getLimitSwitchState(0)) {
+            wristMotor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
+        }
+    }
+
     public double getAngle() {
         return getPosition() * encoderCountsToAngle;
-    }
-    public void setMotorState(boolean state) {
-        wristMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
     }
 
     public void setDirectOutput(double output) {
@@ -75,9 +92,9 @@ public class Wrist extends Subsystem {
             if(isEncoderHealthy())
                 wristMotor.set(ControlMode.Position, getPosition());
             else
-                wristMotor.set(ControlMode.PercentOutput, 0);
+                wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
         } else
-            wristMotor.set(ControlMode.PercentOutput, output);
+            wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
     
     public void setIncrementedPosition(double angle) {

@@ -24,6 +24,7 @@ public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public static int intakeState = 0;
+
     DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
@@ -33,6 +34,7 @@ public class Intake extends Subsystem {
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
+    // TODO: Add sensor for hatch intake
 
     public Intake() {
         super("Intake");

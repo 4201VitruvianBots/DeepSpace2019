@@ -5,24 +5,48 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetWristSetpoint extends InstantCommand {
-    double setpoint;
-    public SetWristSetpoint(double angle) {
+public class UpdateWristSetpoint extends Command {
+    double output;
+
+    public static boolean override;
+
+
+    public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
-        //requires(Robot.elevator);
-        this.setpoint = angle;
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        double joystickOutput = Robot.m_oi.getXBoxRightY();
+
+        if (Wrist.controlMode == 1 && !override) {/*
+            if(Math.abs(joystickOutput) > 0.05)
+               Robot.wrist.setIncrementedPosition(joystickOutput * 2);*/
+        } else {
+            Robot.wrist.setDirectOutput (joystickOutput * 0.5);
+        }
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 
     // Called once after isFinished returns true

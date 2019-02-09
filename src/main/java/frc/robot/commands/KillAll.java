@@ -8,31 +8,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
+import frc.robot.commands.drivetrain.SetArcadeDrive;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ExampleCommand extends Command {
-    public ExampleCommand() {
-        // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
+public class KillAll extends InstantCommand {
+    public KillAll() {
+        requires(Robot.elevator);
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Scheduler.getInstance().removeAll();
+        Elevator.controlMode = 0;
+        Wrist.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 
     // Called once after isFinished returns true
@@ -44,5 +48,8 @@ public class ExampleCommand extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
+
+
 }

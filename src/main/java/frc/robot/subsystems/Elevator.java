@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.UpdateElevatorSetpoint;
+import frc.robot.commands.elevator.UpdateElevatorSetpoint;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -27,10 +27,6 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private TalonSRX[] elevatorMotors = {
-        new TalonSRX(RobotMap.leftElevator),
-        new TalonSRX(RobotMap.rightElevator),
-    };
     private Timer elevatorTimer;
     private double elevatorPreviousTime;
     private double elevatorPreviousError;
@@ -51,7 +47,12 @@ public class Elevator extends Subsystem {
     public static double elevatorSetPoint = 0;
     public static int controlMode = 0;
 
-    DigitalInput[] limitSwitches = {
+    private TalonSRX[] elevatorMotors = {
+        new TalonSRX(RobotMap.leftElevator),
+        new TalonSRX(RobotMap.rightElevator),
+    };
+
+    private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
         new DigitalInput(RobotMap.elevatorTop)
     };
@@ -64,7 +65,7 @@ public class Elevator extends Subsystem {
             motor.setInverted(true);
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
             motor.config_kP(0, kP, 30);
-            motor.config_kI(0,kI, 30);
+            motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
         }
         elevatorMotors[0].setSensorPhase(true);
@@ -118,9 +119,9 @@ public class Elevator extends Subsystem {
         return elevatorMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
-    public double getPosition() {
+    public int getPosition() {
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return (elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition()) / 2;
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition()) / 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorPosition();
         else if(getEncoderHealth(1))
@@ -129,19 +130,15 @@ public class Elevator extends Subsystem {
             return 0;
     }
 
-    public double getVelocity(){
+    public int getVelocity(){
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return (elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[1].getSelectedSensorVelocity()) / 2;
+            return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[1].getSelectedSensorVelocity()) / 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorVelocity();
         else if(getEncoderHealth(1))
             return elevatorMotors[1].getSelectedSensorVelocity();
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
-    }
-
-    public ControlMode getTalonControlMode() {
-        return elevatorMotors[0].getControlMode();
     }
 
     public double encoderCountsToInches(double encoderCounts){

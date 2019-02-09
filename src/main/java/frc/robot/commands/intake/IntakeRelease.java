@@ -5,24 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class UpdateWristSetpoint extends Command {
-    double output;
+public class ReleaseGamePiece extends Command {
+    Timer pause = new Timer();
 
-    public static boolean override;
-
-
-    public UpdateWristSetpoint() {
+    public ReleaseGamePiece() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
+        requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
@@ -33,16 +32,19 @@ public class UpdateWristSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if (Wrist.controlMode == 1 && !override) {
-
-        } else {
-            double joystickOutput = Robot.m_oi.getXBoxRightY();
-
-            Robot.wrist.setDirectOutput (joystickOutput * 0.5);
+        switch (Intake.intakeState) {
+            case 2:
+                Robot.intake.setCargoIntakeOutput(0.8);
+                break;
+            case 1:
+            case 0:
+            default:
+                Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(true);
+                break;
         }
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
         return false;
@@ -51,12 +53,28 @@ public class UpdateWristSetpoint extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.wrist.setDirectOutput(0);
+        pause.reset();
+        switch (Intake.intakeState) {
+            case 1:
+                Robot.intake.setCargoIntakeOutput(0);
+                break;
+            case 0:
+            default:
+                Robot.intake.setHarpoonSecure(false);
+                pause.start();
+                while(pause.get() < 0.15) {
+
+                }
+                Robot.intake.setHarpoonExtend(false);
+                pause.stop();
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

@@ -7,16 +7,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
-import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.commands.*;
-import frc.robot.commands.drive.*;
-import frc.robot.commands.operate.*;
-import frc.robot.commands.auto.IntakeControl;
-import frc.robot.commands.test.SetElevatorVoltage;
+import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.elevator.SetElevatorSetpoint;
+import frc.robot.commands.intake.IntakeIntake;
+import frc.robot.commands.intake.IntakeRelease;
+import frc.robot.commands.intake.SetIntakeState;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -82,8 +84,8 @@ public class OI {
             2 (?) - Right Button: Set DriveTrain Low Gear
             3 (?) - Left Button: Set DriveTrain High Gear
         */
-        leftButtons[0].whileHeld(new DeployIntake());
-        leftButtons[1].whileHeld(new HomeAllMechanisms());
+        leftButtons[0].whileHeld(new IntakeIntake());
+        leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
         leftButtons[2].whileHeld(new SetDriveShifters(true));
         leftButtons[3].whileHeld(new SetDriveShifters(false));
 
@@ -93,7 +95,7 @@ public class OI {
             2 (?) - Right Button: DriveTrain turn 90
             3 (?) - Left Button: DriveTrain turn -90
         */
-        rightButtons[0].whileHeld(new ReleaseGamePiece());
+        rightButtons[0].whileHeld(new IntakeRelease());
         rightButtons[1].whenPressed(new TurnToAngle(180));
         rightButtons[2].whenPressed(new TurnToAngle(-90));
         rightButtons[3].whenPressed(new TurnToAngle(90));
@@ -103,8 +105,10 @@ public class OI {
             1 (?) - B Button: Set Mechanisms to Rocket Medium
             2 (?) - X Button: Set Mechanisms to Cargo Ship
             3 (?) - Y Button: Set Mechanisms to Rocket Low
+
             4 (?) Left Button: Elevator Increment Up 5 (?) inches
             LeftTrigger: Elevator Increment Down 5 (?) inches
+
             5 - Right Button: Select Intake Hatch State
             RightTrigger: Select Intake Cargo State
 
@@ -112,23 +116,24 @@ public class OI {
             10 - Start: KillAll
             12 - R3: Home all mechanisms
         */
-        xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints());
+        xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints(2));
+        xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(3));
+        xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(1));
+        xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(4));
 
-        //xBoxButtons[1].whileHeld(new SetElevatorVoltage());
-        //xBoxButtons[5].whileHeld(new UpdateWristSetpoint(0.3));
-        //xBoxButtons[5].whenReleased(new UpdateWristSetpoint(0));
-        //xBoxRightTrigger.whileHeld(new UpdateWristSetpoint(-0.3));
-        //xBoxRightTrigger.whenReleased(new UpdateWristSetpoint(0));
-        xBoxButtons[7].whenPressed(new KillAll());
-
+        xBoxRightTrigger.whenPressed(new SetIntakeState(2));
+        xBoxPOVButtons[1].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
-        xBoxRightTrigger.whenPressed(new SetIntakeState(1));
-        //leftButtons[1].whenPressed(new ResetNavXAngle());
-        leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
-        rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
 
-        xBoxButtons[0].whileHeld(new IntakeControl(true));
-        xBoxButtons[1].whileHeld(new IntakeControl(false));
+        xBoxButtons[7].whenPressed(new KillAll());
+        xBoxButtons[12].whenPressed(new SetAllMechanismSetpoints(0));
+
+        //leftButtons[1].whenPressed(new ResetNavXAngle());
+        //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
+        //rightButtons[2].whenPressed(new TestControllerRumble(rightJoystick, 3));
+
+        //xBoxButtons[0].whileHeld(new IntakeControl(true));
+        //xBoxButtons[1].whileHeld(new IntakeControl(false));
     }
 
     public double getLeftJoystickX() {
@@ -144,7 +149,7 @@ public class OI {
     }
 
     public double getRightJoystickY() {
-        return Math.pow(-rightJoystick.getY(), 3);
+        return Math.pow(-rightJoystick.getY(), 1);
     }
 
     public double getRawLeftJoystickX() {
@@ -177,6 +182,24 @@ public class OI {
 
     public double getXBoxRightY(){
         return -xBoxController.getRawAxis(5);
+    }
+
+    public void enableXBoxRumbleTimed(){
+        Thread t = new Thread(() -> {
+            Timer stopwatch = new Timer();
+            setXBoxRumble(0.8);
+            stopwatch.start();
+            while(stopwatch.get() < 0.05){
+
+            }
+            setXBoxRumble(0);
+        });
+        t.start();
+    }
+
+    public void setXBoxRumble(double value) {
+        xBoxController.setRumble(GenericHID.RumbleType.kLeftRumble, value);
+        xBoxController.setRumble(GenericHID.RumbleType.kRightRumble, value);
     }
 
 }

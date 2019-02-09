@@ -5,37 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.operate;
+package frc.robot.commands.test;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Elevator;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class KillAll extends InstantCommand {
-    public KillAll() {
-        requires(Robot.elevator);
-        //requires(Robot.wrist);
+public class TestControllerRumble extends Command {
+    Joystick controller;
+
+    public TestControllerRumble(Joystick controller, double timeout) {
+        // Use requires() here to declare subsystem dependencies
+        setTimeout(timeout);
+
+        this.controller = controller;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Elevator.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.8);
+        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.8);
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     // Called when another command which requires one or more of the same
@@ -44,6 +56,4 @@ public class KillAll extends InstantCommand {
     protected void interrupted() {
         end();
     }
-
-
 }

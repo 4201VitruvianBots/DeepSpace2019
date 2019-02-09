@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
-import frc.robot.commands.auto.*;
-import frc.robot.commands.drive.*;
+import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -36,6 +34,8 @@ public class Robot extends TimedRobot {
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;
+
+    boolean shuffleboardTransition = false;
 
     Command m_autonomousCommand;
     SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -63,8 +63,6 @@ public class Robot extends TimedRobot {
         Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
         vision.initUSBCamera();
 
-        // Default VP Pipeline
-        vision.setPipeline(1);
     }
 
     /**
@@ -93,7 +91,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        shuffleboardTransition = false;
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
         VitruvianLogger.getInstance().startLogger();
+
+        // Default VP Pipeline
+        vision.setPipeline(1);
     }
 
     @Override
@@ -130,6 +134,9 @@ public class Robot extends TimedRobot {
         }
 
         VitruvianLogger.getInstance().startLogger();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
+        shuffleboardTransition = true;
     }
 
     /**
@@ -157,6 +164,12 @@ public class Robot extends TimedRobot {
 
         Robot.elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
+
+        // Only reset shuffleboard's recording if starting from disabledInit
+        if(!shuffleboardTransition) {
+            edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+            edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
+        }
     }
 
     /**
@@ -166,12 +179,11 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        // TODO: Update logic to specify tank/arcade drive
-        // If drivetrain encoders are bad, revert to default arcade drive.
+        // TODO: Update logic to specify tank/arcade drivetrain
+        // If drivetrain encoders are bad, revert to default arcade drivetrain.
         if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
-
     }
 
     /**

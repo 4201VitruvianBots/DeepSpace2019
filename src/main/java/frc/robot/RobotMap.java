@@ -55,10 +55,11 @@ public class RobotMap {
 
     // DIOs
     public static int bannerIR = 0;
-    public static int elevatorBottom = 1;
-    public static int elevatorTop = 2;
-    public static int intakeBottom = 3;
-    public static int intakeTop = 4;
+    public static int hatchSensor = 1;
+    public static int elevatorBottom = 2;
+    public static int elevatorTop = 3;
+    public static int wristBottom = 4;
+    public static int wristTop = 5;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
@@ -68,7 +69,20 @@ public class RobotMap {
     public static int pdpChannelElevatorLeft = 13;
     public static int pdpChannelElevatorRight = 2;
 
-    // Pathfinder
+    // Important Constants
+    public static double WRIST_RETRACTED_ANGLE = 0;
+    public static double WRIST_EXTENDED_ANGLE = 0;
+    public static double WRIST_HATCH_ANGLE = 0;
+    public static double ELEVATOR_HOME_POSITION = 0;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 0;
+    public static double ELEVATOR_HATCH_MID_POSITION = 0;
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 0;
+    public static double ELEVATOR_CARGO_SHIP_POSITION = 0;
+    public static double ELEVATOR_CARGO_LOW_POSITION = 0;
+    public static double ELEVATOR_CARGO_MID_POSITION = 0;
+    public static double ELEVATOR_CARGO_HIGH_POSITION = 0;
+
+    // Pathfinder (Units in feet)
     public static double wheel_diameter = 0.5104167;
     public static double wheelbase = 2.20833;
     public static double max_vel_high = 0.5104167;

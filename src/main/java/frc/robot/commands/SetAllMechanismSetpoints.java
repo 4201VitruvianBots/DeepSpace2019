@@ -10,11 +10,58 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.commands.elevator.SetElevatorSetpoint;
+import frc.robot.commands.wrist.SetWristSetpoint;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
 public class SetAllMechanismSetpoints extends CommandGroup {
-    public SetAllMechanismSetpoints() {
+    public SetAllMechanismSetpoints(int position) {
+        // Set the position of the elevator
+        switch(position) {
+            case 4:
+                if(Intake.intakeState == 2) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_HIGH_POSITION));
+                } else {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_HIGH_POSITION));
+                }
+            case 3:
+                if(Intake.intakeState == 2) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_MID_POSITION));
+                } else {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_MID_POSITION));
+                }
+                break;
+            case 2:
+                if(Intake.intakeState == 2) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_LOW_POSITION));
+                } else {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_LOW_POSITION));
+                }
+                break;
+            case 1:
+                if(Intake.intakeState == 2) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_SHIP_POSITION));
+                } else {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_LOW_POSITION));
+                }
+                break;
+            case 0:
+            default:
+                addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+                addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HOME_POSITION));
+                break;
+        }
     }
 }

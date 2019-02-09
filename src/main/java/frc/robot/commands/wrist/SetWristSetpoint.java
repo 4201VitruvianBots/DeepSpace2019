@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -13,25 +13,18 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class HomeAllMechanisms extends InstantCommand {
-    public HomeAllMechanisms() {
+public class SetWristSetpoint extends InstantCommand {
+    double setpoint;
+    public SetWristSetpoint(double angle) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+        //requires(Robot.elevator);
+        this.setpoint = angle;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if (Robot.intake.getHarpoonSecureStatus())
-            Robot.intake.setHarpoonSecure(false);
-        else
-            Robot.intake.setHarpoonSecure(true);
-
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        Robot.wrist.setAbsolutePosition(setpoint);
     }
 
     // Called once after isFinished returns true
@@ -43,6 +36,5 @@ public class HomeAllMechanisms extends InstantCommand {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }
