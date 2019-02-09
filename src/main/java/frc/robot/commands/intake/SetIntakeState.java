@@ -5,14 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.operate;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 
-import java.time.Instant;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -27,7 +25,9 @@ public class SetIntakeState extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Intake.intakeState = state;
+        if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
+            (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
+            Intake.intakeState = state;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -46,6 +46,4 @@ public class SetIntakeState extends InstantCommand {
     protected void interrupted() {
         end();
     }
-
-
 }

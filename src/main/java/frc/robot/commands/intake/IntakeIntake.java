@@ -15,9 +15,9 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class DeployIntake extends Command {
+public class IntakeIntake extends Command {
     Timer pause = new Timer();
-    public DeployIntake() {
+    public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
         requires(Robot.intake);
@@ -56,7 +56,7 @@ public class DeployIntake extends Command {
 
     @Override
     protected boolean isFinished() {
-        if(Intake.intakeState == 1)
+        if(Intake.intakeState == 2)
             return !Robot.intake.bannerIR.get();
         else
             return false;
@@ -76,7 +76,7 @@ public class DeployIntake extends Command {
                 pause.stop();
                 break;
             case 1:
-
+                // TODO: Retract Wrist then grab hatch
                 break;
             case 0:
             default:

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.PIDCommand;
@@ -103,7 +103,4 @@ public class HoldToAlignWithTarget extends PIDCommand {
     protected void interrupted() {
         end();
     }
-
-
-
 }

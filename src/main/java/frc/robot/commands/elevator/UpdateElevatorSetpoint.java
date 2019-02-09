@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -36,7 +36,6 @@ public class UpdateElevatorSetpoint extends Command {
     @Override
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxLeftY();
-        joystickOutput = Math.abs(joystickOutput) > 0.05 ? joystickOutput : 0;
 
         if(Elevator.controlMode == 1 && !override) {
             /*
@@ -49,7 +48,8 @@ public class UpdateElevatorSetpoint extends Command {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
             */
-            Robot.elevator.setIncrementedPosition(joystickOutput * 4250 * 2);
+            if(Math.abs(joystickOutput) > 0.05)
+                Robot.elevator.setIncrementedPosition(joystickOutput * 4250 * 2);
         } else {
             double voltage = 0;
             if (Math.abs(joystickOutput) > 0.05)
@@ -66,6 +66,9 @@ public class UpdateElevatorSetpoint extends Command {
 
             double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
             lastVoltage = targetVoltage;
+
+            // Debugging
+            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
 
             Robot.elevator.setOpenLoopOutput(targetVoltage);
         }

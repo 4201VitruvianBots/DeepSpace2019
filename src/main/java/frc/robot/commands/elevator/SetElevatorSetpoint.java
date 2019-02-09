@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -24,6 +24,7 @@ public class SetElevatorSetpoint extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Robot.elevator.setAbsolutePosition(setpoint);
     }
 
     // Called once after isFinished returns true

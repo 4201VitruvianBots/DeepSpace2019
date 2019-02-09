@@ -15,10 +15,10 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ReleaseGamePiece extends Command {
+public class IntakeRelease extends Command {
     Timer pause = new Timer();
 
-    public ReleaseGamePiece() {
+    public IntakeRelease() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
         requires(Robot.intake);
@@ -55,9 +55,10 @@ public class ReleaseGamePiece extends Command {
     protected void end() {
         pause.reset();
         switch (Intake.intakeState) {
-            case 1:
+            case 2:
                 Robot.intake.setCargoIntakeOutput(0);
                 break;
+            case 1:
             case 0:
             default:
                 Robot.intake.setHarpoonSecure(false);
