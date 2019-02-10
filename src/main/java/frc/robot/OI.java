@@ -102,31 +102,34 @@ public class OI {
 
         /*  xBox Controller Buttons:
             0  - A Button: Set Mechanisms to Rocket Low
-            1 (?) - B Button: Set Mechanisms to Rocket Medium
-            2 (?) - X Button: Set Mechanisms to Cargo Ship
-            3 (?) - Y Button: Set Mechanisms to Rocket Low
+            1  - B Button: Set Mechanisms to Rocket Medium
+            3  - Y Button: Set Mechanisms to Rocket High
+            2 - X Button: Set Mechanisms to Cargo Ship
 
-            4 (?) Left Button: Elevator Increment Up 5 (?) inches
+            4 Left Button: Elevator Increment Up 5 (?) inches
             LeftTrigger: Elevator Increment Down 5 (?) inches
 
-            5 - Right Button: Select Intake Hatch State
             RightTrigger: Select Intake Cargo State
-
             POV 1: Set Intake State Hatch Ground
-            10 - Start: KillAll
-            12 - R3: Home all mechanisms
+            5 - Right Button: Select Intake Hatch State
+
+            7 - Start: KillAll
+            9 - R3: Home all mechanisms
         */
         xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(3));
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(1));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(4));
 
+        //xBoxLeftTrigger.whenPressed(new SetIntakeState(2));
+        //xBoxButtons[4].whenPressed(new SetIntakeState(0));
+
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxPOVButtons[1].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
         xBoxButtons[7].whenPressed(new KillAll());
-        xBoxButtons[12].whenPressed(new SetAllMechanismSetpoints(0));
+        xBoxButtons[9].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
@@ -137,19 +140,19 @@ public class OI {
     }
 
     public double getLeftJoystickX() {
-        return Math.pow(leftJoystick.getX(), 1);
+        return leftJoystick.getX();
     }
 
     public double getLeftJoystickY() {
-        return Math.pow(-leftJoystick.getY(), 1);
+        return -leftJoystick.getY();
     }
 
     public double getRightJoystickX() {
-        return Math.pow(rightJoystick.getX(), 1);
+        return rightJoystick.getX();
     }
 
     public double getRightJoystickY() {
-        return Math.pow(-rightJoystick.getY(), 1);
+        return -rightJoystick.getY();
     }
 
     public double getRawLeftJoystickX() {

@@ -53,8 +53,8 @@ public class Robot extends TimedRobot {
         // chooser.addOption("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDriveVelocity());
-        m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
+        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
+        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
@@ -181,7 +181,7 @@ public class Robot extends TimedRobot {
 
         // TODO: Update logic to specify tank/arcade drivetrain
         // If drivetrain encoders are bad, revert to default arcade drivetrain.
-        if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
+        if (!driveTrain.getEncoderHealth(0) || !driveTrain.getEncoderHealth(2)) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
     }

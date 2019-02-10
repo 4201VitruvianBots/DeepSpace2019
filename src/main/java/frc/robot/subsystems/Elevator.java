@@ -62,13 +62,15 @@ public class Elevator extends Subsystem {
 
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
-            motor.setInverted(true);
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
         }
+        elevatorMotors[0].setInverted(false);   // Set true for silicon?
+        elevatorMotors[1].setInverted(true);
         elevatorMotors[0].setSensorPhase(true);
+        elevatorMotors[1].setSensorPhase(false);
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);

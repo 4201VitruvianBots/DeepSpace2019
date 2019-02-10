@@ -25,8 +25,8 @@ public class SetIntakeState extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-            (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
+        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
+        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
             Intake.intakeState = state;
     }
 

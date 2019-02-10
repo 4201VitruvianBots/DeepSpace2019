@@ -28,6 +28,7 @@ public class IntakeIntake extends Command {
     protected void initialize() {
         switch (Intake.intakeState) {
             case 2:
+                break;
             case 1:
                 break;
             case 0:
@@ -43,11 +44,12 @@ public class IntakeIntake extends Command {
             case 2:
                 Robot.intake.setCargoIntakeOutput(-0.8);
                 break;
+            default:
             case 1:
                 Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             case 0:
-            default:
+            //default:
                 Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
                 break;
@@ -59,7 +61,7 @@ public class IntakeIntake extends Command {
         if(Intake.intakeState == 2)
             return !Robot.intake.bannerIR.get();
         else
-            return false;
+            return false || !Robot.m_oi.leftButtons[0].get();
     }
     // Called once after isFinished returns true
     @Override
@@ -75,11 +77,12 @@ public class IntakeIntake extends Command {
                 //TODO: Retract wrist to home.
                 pause.stop();
                 break;
+            default:
             case 1:
                 // TODO: Retract Wrist then grab hatch
-                break;
+                //break;
             case 0:
-            default:
+            //default:
                 Robot.intake.setHarpoonSecure(true);
                 pause.start();
                 while(pause.get() < 0.15) {

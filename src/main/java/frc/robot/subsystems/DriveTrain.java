@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.robot.commands.drivetrain.SetArcadeDriveVelocity;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
@@ -96,12 +98,9 @@ public class DriveTrain extends Subsystem {
         return driveMotors[0].getControlMode();
     }
     // Using the pulse width measurement, check if the encoders are healthy
-    public boolean isLeftEncoderHealthy() {
-        return driveMotors[0].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
-    }
 
-    public boolean isRightEncoderHealthy() {
-        return driveMotors[2].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    public boolean getEncoderHealth(int encoderIndex) {
+        return driveMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
 
@@ -211,12 +210,15 @@ public class DriveTrain extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-        /*
+
         SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
         SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
         SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
         SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
-        */
+
+        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
+        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
+        Shuffleboard.putBoolean("DriveTrain", "xBox Button Test", Robot.m_oi.xBoxButtons[5].get());
 
         Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getLeftEncoderCount());
         Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getRightEncoderCount());
@@ -228,6 +230,6 @@ public class DriveTrain extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //defaultCommand = new SetArcadeDriveVelocity();
-        setDefaultCommand(new SetArcadeDriveVelocity());
+        setDefaultCommand(new SetArcadeDrive());
     }
 }
