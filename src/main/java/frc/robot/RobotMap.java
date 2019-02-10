@@ -72,6 +72,7 @@ public class RobotMap {
     // Important Constants
     public static double WRIST_RETRACTED_ANGLE = 0;
     public static double WRIST_EXTENDED_ANGLE = 0;
+    public static double WRIST_CARGO_HIGH_ANGLE = 0;
     public static double WRIST_HATCH_ANGLE = 0;
     public static double ELEVATOR_HOME_POSITION = 0;
     public static double ELEVATOR_HATCH_LOW_POSITION = 0;
