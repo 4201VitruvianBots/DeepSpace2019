@@ -54,8 +54,7 @@ public class Intake extends Subsystem {
         intakeMotors[1].set(ControlMode.PercentOutput, -output);
     }
 
-    public void setHatchGroundIntakeOutput(double output){
-        intakeMotors[0].set(ControlMode.PercentOutput, output);
+    public void setHatchGroundIntakeOutput(double output){ intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public boolean getHarpoonSecureStatus(){
