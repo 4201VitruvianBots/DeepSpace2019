@@ -8,7 +8,6 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
 import frc.vitruvianlib.driverstation.Shuffleboard;
@@ -49,7 +48,7 @@ public class UpdateElevatorSetpoint extends Command {
             }
             */
             if(Math.abs(joystickOutput) > 0.05)
-                Robot.elevator.setIncrementedPosition(joystickOutput * 4250 * 2);
+                Robot.elevator.setIncrementedHeight(joystickOutput * 6);
         } else {
             double voltage = 0;
             if (Math.abs(joystickOutput) > 0.05)

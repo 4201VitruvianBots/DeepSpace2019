@@ -30,7 +30,7 @@ public class Elevator extends Subsystem {
     private Timer elevatorTimer;
     private double elevatorPreviousTime;
     private double elevatorPreviousError;
-    private double kP = 0.6;
+    private double kP = 0.3;
     private double kI = 0;
     private double kD = 0;
     private double kS = 0; //Voltage to break static friction
@@ -38,11 +38,12 @@ public class Elevator extends Subsystem {
     private double kA = 0; //Voltage to hold constant acceleration
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
-    public int upperLimitEncoderCounts = 42500;
+    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
     public int lowerLimitEncoderCounts = 0;
-    private int encoderCountsPerInch = 0;
+    private int encoderCountsPerInch = 652;
 
-    private double arbitraryFF = 2 / 12;
+    private double arbitraryFFUp = 2 / 12;
+    private double arbitraryFFDown = -0.5 / 12;
 
     public static double elevatorSetPoint = 0;
     public static int controlMode = 0;
@@ -69,7 +70,7 @@ public class Elevator extends Subsystem {
         }
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
         elevatorMotors[1].setInverted(true);
-        elevatorMotors[0].setSensorPhase(true);
+        elevatorMotors[0].setSensorPhase(false);
         elevatorMotors[1].setSensorPhase(false);
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
@@ -148,7 +149,10 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFF);
+        if(voltage >= 0)
+            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFUp);
+        else
+            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFDown);
     }
 
     //PID(feedback loop)
@@ -185,27 +189,31 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].set(ControlMode.Position, getPosition());
     }
 
-    public void setIncrementedPosition(double height) {
-        double hieghtToEncoderCounts = 1;
+    public void setIncrementedHeight(double height) {
         double currentPosition = getPosition();
-        double encoderCounts = height * hieghtToEncoderCounts + currentPosition;
+        double encoderCounts = (height * encoderCountsPerInch) + currentPosition;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
-        elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
+        if(getPosition() >= encoderCounts)
+            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
+        else
+            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
     }
 
-    public void setAbsolutePosition(double height) {
-        double hieghtToEncoderCounts = 1;
-        double encoderCounts = height * hieghtToEncoderCounts;
+    public void setAbsoluteHeight(double height) {
+        double encoderCounts = height * encoderCountsPerInch;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
-        elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
+        if(getPosition() >= encoderCounts)
+            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
+        else
+            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
     }
 
     public void updateSmartDashboard() {

@@ -19,6 +19,7 @@ import frc.robot.commands.elevator.SetElevatorSetpoint;
 import frc.robot.commands.intake.IntakeIntake;
 import frc.robot.commands.intake.IntakeRelease;
 import frc.robot.commands.intake.SetIntakeState;
+import frc.robot.commands.test.SetElevatorVoltage;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -121,7 +122,7 @@ public class OI {
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(1));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(4));
 
-        //xBoxLeftTrigger.whenPressed(new SetIntakeState(2));
+        xBoxLeftTrigger.whenPressed(new SetElevatorVoltage());
         //xBoxButtons[4].whenPressed(new SetIntakeState(0));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));

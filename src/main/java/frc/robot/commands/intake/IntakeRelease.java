@@ -17,6 +17,7 @@ import frc.robot.subsystems.Intake;
  */
 public class IntakeRelease extends Command {
     Timer pause = new Timer();
+    int outtakeState;
 
     public IntakeRelease() {
         // Use requires() here to declare subsystem dependencies
@@ -27,16 +28,18 @@ public class IntakeRelease extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        outtakeState = Intake.outtakeState;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        switch (Intake.intakeState) {
+        switch (outtakeState) {
             case 2:
                 Robot.intake.setCargoIntakeOutput(0.8);
                 break;
             case 1:
+                //Robot.intake.setHatchGroundIntakeOutput(0.8);
             case 0:
             default:
                 Robot.intake.setHarpoonExtend(true);
@@ -54,7 +57,7 @@ public class IntakeRelease extends Command {
     @Override
     protected void end() {
         pause.reset();
-        switch (Intake.intakeState) {
+        switch (outtakeState) {
             case 2:
                 Robot.intake.setCargoIntakeOutput(0);
                 break;

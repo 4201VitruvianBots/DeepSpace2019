@@ -62,7 +62,6 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
         vision.initUSBCamera();
-
     }
 
     /**
@@ -81,7 +80,9 @@ public class Robot extends TimedRobot {
         intake.updateSmartDashboard();
 
         // TODO: Enable this when encoders are fixed
-        //elevator.zeroEncoder();
+        elevator.zeroEncoder();
+        //wrist.zeroEncoder();
+        intake.updateOuttakeState();
     }
 
     /**
@@ -162,7 +163,7 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        Robot.elevator.resetEncoderCount();
+        //Robot.elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
 
         // Only reset shuffleboard's recording if starting from disabledInit

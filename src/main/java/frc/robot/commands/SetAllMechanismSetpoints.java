@@ -23,7 +23,7 @@ public class SetAllMechanismSetpoints extends CommandGroup {
         // Set the position of the elevator
         switch(position) {
             case 4: // Rocket Level 3 Scoring Positions
-                if(Intake.intakeState == 2) {
+                if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_CARGO_HIGH_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_HIGH_POSITION));
                 } else {
@@ -31,7 +31,7 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_HIGH_POSITION));
                 }
             case 3: // Rocket Level 2 Scoring Positions
-                if(Intake.intakeState == 2) {
+                if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_MID_POSITION));
                 } else {
@@ -40,7 +40,7 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 }
                 break;
             case 2: // Rocket Level 1 Scoring Positions
-                if(Intake.intakeState == 2) {
+                if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_LOW_POSITION));
                 } else {
@@ -49,7 +49,7 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 }
                 break;
             case 1: // Cargo Ship Scoring Positions
-                if(Intake.intakeState == 2) {
+                if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_SHIP_POSITION));
                 } else {

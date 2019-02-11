@@ -37,7 +37,7 @@ public class UpdateWristSetpoint extends Command {
 
         if (Wrist.controlMode == 1 && !override) {/*
             if(Math.abs(joystickOutput) > 0.05)
-               Robot.wrist.setIncrementedPosition(joystickOutput * 2);*/
+               Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/
         } else {
             Robot.wrist.setDirectOutput (joystickOutput * 0.5);
         }

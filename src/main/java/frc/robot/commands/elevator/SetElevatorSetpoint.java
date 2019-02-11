@@ -24,7 +24,7 @@ public class SetElevatorSetpoint extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.elevator.setAbsolutePosition(setpoint);
+        Robot.elevator.setAbsoluteHeight(setpoint);
     }
 
     // Called once after isFinished returns true
