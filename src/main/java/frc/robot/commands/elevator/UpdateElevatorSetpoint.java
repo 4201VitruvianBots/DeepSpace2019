@@ -36,6 +36,13 @@ public class UpdateElevatorSetpoint extends Command {
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxLeftY();
 
+        if(!Elevator.initialCalibration) {
+             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(0)) {
+                 Elevator.initialCalibration = true;
+                 //Elevator.controlMode = 1;
+             }
+        }
+
         if(Elevator.controlMode == 1 && !override) {
             /*
             if (Robot.elevator.getPosition() > Robot.elevator.upperLimitEncoderCounts)
@@ -59,8 +66,12 @@ public class UpdateElevatorSetpoint extends Command {
                 else
                     voltage = 1;
             }
-            //voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
-            //voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;
+            // TODO: Uncomment once limit switches are implemented
+            /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
+                voltage = 0;
+                Robot.m_oi.setXBoxRumble(0.8);
+            } else
+                Robot.m_oi.setXBoxRumble(0);*/
 
 
             double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
@@ -71,14 +82,6 @@ public class UpdateElevatorSetpoint extends Command {
 
             Robot.elevator.setOpenLoopOutput(targetVoltage);
         }
-
-        // TODO: Figure out why this only works on the trigger and not as a command on other xBox buttons
-        if(Robot.m_oi.xBoxLeftTrigger.get()) {
-            Shuffleboard.putBoolean("Elevator", "Test Button", true);
-            Robot.elevator.setOpenLoopOutput(Shuffleboard.getNumber("Elevator", "Test Voltage", 0));
-        } else
-            Shuffleboard.putBoolean("Elevator", "Test Button", false);
-
     }
 
     // Make this return true when this Command no longer needs to run execute()

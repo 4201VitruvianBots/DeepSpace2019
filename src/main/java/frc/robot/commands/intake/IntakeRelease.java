@@ -28,8 +28,8 @@ public class IntakeRelease extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        outtakeState = Intake.intakeState;
-        //outtakeState = Intake.outtakeState;
+        // Read this initially to avoid flickering
+        outtakeState = Intake.outtakeState;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -61,10 +61,8 @@ public class IntakeRelease extends Command {
         pause.reset();
         switch (outtakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(0);
-                break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 0:
             default:

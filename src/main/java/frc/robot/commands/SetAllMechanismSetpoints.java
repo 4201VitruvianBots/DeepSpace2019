@@ -26,6 +26,9 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_CARGO_HIGH_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_HIGH_POSITION));
+                } if(Intake.outtakeState == 1) {
+                addSequential(new SetWristSetpoint(RobotMap.WRIST_HATCH_ANGLE));
+                addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_GROUND_HIGH_POSITION));
                 } else {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_HIGH_POSITION));
@@ -34,6 +37,9 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_MID_POSITION));
+                } else if(Intake.outtakeState == 1) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_HATCH_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_GROUND_MID_POSITION));
                 } else {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_MID_POSITION));
@@ -43,6 +49,9 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_LOW_POSITION));
+                } else if(Intake.outtakeState == 1) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_HATCH_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_GROUND_LOW_POSITION));
                 } else {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_LOW_POSITION));
@@ -52,7 +61,10 @@ public class SetAllMechanismSetpoints extends CommandGroup {
                 if(Intake.outtakeState == 2) {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_SHIP_POSITION));
-                } else {
+                } else if(Intake.outtakeState == 1) {
+                    addSequential(new SetWristSetpoint(RobotMap.WRIST_HATCH_ANGLE));
+                    addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_GROUND_LOW_POSITION));
+                }else {
                     addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
                     addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_LOW_POSITION));
                 }

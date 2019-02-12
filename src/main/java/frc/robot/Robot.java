@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        Elevator.initialCalibration = false;
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
         // chooser.addOption("My Auto", new MyAutoCommand());
@@ -59,8 +60,8 @@ public class Robot extends TimedRobot {
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
+        controls.initTestSettings();
 
-        Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
         vision.initUSBCamera();
     }
 

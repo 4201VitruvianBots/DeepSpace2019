@@ -88,7 +88,7 @@ public class Intake extends Subsystem {
         else if(false)  // TODO: Add hatch sensor
             outtakeState = 1;
         else
-            outtakeState = 0;
+            outtakeState = intakeState;
     }
 
     public void updateSmartDashboard() {

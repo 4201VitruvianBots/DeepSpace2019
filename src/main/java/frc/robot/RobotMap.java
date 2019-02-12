@@ -36,9 +36,6 @@ public class RobotMap {
         public static int hatchIntakeExtendReverse = 3;
         public static int hatchIntakeSecureForward = 4;
         public static int hatchIntakeSecureReverse = 5;
-        // TODO: Update when solenoid is fixed
-     //  public static int driveTrainShifterReverse = 1;
-     //  public static int driveTrainShifterReverse = 1;
 
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
@@ -78,6 +75,9 @@ public class RobotMap {
     public static double ELEVATOR_HATCH_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_MID_POSITION = 0;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 0;
+    public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
+    public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 0;
+    public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 0;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 0;
     public static double ELEVATOR_CARGO_LOW_POSITION = 0;
     public static double ELEVATOR_CARGO_MID_POSITION = 0;

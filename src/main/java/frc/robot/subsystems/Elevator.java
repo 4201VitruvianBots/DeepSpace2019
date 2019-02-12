@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.UpdateElevatorSetpoint;
 import frc.robot.util.Controls;
@@ -47,6 +48,8 @@ public class Elevator extends Subsystem {
 
     public static double elevatorSetPoint = 0;
     public static int controlMode = 0;
+
+    public static boolean initialCalibration = false;
 
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.leftElevator),
@@ -225,6 +228,9 @@ public class Elevator extends Subsystem {
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
         Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
+        Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
+
+        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
     }
 
     @Override

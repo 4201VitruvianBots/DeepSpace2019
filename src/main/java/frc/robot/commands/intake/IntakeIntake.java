@@ -28,8 +28,8 @@ public class IntakeIntake extends Command {
     protected void initialize() {
         switch (Intake.intakeState) {
             case 2:
-                break;
             case 1:
+                // TODO: Set wrist ground
                 break;
             case 0:
             default:
@@ -68,6 +68,7 @@ public class IntakeIntake extends Command {
         pause.reset();
         switch (Intake.intakeState) {
             case 2:
+            case 1:
                 Robot.intake.setCargoIntakeOutput(0);
                 pause.start();
                 while (pause.get() < 0.15) {
@@ -76,13 +77,8 @@ public class IntakeIntake extends Command {
                 //TODO: Retract wrist to home.
                 pause.stop();
                 break;
-            default:
-            case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0);
-                // TODO: Retract Wrist then grab hatch
-                break;
             case 0:
-            //default:
+            default:
                 Robot.intake.setHarpoonSecure(true);
                 pause.start();
                 while(pause.get() < 0.15) {

@@ -84,8 +84,7 @@ public class OI {
             3 (?) - Left Button: Set DriveTrain High Gear
         */
         leftButtons[0].whileHeld(new IntakeIntake());
-        //leftButtons[1].whileHeld(new FollowVisionTarget());
-        //leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
+        leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
         leftButtons[2].whileHeld(new SetDriveShifters(true));
         leftButtons[3].whileHeld(new SetDriveShifters(false));
 
@@ -97,6 +96,8 @@ public class OI {
         */
         rightButtons[0].whileHeld(new IntakeRelease());
         rightButtons[1].whileHeld(new FollowVisionTarget());
+        // TODO: Test this version of limelight auto-correction
+        //rightButtons[1].whileHeld(new HoldToAlignWithTarget());
 
         //rightButtons[1].whenPressed(new TurnToAngle(180));
         //rightButtons[2].whenPressed(new TurnToAngle(-90));

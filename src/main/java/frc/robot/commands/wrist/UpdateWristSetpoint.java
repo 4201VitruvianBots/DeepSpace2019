@@ -39,6 +39,13 @@ public class UpdateWristSetpoint extends Command {
             if(Math.abs(joystickOutput) > 0.05)
                Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/
         } else {
+            // TODO: Uncomment once limit switches are implemented
+            /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {
+                joystickOutput = 0;
+                Robot.m_oi.setXBoxRumble(0.8);
+            } else
+                Robot.m_oi.setXBoxRumble(0);*/
+
             Robot.wrist.setDirectOutput (joystickOutput * 0.5);
         }
     }
