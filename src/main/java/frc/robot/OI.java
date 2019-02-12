@@ -14,11 +14,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import frc.robot.commands.*;
+import frc.robot.commands.FollowVisionTarget;
 import frc.robot.commands.drivetrain.*;
-import frc.robot.commands.elevator.SetElevatorSetpoint;
-import frc.robot.commands.intake.IntakeIntake;
-import frc.robot.commands.intake.IntakeRelease;
-import frc.robot.commands.intake.SetIntakeState;
+import frc.robot.commands.intake.*;
 import frc.robot.commands.test.SetElevatorVoltage;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
@@ -86,7 +84,8 @@ public class OI {
             3 (?) - Left Button: Set DriveTrain High Gear
         */
         leftButtons[0].whileHeld(new IntakeIntake());
-        leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
+        //leftButtons[1].whileHeld(new FollowVisionTarget());
+        //leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
         leftButtons[2].whileHeld(new SetDriveShifters(true));
         leftButtons[3].whileHeld(new SetDriveShifters(false));
 
@@ -97,9 +96,11 @@ public class OI {
             3 (?) - Left Button: DriveTrain turn -90
         */
         rightButtons[0].whileHeld(new IntakeRelease());
-        rightButtons[1].whenPressed(new TurnToAngle(180));
-        rightButtons[2].whenPressed(new TurnToAngle(-90));
-        rightButtons[3].whenPressed(new TurnToAngle(90));
+        rightButtons[1].whileHeld(new FollowVisionTarget());
+
+        //rightButtons[1].whenPressed(new TurnToAngle(180));
+        //rightButtons[2].whenPressed(new TurnToAngle(-90));
+        //rightButtons[3].whenPressed(new TurnToAngle(90));
 
         /*  xBox Controller Buttons:
             0  - A Button: Set Mechanisms to Rocket Low

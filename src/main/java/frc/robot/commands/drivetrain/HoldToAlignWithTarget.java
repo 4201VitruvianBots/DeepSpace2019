@@ -17,11 +17,11 @@ import frc.robot.Robot;
 public class HoldToAlignWithTarget extends PIDCommand {
     static double kP = 0.04;   //0.1
     static double kI = 0;
-    static double kD = 0;  //10
+    static double kD = 0.15;  //10
     static double kF = 0;  //1023.0 / 72000.0;
     static double period = 0.02;
     double lastLimelightAngle = 0;
-    double turn;
+    double throttle, turn;
     //Notifier periodicRunnable;
     boolean isFinished = false;
 
@@ -37,7 +37,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
         Robot.driveTrain.setDriveMotorsState(false);
         getPIDController().setF(kF);
         getPIDController().setContinuous(true);
-        getPIDController().setAbsoluteTolerance(1.5);
+        getPIDController().setAbsoluteTolerance(1);
         getPIDController().setOutputRange(-1, 1);
 
         Robot.vision.setPipeline(1);
@@ -46,26 +46,21 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double throttle = Robot.m_oi.getLeftJoystickY();
+        throttle = Robot.m_oi.getLeftJoystickY();
 
         if (Robot.vision.isValidTarget()) {
             double limelightAngle = Robot.vision.getTargetX();
             lastLimelightAngle = limelightAngle;
+            getPIDController().enable();
             if(limelightAngle != lastLimelightAngle) {
                 double currentNavXAngle = Robot.driveTrain.navX.getAngle();
                 double setpoint = currentNavXAngle + lastLimelightAngle;
                 getPIDController().setSetpoint(setpoint);
-                getPIDController().enable();
             }
         } else {
             getPIDController().disable();
             turn = Robot.m_oi.getRightJoystickX();
         }
-
-        if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
-            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
-        else
-            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
 
         //if(Robot.vision.IsTargetGood())
          //   isFinished = true;
@@ -80,11 +75,16 @@ public class HoldToAlignWithTarget extends PIDCommand {
     @Override
     protected void usePIDOutput(double output) {
         turn = -output;
+
+        if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
+            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+        else
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 
     @Override
     protected boolean isFinished(){
-        return getPIDController().onTarget();
+        return false; //getPIDController().onTarget();
     }
     // Called once after isFinished returns true
     @Override

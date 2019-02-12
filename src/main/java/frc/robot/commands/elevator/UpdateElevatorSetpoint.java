@@ -57,7 +57,7 @@ public class UpdateElevatorSetpoint extends Command {
                 if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
                     Robot.elevator.setCurrentPositionHold();
                 else
-                    voltage = 2;
+                    voltage = 1;
             }
             //voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
             //voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;

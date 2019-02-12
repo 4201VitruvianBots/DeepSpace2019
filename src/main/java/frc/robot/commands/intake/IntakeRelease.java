@@ -28,7 +28,8 @@ public class IntakeRelease extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        outtakeState = Intake.outtakeState;
+        outtakeState = Intake.intakeState;
+        //outtakeState = Intake.outtakeState;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -39,7 +40,8 @@ public class IntakeRelease extends Command {
                 Robot.intake.setCargoIntakeOutput(0.8);
                 break;
             case 1:
-                //Robot.intake.setHatchGroundIntakeOutput(0.8);
+                Robot.intake.setHatchGroundIntakeOutput(0.8);
+                break;
             case 0:
             default:
                 Robot.intake.setHarpoonExtend(true);
@@ -62,6 +64,8 @@ public class IntakeRelease extends Command {
                 Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:
+                Robot.intake.setHatchGroundIntakeOutput(0);
+                break;
             case 0:
             default:
                 Robot.intake.setHarpoonSecure(false);

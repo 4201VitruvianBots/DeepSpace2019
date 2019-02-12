@@ -44,12 +44,11 @@ public class IntakeIntake extends Command {
             case 2:
                 Robot.intake.setCargoIntakeOutput(-0.8);
                 break;
-            default:
             case 1:
                 Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             case 0:
-            //default:
+            default:
                 Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
                 break;
@@ -79,8 +78,9 @@ public class IntakeIntake extends Command {
                 break;
             default:
             case 1:
+                Robot.intake.setHatchGroundIntakeOutput(0);
                 // TODO: Retract Wrist then grab hatch
-                //break;
+                break;
             case 0:
             //default:
                 Robot.intake.setHarpoonSecure(true);

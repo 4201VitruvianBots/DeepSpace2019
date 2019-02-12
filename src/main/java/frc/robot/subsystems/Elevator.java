@@ -157,12 +157,12 @@ public class Elevator extends Subsystem {
 
     //PID(feedback loop)
     private double setClosedLoopPositionStep(double setPoint) {
-        double velocity = (setPoint-elevatorPreviousError)/(elevatorPreviousTime -elevatorTimer.getFPGATimestamp());
+        double velocity = (setPoint-elevatorPreviousError)/(elevatorPreviousTime - Timer.getFPGATimestamp());
         double error = setPoint-encoderCountsToInches(getPosition());
         double voltage = 0;
-        voltage = kP*error+kD*(error-elevatorPreviousError)/((elevatorPreviousTime -elevatorTimer.getFPGATimestamp())- velocity);
+        voltage = kP*error+kD*(error-elevatorPreviousError)/((elevatorPreviousTime - Timer.getFPGATimestamp())- velocity);
         elevatorPreviousError = error;
-        elevatorPreviousTime = elevatorTimer.getFPGATimestamp();
+        elevatorPreviousTime = Timer.getFPGATimestamp();
         return voltage;
     }
 
