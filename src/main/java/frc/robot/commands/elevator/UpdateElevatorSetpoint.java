@@ -63,8 +63,8 @@ public class UpdateElevatorSetpoint extends Command {
             else {
                 if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
                     Robot.elevator.setCurrentPositionHold();
-                else
-                    voltage = 1;
+                //else if(Robot.m_oi.xBoxPOVButtons[0].get())
+                //    voltage = 2;
             }
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {

@@ -46,7 +46,7 @@ public class UpdateWristSetpoint extends Command {
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
 
-            Robot.wrist.setDirectOutput (joystickOutput * 0.5);
+            Robot.wrist.setDirectOutput (joystickOutput);
         }
     }
 

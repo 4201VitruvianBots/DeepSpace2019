@@ -55,8 +55,9 @@ public class RobotMap {
     public static int hatchSensor = 1;
     public static int elevatorBottom = 2;
     public static int elevatorTop = 3;
-    public static int wristBottom = 4;
-    public static int wristTop = 5;
+    public static int elevatorMid = 4;
+    public static int wristBottom = 5;
+    public static int wristTop = 6;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;

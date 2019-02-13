@@ -124,6 +124,8 @@ public class Wrist extends Subsystem {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
+        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
+        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
     }
 
     @Override

@@ -58,7 +58,7 @@ public class IntakeIntake extends Command {
     @Override
     protected boolean isFinished() {
         if(Intake.intakeState == 2)
-            return !Robot.intake.bannerIR.get();
+            return Robot.intake.bannerIR.get();
         else
             return false || !Robot.m_oi.leftButtons[0].get();
     }
@@ -68,6 +68,8 @@ public class IntakeIntake extends Command {
         pause.reset();
         switch (Intake.intakeState) {
             case 2:
+                Robot.intake.setCargoIntakeOutput(-0.2);
+                break;
             case 1:
                 Robot.intake.setCargoIntakeOutput(0);
                 pause.start();

@@ -58,7 +58,8 @@ public class Elevator extends Subsystem {
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
-        new DigitalInput(RobotMap.elevatorTop)
+        new DigitalInput(RobotMap.elevatorTop),
+        new DigitalInput(RobotMap.elevatorMid)
     };
 
     public Elevator() {
@@ -224,6 +225,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
         Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));

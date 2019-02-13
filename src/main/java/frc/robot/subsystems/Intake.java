@@ -31,7 +31,7 @@ public class Intake extends Subsystem {
 
     private TalonSRX[] intakeMotors = {
         new TalonSRX(RobotMap.hatchIntakeMotor),
-        //new TalonSRX(RobotMap.hatchIntakeMotor)
+        new TalonSRX(RobotMap.cargoIntakeMotor)
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
@@ -45,19 +45,18 @@ public class Intake extends Subsystem {
             intakeMotor.setNeutralMode(NeutralMode.Coast);
         }
         intakeMotors[0].setInverted(true);
-        //intakeMotors[1].setInverted(true);
-        //intakeMotors[1].setInverted(true);
+        intakeMotors[1].setInverted(true);
         //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 
     public void setCargoIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, output);
-        //intakeMotors[1].set(ControlMode.PercentOutput, -output);
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public void setHatchGroundIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, -output);
-        //intakeMotors[1].set(ControlMode.PercentOutput, -output);
+        intakeMotors[1].set(ControlMode.PercentOutput, -output);
     }
 
     public boolean getHarpoonSecureStatus(){
@@ -83,7 +82,7 @@ public class Intake extends Subsystem {
     }
 
     public void updateOuttakeState() {
-        if(!bannerIR.get())
+        if(bannerIR.get())
             outtakeState = 2;
         else if(false)  // TODO: Add hatch sensor
             outtakeState = 1;
