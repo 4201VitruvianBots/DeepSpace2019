@@ -66,15 +66,15 @@ public class RobotMap {
     public static int pdpChannelElevatorLeft = 13;
     public static int pdpChannelElevatorRight = 2;
 
-    // Important Constants
+    // Setpoints (Units in inches or degrees)
     public static double WRIST_RETRACTED_ANGLE = 0;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_HIGH_ANGLE = 0;
     public static double WRIST_HATCH_ANGLE = 0;
     public static double ELEVATOR_HOME_POSITION = 0;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 0;
-    public static double ELEVATOR_HATCH_MID_POSITION = 0;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 0;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 11;
+    public static double ELEVATOR_HATCH_MID_POSITION = 39;
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 70; // TODO: Validate if the robot is capable of this
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 0;
