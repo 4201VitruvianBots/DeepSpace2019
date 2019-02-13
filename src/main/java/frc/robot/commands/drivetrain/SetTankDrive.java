@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetArcadeDrive extends Command {
-    public SetArcadeDrive() {
+public class SetTankDrive extends Command {
+    public SetTankDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
     }
@@ -27,10 +27,13 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
+        double leftInput = Robot.m_oi.getLeftJoystickY();
+        double rightInput = Robot.m_oi.getRightJoystickY();
 
-        Robot.driveTrain.setMotorArcadeDrive(joystickY, joystickX);
+        double leftOutput = (Math.abs(leftInput) > 0.05) ? leftInput : 0;
+        double rightOutput = (Math.abs(rightInput) > 0.05) ? rightInput : 0;
+
+        Robot.driveTrain.setMotorTankDrive(leftOutput, rightOutput);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -49,5 +52,6 @@ public class SetArcadeDrive extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

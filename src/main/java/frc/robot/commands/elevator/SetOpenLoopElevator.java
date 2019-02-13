@@ -5,37 +5,40 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetDriveShifters extends InstantCommand {
-    boolean state;
-    public SetDriveShifters(boolean state) {
+public class SetOpenLoopElevator extends Command {
+    public SetOpenLoopElevator() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
-        this.state = state;
+        requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(state);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        Robot.elevator.setOpenLoopOutput(Robot.m_oi.getRightJoystickY()*12);
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 
     // Called once after isFinished returns true
     @Override
-    protected void end() {
+    protected void end() { Robot.elevator.setOpenLoopOutput(0);
     }
 
     // Called when another command which requires one or more of the same

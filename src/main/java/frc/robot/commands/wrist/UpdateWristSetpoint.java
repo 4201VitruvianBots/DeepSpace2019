@@ -5,33 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDriveVelocity extends Command {
-    public SetTankDriveVelocity() {
+public class UpdateWristSetpoint extends Command {
+    double output;
+
+    public static boolean override;
+
+
+    public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double leftOutput = Robot.m_oi.getLeftJoystickY();
-        double rightOutput = Robot.m_oi.getRightJoystickY();
+        double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-        Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
+        if (Wrist.controlMode == 1 && !override) {/*
+            if(Math.abs(joystickOutput) > 0.05)
+               Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/
+        } else {
+            // TODO: Uncomment once limit switches are implemented
+            /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {
+                joystickOutput = 0;
+                Robot.m_oi.setXBoxRumble(0.8);
+            } else
+                Robot.m_oi.setXBoxRumble(0);*/
+
+            Robot.wrist.setDirectOutput (joystickOutput * 0.5);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -43,8 +59,6 @@ public class SetTankDriveVelocity extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorVelocityOutput(0, 0);
-        //Robot.driveTrain.setMotorGains(0, 0, 0, 0);
     }
 
     // Called when another command which requires one or more of the same

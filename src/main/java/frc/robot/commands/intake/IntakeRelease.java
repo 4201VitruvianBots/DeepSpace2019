@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,25 +15,32 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ReleaseGamePiece extends Command {
+public class IntakeRelease extends Command {
     Timer pause = new Timer();
+    int outtakeState;
 
-    public ReleaseGamePiece() {
+    public IntakeRelease() {
         // Use requires() here to declare subsystem dependencies
+        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        // Read this initially to avoid flickering
+        outtakeState = Intake.outtakeState;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        switch (Intake.intakeState) {
+        switch (outtakeState) {
+            case 2:
+                Robot.intake.setCargoIntakeOutput(0.8);
+                break;
             case 1:
-                Robot.intake.setIntakeOutput(0.8);
+                Robot.intake.setHatchGroundIntakeOutput(0.8);
                 break;
             case 0:
             default:
@@ -52,15 +59,16 @@ public class ReleaseGamePiece extends Command {
     @Override
     protected void end() {
         pause.reset();
-        switch (Intake.intakeState) {
+        switch (outtakeState) {
+            case 2:
             case 1:
-                Robot.intake.setIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 0:
             default:
                 Robot.intake.setHarpoonSecure(false);
                 pause.start();
-                while(pause.get() < 0.15) {
+                while(pause.get() < 0.35) {
 
                 }
                 Robot.intake.setHarpoonExtend(false);

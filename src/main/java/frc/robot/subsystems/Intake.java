@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -23,15 +24,18 @@ public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public static int intakeState = 0;
+    public static int outtakeState = 0;
+
     DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
-        new TalonSRX(RobotMap.cargoIntakeA),
-        new TalonSRX(RobotMap.cargoIntakeB)
+        new TalonSRX(RobotMap.hatchIntakeMotor),
+        //new TalonSRX(RobotMap.hatchIntakeMotor)
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
+    // TODO: Add sensor for hatch intake
 
     public Intake() {
         super("Intake");
@@ -41,12 +45,19 @@ public class Intake extends Subsystem {
             intakeMotor.setNeutralMode(NeutralMode.Coast);
         }
         intakeMotors[0].setInverted(true);
-        intakeMotors[1].setInverted(true);
-        intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
+        //intakeMotors[1].setInverted(true);
+        //intakeMotors[1].setInverted(true);
+        //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 
-    public void setIntakeOutput(double output){
+    public void setCargoIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, output);
+        //intakeMotors[1].set(ControlMode.PercentOutput, -output);
+    }
+
+    public void setHatchGroundIntakeOutput(double output){
+        intakeMotors[0].set(ControlMode.PercentOutput, -output);
+        //intakeMotors[1].set(ControlMode.PercentOutput, -output);
     }
 
     public boolean getHarpoonSecureStatus(){
@@ -71,7 +82,19 @@ public class Intake extends Subsystem {
             harpoonSecure.set(DoubleSolenoid.Value.kReverse);
     }
 
+    public void updateOuttakeState() {
+        if(!bannerIR.get())
+            outtakeState = 2;
+        else if(false)  // TODO: Add hatch sensor
+            outtakeState = 1;
+        else
+            outtakeState = intakeState;
+    }
+
     public void updateSmartDashboard() {
+        Shuffleboard.putNumber("Intake","Intake State", intakeState);
+        Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
+
         SmartDashboard.putNumber("Intake State", intakeState);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }

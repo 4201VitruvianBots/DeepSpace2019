@@ -12,12 +12,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
-import frc.robot.commands.auto.*;
-import frc.robot.commands.drive.*;
+import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,12 +28,14 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
-    public static NerdyElevator nerdyElevator = new NerdyElevator();
+    //public static NerdyElevator nerdyElevator = new NerdyElevator();
     public static Intake intake = new Intake();
     public static Controls controls = new Controls();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;
+
+    boolean shuffleboardTransition = false;
 
     Command m_autonomousCommand;
     SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -47,21 +48,21 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        Elevator.initialCalibration = false;
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
         // chooser.addOption("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.addOption("Arcade Drive", new SetArcadeDriveVelocity());
-        m_teleopChooser.setDefaultOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
+        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
+        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
-        vision.initUSBCamera();
+        controls.initTestSettings();
 
-        // Default VP Pipeline
-        vision.setPipeline(1);
+        vision.initUSBCamera();
     }
 
     /**
@@ -78,6 +79,11 @@ public class Robot extends TimedRobot {
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
+
+        // TODO: Enable this when encoders are fixed
+        elevator.zeroEncoder();
+        //wrist.zeroEncoder();
+        intake.updateOuttakeState();
     }
 
     /**
@@ -87,7 +93,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        shuffleboardTransition = false;
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
         VitruvianLogger.getInstance().startLogger();
+
+        // Default VP Pipeline
+        vision.setPipeline(1);
     }
 
     @Override
@@ -124,6 +136,9 @@ public class Robot extends TimedRobot {
         }
 
         VitruvianLogger.getInstance().startLogger();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+        edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
+        shuffleboardTransition = true;
     }
 
     /**
@@ -149,8 +164,14 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        Robot.elevator.resetEncoderCount();
+        //Robot.elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
+
+        // Only reset shuffleboard's recording if starting from disabledInit
+        if(!shuffleboardTransition) {
+            edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
+            edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
+        }
     }
 
     /**
@@ -160,12 +181,11 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        // TODO: Update logic to specify tank/arcade drive
-        // If drivetrain encoders are bad, revert to default arcade drive.
-        if (!driveTrain.isLeftEncoderHealthy() || !driveTrain.isRightEncoderHealthy()) {
+        // TODO: Update logic to specify tank/arcade drivetrain
+        // If drivetrain encoders are bad, revert to default arcade drivetrain.
+        if (!driveTrain.getEncoderHealth(0) || !driveTrain.getEncoderHealth(2)) {
             Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
         }
-
     }
 
     /**

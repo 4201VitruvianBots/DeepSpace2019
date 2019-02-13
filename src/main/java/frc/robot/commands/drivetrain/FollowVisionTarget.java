@@ -5,73 +5,71 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class TurnToAngle extends PIDCommand {
-    static double kP = 0.04;   //0.1
-    static double kI = 0;
-    static double kD = 0;  //10
-    static double kF = 0;  //1023.0 / 72000.0;
-    static double period = 0.02;
 
-    double targetAngle;
-    double output;
-    public TurnToAngle(double targetAngle) {
-        super(kP, kI, kD, period);
+public class FollowVisionTarget extends PIDCommand {
+    static double kP = 0.04; //Proportion for turning
+    static double kI = 0; //Proportion for turning
+    static double kD = 0.15; //Proportion for turning
+    double tta = 0.85; //Target TA val
 
+    public FollowVisionTarget() {
+        super(kP, kI, kD);
         // Use requires() here to declare subsystem dependencies
+        // requires(Robot.m_subsystem);
         requires(Robot.driveTrain);
-        this.targetAngle = targetAngle;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(false);
-        getPIDController().setF(kF);
-        getPIDController().setContinuous(true);
-        getPIDController().setAbsoluteTolerance(1.5);
-        getPIDController().setOutputRange(-1, 1); // +/- 0.8
 
-        double currentAngle = Robot.driveTrain.navX.getAngle();
-        setSetpoint(currentAngle + targetAngle);
-        getPIDController().enable();
+        this.getPIDController().setAbsoluteTolerance(1);
+        this.getPIDController().setOutputRange(-1, 1);
     }
 
     @Override
     protected double returnPIDInput() {
-        return Robot.driveTrain.navX.getAngle();
+        return Robot.vision.getTargetX();
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        this.output = output;
+        Robot.driveTrain.setMotorPercentOutput((Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output, (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output);
     }
-
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        if(Robot.vision.isValidTarget()) {
+            this.getPIDController().enable();
+            //double correction = Robot.limelight.getTargetX() * kP;
+            //Robot.driveTrain.setDriveOutput((Robot.m_oi.getLeftY() - Robot.m_oi.getRightX()) + correction, (Robot.m_oi.getLeftY() + Robot.m_oi.getRightX()) - correction);
+        } else
+            this.getPIDController().disable();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return getPIDController().onTarget();
+        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        getPIDController().disable();
-        Robot.driveTrain.setMotorTankDrive(0, 0);
         Robot.driveTrain.setDriveMotorsState(true);
+        //Robot.driveTrain.setDriveOutput(0, 0);
     }
 
     // Called when another command which requires one or more of the same
@@ -80,6 +78,4 @@ public class TurnToAngle extends PIDCommand {
     protected void interrupted() {
         end();
     }
-
-
 }

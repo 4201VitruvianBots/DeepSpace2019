@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -13,38 +13,52 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeExtend extends Command {
-    public IntakeExtend() {
+public class HoldToFollowTarget extends Command {
+    double kP = 0.04; //Proportion for turning
+    double kPB = 1.4; //Proportion for moving
+    double ds = 0.5; //Default speed multiplier
+    double tta = 0.85; //Target TA val
+
+    public HoldToFollowTarget() {
         // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
-        requires(Robot.intake);
+        requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Robot.driveTrain.setDriveMotorsState(false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
+        if(Robot.vision.isValidTarget()) {
+            double correction = Robot.vision.getTargetX() * kP;
+            double paddingCorrection = ds*((tta - Robot.vision.getTargetX()) * kPB);
+            Robot.driveTrain.setMotorVelocityOutput(-paddingCorrection + correction, -paddingCorrection - correction);
+        }
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        if(Robot.driveTrain.getLeftEncoderVelocity() <= 0 && Robot.driveTrain.getLeftEncoderVelocity() <= 0){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.driveTrain.setDriveMotorsState(true);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

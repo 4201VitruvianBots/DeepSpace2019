@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,10 +15,11 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class DeployIntake extends Command {
+public class IntakeIntake extends Command {
     Timer pause = new Timer();
-    public DeployIntake() {
+    public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
+        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
@@ -28,6 +29,7 @@ public class DeployIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
+                // TODO: Set wrist ground
                 break;
             case 0:
             default:
@@ -40,10 +42,10 @@ public class DeployIntake extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-
+                Robot.intake.setCargoIntakeOutput(-0.8);
                 break;
             case 1:
-                Robot.intake.setIntakeOutput(-0.8);
+                Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             case 0:
             default:
@@ -55,18 +57,19 @@ public class DeployIntake extends Command {
 
     @Override
     protected boolean isFinished() {
-        if(Intake.intakeState == 1)
+        if(Intake.intakeState == 2)
             return !Robot.intake.bannerIR.get();
         else
-            return false;
+            return false || !Robot.m_oi.leftButtons[0].get();
     }
     // Called once after isFinished returns true
     @Override
     protected void end() {
         pause.reset();
         switch (Intake.intakeState) {
+            case 2:
             case 1:
-                Robot.intake.setIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(0);
                 pause.start();
                 while (pause.get() < 0.15) {
 

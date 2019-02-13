@@ -8,92 +8,121 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.UpdateWristSetpoint;
+import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.driverstation.Shuffleboard;
-
-import javax.naming.ldap.Control;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
-public class Wrist extends PIDSubsystem {
+public class Wrist extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     static double kP = 0.03;
     static double kI = 0;
-    static double kD = 0.00;
+    static double kD = 0;
     static double kF = 0;
+    static double arbitraryFF = 0;
 
-    double encoderCountRatio = 1; //Ratio for angle over encoder count.
+    int upperLimitEncoderCounts;
+    int lowerLimitEncoderCounts;
+    double encoderCountsToAngle;
 
     public static int controlMode = 0;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 
-    public Wrist() {
-        super("Wrist", kP, kI, kD);
+    private DigitalInput[] limitSwitches = {
+        new DigitalInput(RobotMap.wristBottom),
+        new DigitalInput(RobotMap.wristTop)
+    };
 
+    public Wrist() {
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        wristMotor.config_kP(0, kP, 30);
+        wristMotor.config_kI(0, kI, 30);
+        wristMotor.config_kD(0, kD, 30);
     }
 
-    public int getEncoderCount() {
+    public int getPosition() {
         return wristMotor.getSelectedSensorPosition();
     }
 
-    public double getEncoderVelocity() {
+    public double getVelocity() {
         return wristMotor.getSelectedSensorVelocity();
-    }
-
-    // Using the pulse width measurement, check if the encoders are healthy
-    public boolean isEncoderHealthy() {
-        return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
-    }
-
-    public double getAngle() {
-        return getEncoderCount() * encoderCountRatio;
     }
 
     public ControlMode getTalonControlMode() {
         return wristMotor.getControlMode();
     }
 
-    public void setMotorState(boolean state) {
-        wristMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
+
+    // Using the pulse width measurement, check if the encoders are healthy
+    public boolean isEncoderHealthy() {
+        return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    }
+
+    public boolean getLimitSwitchState(int limitSwitchIndex){
+        return !limitSwitches[limitSwitchIndex].get();
+    }
+
+    public void zeroEncoder() {
+        if(getLimitSwitchState(1)) {
+            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+        } else if(getLimitSwitchState(0)) {
+            wristMotor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
+        }
+    }
+
+    public double getAngle() {
+        return getPosition() * encoderCountsToAngle;
     }
 
     public void setDirectOutput(double output) {
         if (output == 0) {
             if(isEncoderHealthy())
-                wristMotor.set(ControlMode.Position, getEncoderCount());
+                wristMotor.set(ControlMode.Position, getPosition());
             else
-                wristMotor.set(ControlMode.PercentOutput, 0);
+                wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
         } else
-            wristMotor.set(ControlMode.PercentOutput, output);
+            wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
+    }
+    
+    public void setIncrementedPosition(double angle) {
+        double angleToEncderCounts = 1;
+        double currentPosition = getPosition();
+        double encoderCounts = angle * angleToEncderCounts + currentPosition;
+
+        encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
+        encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
+
+        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    @Override
-    protected double returnPIDInput() {
-        return getAngle();
-    }
+    public void setAbsolutePosition(double angle) {
+        double hieghtToEncoderCounts = 1;
+        double encoderCounts = angle * hieghtToEncoderCounts;
 
-    @Override
-    protected void usePIDOutput(double output) {
-        // TODO Auto-generated method stub
-        wristMotor.set(ControlMode.PercentOutput, output);
+        encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
+        encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
+
+        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
     public void updateSmartDashboard() {
-        Shuffleboard.putNumber("Wrist","Encoder Count", getEncoderCount());
-        Shuffleboard.putNumber("Wrist","Encoder Velocity", getEncoderVelocity());
+        Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
+        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
     }
 

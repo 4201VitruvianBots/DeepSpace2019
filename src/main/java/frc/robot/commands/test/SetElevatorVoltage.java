@@ -5,47 +5,44 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeControl extends Command {
-    public int pickup;
-    public IntakeControl(boolean pickup) {
-        // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
-        requires(Robot.intake);
-        if(pickup == true)
-            this.pickup = 1;
-        else
-            this.pickup = -1;
+public class SetElevatorVoltage extends Command {
+   double voltage;
+
+    public SetElevatorVoltage() {
+        requires(Robot.elevator);
+
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        voltage = Shuffleboard.getNumber("Elevator", "Test Voltage", 0);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.intake.setIntakeOutput(1*pickup);
+        Robot.elevator.setOpenLoopOutput(voltage);
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     @Override
-    protected boolean isFinished() {
+    protected boolean isFinished(){
         return false;
     }
-
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.intake.setIntakeOutput(0);
+        Robot.elevator.setOpenLoopOutput(0);
     }
 
     // Called when another command which requires one or more of the same

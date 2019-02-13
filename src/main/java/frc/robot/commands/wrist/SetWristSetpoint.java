@@ -5,55 +5,36 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class TestControllerRumble extends Command {
-    Joystick controller;
-
-    public TestControllerRumble(Joystick controller, double timeout) {
+public class SetWristSetpoint extends InstantCommand {
+    double setpoint;
+    public SetWristSetpoint(double angle) {
         // Use requires() here to declare subsystem dependencies
-        setTimeout(timeout);
-
-        this.controller = controller;
+        //requires(Robot.elevator);
+        this.setpoint = angle;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.8);
-        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.8);
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return isTimedOut();
+        Robot.wrist.setAbsolutePosition(setpoint);
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }

@@ -5,41 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Intake;
+
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDrive extends Command {
-    public SetTankDrive() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+public class SetIntakeState extends InstantCommand {
+    int state;
+    public SetIntakeState(int state) {
+        requires(Robot.intake);
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
+        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
+            Intake.intakeState = state;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.driveTrain.setMotorTankDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickY());
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorTankDrive(0, 0);
     }
 
     // Called when another command which requires one or more of the same

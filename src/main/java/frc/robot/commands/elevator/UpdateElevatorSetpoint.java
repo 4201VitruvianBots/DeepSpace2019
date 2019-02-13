@@ -5,20 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
-import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
-import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class UpdateElevatorSetpoint extends InstantCommand {
+public class UpdateElevatorSetpoint extends Command {
     double alpha = 0.125;
-    double lastVoltage = 0;
+    static double lastVoltage = 0;
+
+    public static boolean override = false;
+
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -32,9 +34,18 @@ public class UpdateElevatorSetpoint extends InstantCommand {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        double joystickOutput = Robot.m_oi.getXBoxLeftY();
 
-        if(Elevator.controlMode == 1) {
-            if (Robot.elevator.getPositionEncoderCounts() > Robot.elevator.upperLimitEncoderCounts)
+        if(!Elevator.initialCalibration) {
+             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(0)) {
+                 Elevator.initialCalibration = true;
+                 //Elevator.controlMode = 1;
+             }
+        }
+
+        if(Elevator.controlMode == 1 && !override) {
+            /*
+            if (Robot.elevator.getPosition() > Robot.elevator.upperLimitEncoderCounts)
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) - 0.5;
 
             // We do this check to make sure co-driver is actually commanding the elevator and not due to minor movement of the joystick.
@@ -42,25 +53,34 @@ public class UpdateElevatorSetpoint extends InstantCommand {
             if (Math.abs(Robot.m_oi.getXBoxLeftY()) > 0.05) {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
+            */
+            if(Math.abs(joystickOutput) > 0.05)
+                Robot.elevator.setIncrementedHeight(joystickOutput * 6);
         } else {
             double voltage = 0;
-            double joystickOutput = Robot.m_oi.getXBoxLeftY();
             if (Math.abs(joystickOutput) > 0.05)
                 voltage = 12 * joystickOutput;
             else {
-                if(Robot.elevator.getLeftElevatorEncoderHealth() || Robot.elevator.getRightElevatorEncoderHealth())
+                if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
                     Robot.elevator.setCurrentPositionHold();
                 else
-                    voltage = 2;
+                    voltage = 1;
             }
-            voltage = Robot.elevator.getLowerLimitSensor() ? Math.max(0, voltage) : voltage;
-            voltage = Robot.elevator.getUpperLimitSensor() ? Math.min(0, voltage) : voltage;
+            // TODO: Uncomment once limit switches are implemented
+            /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
+                voltage = 0;
+                Robot.m_oi.setXBoxRumble(0.8);
+            } else
+                Robot.m_oi.setXBoxRumble(0);*/
 
 
             double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
             lastVoltage = targetVoltage;
 
-            Robot.elevator.driveOpenLoop(targetVoltage);
+            // Debugging
+            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
+
+            Robot.elevator.setOpenLoopOutput(targetVoltage);
         }
     }
 
@@ -79,5 +99,6 @@ public class UpdateElevatorSetpoint extends InstantCommand {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }
