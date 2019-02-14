@@ -5,40 +5,47 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
-
-import java.time.Instant;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class DeployIntake extends Command {
-    public DeployIntake() {
+public class IntakeRelease extends Command {
+    Timer pause = new Timer();
+    int outtakeState;
+
+    public IntakeRelease() {
         // Use requires() here to declare subsystem dependencies
+        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        // Read this initially to avoid flickering
+        outtakeState = Intake.outtakeState;
     }
+
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        switch (Intake.intakeState) {
+        switch (outtakeState) {
+            case 2:
+                Robot.intake.setCargoIntakeOutput(0.8);
+                break;
             case 1:
+                Robot.intake.setHatchGroundIntakeOutput(0.8);
                 break;
             case 0:
             default:
-                if (Robot.intake.getHarpoonStatus())
-                    Robot.intake.setHarpoonReverse();
-                else
-                    Robot.intake.setHarpoonForward();
+                Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -47,9 +54,27 @@ public class DeployIntake extends Command {
     protected boolean isFinished() {
         return false;
     }
+
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        pause.reset();
+        switch (outtakeState) {
+            case 2:
+            case 1:
+                Robot.intake.setCargoIntakeOutput(0);
+                break;
+            case 0:
+            default:
+                Robot.intake.setHarpoonSecure(false);
+                pause.start();
+                while(pause.get() < 0.2) {
+
+                }
+                Robot.intake.setHarpoonExtend(false);
+                pause.stop();
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

@@ -5,24 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class TestControllerRumble extends Command {
-    Joystick controller;
+public class UpdateWristSetpoint extends Command {
+    double output;
 
-    public TestControllerRumble(Joystick controller, double timeout) {
+    public static boolean override;
+
+
+    public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
-        setTimeout(timeout);
-
-        this.controller = controller;
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
@@ -33,27 +33,37 @@ public class TestControllerRumble extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.8);
-        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.8);
+        double joystickOutput = Robot.m_oi.getXBoxRightY();
+
+        if (Wrist.controlMode == 1 && !override) {/*
+            if(Math.abs(joystickOutput) > 0.05)
+               Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/
+        } else {
+            // TODO: Uncomment once limit switches are implemented
+            /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {
+                joystickOutput = 0;
+                Robot.m_oi.setXBoxRumble(0.8);
+            } else
+                Robot.m_oi.setXBoxRumble(0);*/
+
+            Robot.wrist.setDirectOutput (joystickOutput);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return isTimedOut();
+        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        end();
     }
 }

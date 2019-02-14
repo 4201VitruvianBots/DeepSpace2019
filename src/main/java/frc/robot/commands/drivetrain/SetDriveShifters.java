@@ -5,51 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDriveVelocity extends Command {
-    public SetTankDriveVelocity() {
+public class SetDriveShifters extends InstantCommand {
+    boolean state;
+    public SetDriveShifters(boolean state) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
+        Robot.driveTrain.setDriveShifterStatus(state);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double leftOutput = Robot.m_oi.getLeftJoystickY();
-        double rightOutput = Robot.m_oi.getRightJoystickY();
-
-        Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorVelocityOutput(0, 0);
-        //Robot.driveTrain.setMotorGains(0, 0, 0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

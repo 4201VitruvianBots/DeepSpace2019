@@ -14,12 +14,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.drive.SetArcadeDriveVelocity;
+import frc.robot.commands.drivetrain.SetArcadeDrive;
+import frc.robot.commands.drivetrain.SetArcadeDriveVelocity;
+import frc.robot.util.Controls;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -41,8 +45,6 @@ public class DriveTrain extends Subsystem {
     private static double m_lastL = 0, m_lastR = 0;
     public static double leftAdjustment = 0, rightAdjustment = 0;
 
-    private Command defaultCommand;
-
     public DriveTrain() {
         super("DriveTrain");
 
@@ -59,6 +61,21 @@ public class DriveTrain extends Subsystem {
 
         driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
         driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
+
+
+        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
+        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
+        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
+        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
+        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
+        //drivetrainLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
+        //drivetrainLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        VitruvianLogger.getInstance().addLog(drivetrainLog);
+
     }
 
     public int getLeftEncoderCount() {
@@ -81,12 +98,9 @@ public class DriveTrain extends Subsystem {
         return driveMotors[0].getControlMode();
     }
     // Using the pulse width measurement, check if the encoders are healthy
-    public boolean isLeftEncoderHealthy() {
-        return driveMotors[0].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
-    }
 
-    public boolean isRightEncoderHealthy() {
-        return driveMotors[2].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+    public boolean getEncoderHealth(int encoderIndex) {
+        return driveMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
 
@@ -159,7 +173,7 @@ public class DriveTrain extends Subsystem {
 
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
         //TODO: Update values to match robot with full load.
-        double k_maxVelocity = getDriveShifterStatus() ? 8789: 18555;  // in encoder units/sec
+        double k_maxVelocity = getDriveShifterStatus() ? 8789 : 18555;  // in encoder units/sec
 
         // TODO: Normalize this
         double leftVelocity = leftOutput * k_maxVelocity;
@@ -196,19 +210,26 @@ public class DriveTrain extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-        SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-        SmartDashboard.putNumber("Angle", navX.getAngle());
 
         SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
         SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
         SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
         SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
+
+        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
+        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
+        Shuffleboard.putBoolean("DriveTrain", "xBox Button Test", Robot.m_oi.xBoxButtons[5].get());
+
+        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getLeftEncoderCount());
+        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getRightEncoderCount());
+        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+        SmartDashboard.putNumber("Angle", navX.getAngle());
     }
 
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //defaultCommand = new SetArcadeDriveVelocity();
-        setDefaultCommand(new SetArcadeDriveVelocity());
+        setDefaultCommand(new SetArcadeDrive());
     }
 }

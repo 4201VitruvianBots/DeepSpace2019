@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDrive extends Command {
-    public SetTankDrive() {
+public class SetArcadeDrive extends Command {
+    public SetArcadeDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
     }
@@ -27,7 +27,15 @@ public class SetTankDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.driveTrain.setMotorTankDrive(Robot.m_oi.getLeftJoystickY(), Robot.m_oi.getRightJoystickY());
+        //double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
+        //double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
+        double joystickY = Robot.m_oi.getLeftJoystickY();
+        double joystickX = Robot.m_oi.getRightJoystickX() * 0.125;
+
+        double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
+        double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
+
+        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

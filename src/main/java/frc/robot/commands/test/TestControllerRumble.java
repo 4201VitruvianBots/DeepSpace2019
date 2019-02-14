@@ -5,55 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.test;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class HoldToFollowTarget extends Command {
-    double kP = 0.04; //Proportion for turning
-    double kPB = 1.4; //Proportion for moving
-    double ds = 0.5; //Default speed multiplier
-    double tta = 0.85; //Target TA val
+public class TestControllerRumble extends Command {
+    Joystick controller;
 
-    public HoldToFollowTarget() {
+    public TestControllerRumble(Joystick controller, double timeout) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        setTimeout(timeout);
+
+        this.controller = controller;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveMotorsState(false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.vision.isValidTarget()) {
-            double correction = Robot.vision.getTargetX() * kP;
-            double paddingCorrection = ds*((tta - Robot.vision.getTargetX()) * kPB);
-            Robot.driveTrain.setMotorVelocityOutput(-paddingCorrection + correction, -paddingCorrection - correction);
-        }
+        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.8);
+        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.8);
     }
 
+    // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        if(Robot.driveTrain.getLeftEncoderVelocity() <= 0 && Robot.driveTrain.getLeftEncoderVelocity() <= 0){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return isTimedOut();
     }
+
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setDriveMotorsState(true);
+        controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     // Called when another command which requires one or more of the same

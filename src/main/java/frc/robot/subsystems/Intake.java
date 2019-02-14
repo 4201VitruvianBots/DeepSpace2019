@@ -7,13 +7,15 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -22,22 +24,103 @@ public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public static int intakeState = 0;
-    DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeForward, RobotMap.hatchIntakeReverse);
+    public static int outtakeState = 0;
+
+    boolean[] intakeIndicator = {false, false, false};
+
+    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+    DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
+
+    private TalonSRX[] intakeMotors = {
+        new TalonSRX(RobotMap.cargoIntakeMotor),
+        new TalonSRX(RobotMap.hatchIntakeMotor)
+    };
+
+    public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
+    // TODO: Add sensor for hatch intake
 
     public Intake() {
         super("Intake");
+
+        for(TalonSRX intakeMotor:intakeMotors) {
+            intakeMotor.configFactoryDefault();
+            intakeMotor.setNeutralMode(NeutralMode.Coast);
+        }
+        intakeMotors[0].setInverted(true);
+        intakeMotors[1].setInverted(false);
+        //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 
-    public boolean getHarpoonStatus(){
-        return harpoon.get() == DoubleSolenoid.Value.kForward ? true : false;
+    public void setCargoIntakeOutput(double output){
+        intakeMotors[0].set(ControlMode.PercentOutput, output);
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
-    public void setHarpoonForward(){
-        harpoon.set(DoubleSolenoid.Value.kForward);
+    public void setHatchGroundIntakeOutput(double output){
+        intakeMotors[0].set(ControlMode.PercentOutput, output);
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
-    public void setHarpoonReverse(){
-        harpoon.set(DoubleSolenoid.Value.kReverse);
+    public boolean getHarpoonSecureStatus(){
+        return harpoonSecure.get() == DoubleSolenoid.Value.kForward ? true : false;
+    }
+
+    public boolean getHarpoonExtendStatus(){
+        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
+    }
+
+    public void setHarpoonExtend(boolean state){
+        if (state)
+            harpoonExtend.set(DoubleSolenoid.Value.kForward);
+        else
+            harpoonExtend.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void setHarpoonSecure(boolean state){
+        if (state)
+            harpoonSecure.set(DoubleSolenoid.Value.kForward);
+        else
+            harpoonSecure.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void updateIntakeIndicator() {
+        switch (intakeState) {
+            case 2:
+                intakeIndicator[2] = true;
+                intakeIndicator[1] = false;
+                intakeIndicator[0] = false;
+                break;
+            case 1:
+                intakeIndicator[2] = false;
+                intakeIndicator[1] = true;
+                intakeIndicator[0] = false;
+                break;
+            case 0:
+            default:
+                intakeIndicator[2] = false;
+                intakeIndicator[1] = false;
+                intakeIndicator[0] = true;
+                break;
+        }
+    }
+
+    public void updateOuttakeState() {
+        if(bannerIR.get())
+            outtakeState = 2;
+        else if(false)  // TODO: Add hatch sensor
+            outtakeState = 1;
+        else
+            outtakeState = intakeState;
+    }
+
+    public void updateSmartDashboard() {
+        Shuffleboard.putNumber("Intake","Intake State", intakeState);
+        Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
+
+        SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
+        SmartDashboard.putBoolean("Hatch", intakeIndicator[1]);
+        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[0]);
+        SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }
 
     @Override

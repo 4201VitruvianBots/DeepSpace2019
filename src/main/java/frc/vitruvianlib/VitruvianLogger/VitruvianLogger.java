@@ -1,6 +1,7 @@
 package frc.vitruvianlib.VitruvianLogger;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.io.File;
@@ -15,6 +16,7 @@ public class VitruvianLogger {
     boolean isRunning = false;
     boolean isMatch = false;
     String basePath = "/media/sda1/4201Robot/Logs/";
+    String roboRioPath = "/home/lvuser/4201Robot/Logs/";
     String logPath;
     List<VitruvianLog> logList = new ArrayList<>();
     public static double m_logStartTime;
@@ -32,6 +34,7 @@ public class VitruvianLogger {
     }
 
     public void addLog(VitruvianLog log) {
+        // TODO: check if a log with the same name exits already before adding to avoid overwritng yourself
         logList.add(log);
     }
 
@@ -41,6 +44,16 @@ public class VitruvianLogger {
     }
 
     public void startLogger() {
+        // Check if base path is a valid directory
+        try {
+            File baseDir = new File(basePath);
+            if(baseDir.isDirectory())
+                System.out.println("VitruvianLogger Info: Base Path found! Logging to USB...");
+        } catch(Exception e) {
+            System.out.println("VitruvianLogger Error: USB Path not detected. Backing up to roboRIO path.");
+            basePath = roboRioPath;
+        }
+
         // Stop logging if its already running to avoid issues and to write logs to new directory
         if (isRunning && !isMatch)
             stopLogger();

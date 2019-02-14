@@ -5,29 +5,33 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.operate;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
-import frc.robot.subsystems.Intake;
-
-import java.time.Instant;
+import frc.robot.commands.drivetrain.SetArcadeDrive;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeState extends InstantCommand {
-    int state;
-    public SetIntakeState(int state) {
-        requires(Robot.intake);
-        this.state = state;
+public class KillAll extends InstantCommand {
+    public KillAll() {
+        requires(Robot.elevator);
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Intake.intakeState = state;
+        Scheduler.getInstance().removeAll();
+        Elevator.controlMode = 0;
+        Wrist.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run

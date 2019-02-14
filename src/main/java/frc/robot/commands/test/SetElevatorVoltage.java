@@ -5,35 +5,50 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.test;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetElevatorSetpoint extends InstantCommand {
-    double setpoint;
-    public SetElevatorSetpoint(double position) {
-        // Use requires() here to declare subsystem dependencies
-        //requires(Robot.elevator);
-        this.setpoint = position;
+public class SetElevatorVoltage extends Command {
+   double voltage;
+
+    public SetElevatorVoltage() {
+        requires(Robot.elevator);
+
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        voltage = Shuffleboard.getNumber("Elevator", "Test Voltage", 0);
+
     }
 
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        Robot.elevator.setOpenLoopOutput(voltage);
+    }
+
+    @Override
+    protected boolean isFinished(){
+        return false;
+    }
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.elevator.setOpenLoopOutput(0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }

@@ -10,6 +10,7 @@ package frc.robot.util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -80,10 +81,13 @@ public class Vision {
     public void initUSBCamera() {
         try {
             usbCamera = CameraServer.getInstance().startAutomaticCapture();
+            usbCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+            usbCamera.setResolution(320, 280);
+            usbCamera.setFPS(24);
+            usbCamera.setExposureManual(50);
         } catch(Exception e) {
 
         }
-        //usbCamera.setc
     }
 
     public void updateSmartDashboard() {
