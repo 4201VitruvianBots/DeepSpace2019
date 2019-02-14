@@ -68,7 +68,10 @@ public class IntakeIntake extends Command {
         pause.reset();
         switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(-0.2);
+                if(Robot.intake.bannerIR.get())
+                   Robot.intake.setCargoIntakeOutput(-0.2);
+                else
+                    Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:
                 Robot.intake.setCargoIntakeOutput(0);

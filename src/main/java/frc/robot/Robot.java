@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        //Robot.elevator.resetEncoderCount();
+        Robot.elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
 
         // Only reset shuffleboard's recording if starting from disabledInit

@@ -68,7 +68,7 @@ public class IntakeRelease extends Command {
             default:
                 Robot.intake.setHarpoonSecure(false);
                 pause.start();
-                while(pause.get() < 0.35) {
+                while(pause.get() < 0.2) {
 
                 }
                 Robot.intake.setHarpoonExtend(false);

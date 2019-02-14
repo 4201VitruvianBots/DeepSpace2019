@@ -30,8 +30,8 @@ public class Intake extends Subsystem {
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
-        new TalonSRX(RobotMap.hatchIntakeMotor),
-        new TalonSRX(RobotMap.cargoIntakeMotor)
+        new TalonSRX(RobotMap.cargoIntakeMotor),
+        new TalonSRX(RobotMap.hatchIntakeMotor)
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
@@ -45,7 +45,7 @@ public class Intake extends Subsystem {
             intakeMotor.setNeutralMode(NeutralMode.Coast);
         }
         intakeMotors[0].setInverted(true);
-        intakeMotors[1].setInverted(true);
+        intakeMotors[1].setInverted(false);
         //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 
@@ -55,8 +55,8 @@ public class Intake extends Subsystem {
     }
 
     public void setHatchGroundIntakeOutput(double output){
-        intakeMotors[0].set(ControlMode.PercentOutput, -output);
-        intakeMotors[1].set(ControlMode.PercentOutput, -output);
+        intakeMotors[0].set(ControlMode.PercentOutput, output);
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public boolean getHarpoonSecureStatus(){

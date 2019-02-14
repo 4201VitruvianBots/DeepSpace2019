@@ -137,6 +137,10 @@ public class Elevator extends Subsystem {
             return 0;
     }
 
+    public double getHeight() {
+        return getPosition() / encoderCountsPerInch;
+    }
+
     public int getVelocity(){
         if(getEncoderHealth(0) && getEncoderHealth(1))
             return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[1].getSelectedSensorVelocity()) / 2);
@@ -227,6 +231,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(1));
         Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
         Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
