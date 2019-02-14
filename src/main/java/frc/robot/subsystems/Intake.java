@@ -26,6 +26,8 @@ public class Intake extends Subsystem {
     public static int intakeState = 0;
     public static int outtakeState = 0;
 
+    boolean[] intakeIndicator = {false, false, false};
+
     DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
@@ -81,6 +83,27 @@ public class Intake extends Subsystem {
             harpoonSecure.set(DoubleSolenoid.Value.kReverse);
     }
 
+    public void updateIntakeIndicator() {
+        switch (intakeState) {
+            case 2:
+                intakeIndicator[2] = true;
+                intakeIndicator[1] = false;
+                intakeIndicator[0] = false;
+                break;
+            case 1:
+                intakeIndicator[2] = false;
+                intakeIndicator[1] = true;
+                intakeIndicator[0] = false;
+                break;
+            case 0:
+            default:
+                intakeIndicator[2] = false;
+                intakeIndicator[1] = false;
+                intakeIndicator[0] = true;
+                break;
+        }
+    }
+
     public void updateOuttakeState() {
         if(bannerIR.get())
             outtakeState = 2;
@@ -94,7 +117,9 @@ public class Intake extends Subsystem {
         Shuffleboard.putNumber("Intake","Intake State", intakeState);
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
 
-        SmartDashboard.putNumber("Intake State", intakeState);
+        SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
+        SmartDashboard.putBoolean("Hatch", intakeIndicator[1]);
+        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[0]);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }
 

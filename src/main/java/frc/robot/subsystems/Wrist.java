@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.driverstation.Shuffleboard;
@@ -32,7 +33,7 @@ public class Wrist extends Subsystem {
 
     int upperLimitEncoderCounts;
     int lowerLimitEncoderCounts;
-    double encoderCountsToAngle;
+    double encoderCountsToAngle = 0.0879;
 
     public static int controlMode = 0;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
@@ -64,7 +65,6 @@ public class Wrist extends Subsystem {
     public ControlMode getTalonControlMode() {
         return wristMotor.getControlMode();
     }
-
 
     // Using the pulse width measurement, check if the encoders are healthy
     public boolean isEncoderHealthy() {
@@ -122,10 +122,13 @@ public class Wrist extends Subsystem {
 
     public void updateSmartDashboard() {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
+        Shuffleboard.putNumber("Wrist","Angle", getAngle());
         Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
         Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
+
+        SmartDashboard.putNumber("Angle", getAngle());
     }
 
     @Override

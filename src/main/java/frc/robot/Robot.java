@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
         // TODO: Enable this when encoders are fixed
         elevator.zeroEncoder();
         //wrist.zeroEncoder();
+        intake.updateIntakeIndicator();
         intake.updateOuttakeState();
     }
 
