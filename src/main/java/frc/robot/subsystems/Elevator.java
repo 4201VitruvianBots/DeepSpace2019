@@ -72,10 +72,10 @@ public class Elevator extends Subsystem {
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
-            //motor.configForwardSoftLimitEnable(true);
-            //motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
-            //motor.configReverseSoftLimitEnable(true);
-            //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
+            motor.configForwardSoftLimitEnable(true);
+            motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
+            motor.configReverseSoftLimitEnable(true);
+            motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
 
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
