@@ -35,13 +35,6 @@ public class UpdateWristSetpoint extends Command {
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-        if(!Wrist.initialCalibration) {
-            while (!Robot.wrist.getLimitSwitchState(1))
-                Robot.wrist.setDirectOutput(0.2);
-            Wrist.initialCalibration = true;
-            Wrist.controlMode = 1;
-        }
-
         if (Wrist.controlMode == 1 && !override) {/*
             if(Math.abs(joystickOutput) > 0.05)
                Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/

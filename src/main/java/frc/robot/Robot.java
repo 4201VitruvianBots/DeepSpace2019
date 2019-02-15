@@ -49,7 +49,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Elevator.initialCalibration = false;
-        Wrist.initialCalibration = false;
         m_oi = new OI();
         //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
         // chooser.addOption("My Auto", new MyAutoCommand());
@@ -67,9 +66,6 @@ public class Robot extends TimedRobot {
 
         if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
             Elevator.controlMode = 0;
-
-        if(Wrist.controlMode == 1 && !Wrist.initialCalibration)
-            Wrist.controlMode = 0;
     }
 
     /**
@@ -89,7 +85,7 @@ public class Robot extends TimedRobot {
 
         // TODO: Enable this when encoders are fixed
         elevator.zeroEncoder();
-        wrist.zeroEncoder();
+        //wrist.zeroEncoder();
         intake.updateIntakeIndicator();
         intake.updateOuttakeState();
     }

@@ -10,9 +10,7 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -31,13 +29,11 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
-                if(Wrist.controlMode == 1)
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                // TODO: Set wrist ground
                 break;
             case 0:
             default:
-                if(Wrist.controlMode == 1)
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                // TODO: Set wrist retract
                 break;
         }
     }
@@ -83,6 +79,7 @@ public class IntakeIntake extends Command {
                 while (pause.get() < 0.15) {
 
                 }
+                //TODO: Retract wrist to home.
                 pause.stop();
                 break;
             case 0:
