@@ -37,7 +37,7 @@ public class UpdateElevatorSetpoint extends Command {
         double joystickOutput = Robot.m_oi.getXBoxLeftY();
 
         if(!Elevator.initialCalibration) {
-             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(0)) {
+             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
                  Elevator.initialCalibration = true;
                  //Elevator.controlMode = 1;
              }
