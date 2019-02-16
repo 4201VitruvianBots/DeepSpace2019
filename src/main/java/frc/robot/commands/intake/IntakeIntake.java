@@ -16,7 +16,6 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class IntakeIntake extends Command {
-    Timer pause = new Timer();
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
@@ -29,11 +28,16 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
+                Robot.intake.setHarpoonExtend(false);
+                Robot.intake.setHarpoonSecure(false);
                 // TODO: Set wrist ground
                 break;
             case 0:
             default:
-                // TODO: Set wrist retract
+                Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(false);
+                Timer.delay(0.2);
+                Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -49,9 +53,11 @@ public class IntakeIntake extends Command {
                 break;
             case 0:
             default:
-                Robot.intake.setHarpoonExtend(true);
+            /*    Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
-                break;
+                Timer.delay(0.2);
+                Robot.intake.setHarpoonSecure(true);
+    */            break;
         }
     }
 
@@ -60,12 +66,11 @@ public class IntakeIntake extends Command {
         if(Intake.intakeState == 2)
             return Robot.intake.bannerIR.get();
         else
-            return false || !Robot.m_oi.leftButtons[0].get();
+            return false;
     }
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        pause.reset();
         switch (Intake.intakeState) {
             case 2:
                 if(Robot.intake.bannerIR.get())
@@ -75,22 +80,12 @@ public class IntakeIntake extends Command {
                 break;
             case 1:
                 Robot.intake.setCargoIntakeOutput(0);
-                pause.start();
-                while (pause.get() < 0.15) {
-
-                }
-                //TODO: Retract wrist to home.
-                pause.stop();
                 break;
             case 0:
             default:
-                Robot.intake.setHarpoonSecure(true);
-                pause.start();
-                while(pause.get() < 0.15) {
-
-                }
+                //Robot.intake.setHarpoonSecure(true);
+                //Timer.delay(0.15);
                 Robot.intake.setHarpoonExtend(false);
-                pause.stop();
                 break;
         }
     }

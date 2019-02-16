@@ -83,9 +83,9 @@ public class OI {
             3 (?) - Left Button: Set DriveTrain High Gear
         */
         leftButtons[0].whileHeld(new IntakeIntake());
-        leftButtons[1].whileHeld(new SetAllMechanismSetpoints(0));
-        leftButtons[2].whileHeld(new SetDriveShifters(true));
-        leftButtons[3].whileHeld(new SetDriveShifters(false));
+        leftButtons[1].whenPressed(new SetAllMechanismSetpoints(0));
+        leftButtons[2].whenPressed(new SetDriveShifters(true));
+        leftButtons[3].whenPressed(new SetDriveShifters(false));
 
         /*  Right Joystick Buttons:
             0 - Trigger: Deploy/Score Game Piece
