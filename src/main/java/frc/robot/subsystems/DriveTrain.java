@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -64,26 +65,19 @@ public class DriveTrain extends Subsystem {
 
 
         VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
-        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
-        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
-        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
-        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
-        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
-        //drivetrainLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
-        //drivetrainLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
+        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
+        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
+        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
         VitruvianLogger.getInstance().addLog(drivetrainLog);
-
     }
 
-    public int getLeftEncoderCount() {
-        return driveMotors[0].getSelectedSensorPosition();
-    }
-
-    public int getRightEncoderCount() {
-        return driveMotors[2].getSelectedSensorPosition();
+    public int getEncoderCount(int sensorIndex) {
+        return driveMotors[sensorIndex].getSelectedSensorPosition();
     }
 
     public double getLeftEncoderVelocity() {
@@ -102,7 +96,6 @@ public class DriveTrain extends Subsystem {
     public boolean getEncoderHealth(int encoderIndex) {
         return driveMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
-
 
     public void setDriveMotorsState(boolean state) {
         for (TalonSRX driveMotor : driveMotors)
@@ -210,18 +203,12 @@ public class DriveTrain extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-
-        SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
-        SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
-        SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
-        SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
-
         Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
         Shuffleboard.putBoolean("DriveTrain", "xBox Button Test", Robot.m_oi.xBoxButtons[5].get());
 
-        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getLeftEncoderCount());
-        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getRightEncoderCount());
+        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
+        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
         //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
         SmartDashboard.putNumber("Angle", navX.getAngle());
     }

@@ -250,6 +250,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
 
         SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
+        SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 
     @Override

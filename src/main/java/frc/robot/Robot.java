@@ -7,9 +7,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.drivetrain.*;
@@ -66,6 +69,9 @@ public class Robot extends TimedRobot {
 
         //if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
         //    Elevator.controlMode = 0;
+
+        // Our robot code is so complex we have to do this
+        LiveWindow.disableAllTelemetry();
     }
 
     /**

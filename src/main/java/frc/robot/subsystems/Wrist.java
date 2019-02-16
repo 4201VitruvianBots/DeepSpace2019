@@ -128,7 +128,7 @@ public class Wrist extends Subsystem {
         Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
-        SmartDashboard.putNumber("Angle", getAngle());
+        SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
 
     @Override
