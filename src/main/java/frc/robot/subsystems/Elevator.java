@@ -47,7 +47,7 @@ public class Elevator extends Subsystem {
     private double arbitraryFFDown = -0.5 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 1;
+    public static int controlMode = 0;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
@@ -219,8 +219,8 @@ public class Elevator extends Subsystem {
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
         if(getPosition() >= encoderCounts)
             elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        //else
+        //    elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double height) {
@@ -243,6 +243,8 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", elevatorMotors[0].getSelectedSensorPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", elevatorMotors[1].getSelectedSensorPosition());
         Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
@@ -250,6 +252,9 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
 
         SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
+
+
+        Shuffleboard.putNumber("Elevator", "Control Mode", controlMode);
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 

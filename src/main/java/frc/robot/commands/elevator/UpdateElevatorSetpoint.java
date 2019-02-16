@@ -54,8 +54,8 @@ public class UpdateElevatorSetpoint extends Command {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
             */
-            if(Math.abs(joystickOutput) > 0.05)
-                Robot.elevator.setIncrementedHeight(joystickOutput * 6);
+            joystickOutput = Math.abs(joystickOutput) > 0.05 ? joystickOutput * 6 : 0;
+            Robot.elevator.setIncrementedHeight(joystickOutput);
         } else {
             double voltage = 0;
             if (Math.abs(joystickOutput) > 0.05)

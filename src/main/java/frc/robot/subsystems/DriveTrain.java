@@ -205,12 +205,12 @@ public class DriveTrain extends Subsystem {
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
-        Shuffleboard.putBoolean("DriveTrain", "xBox Button Test", Robot.m_oi.xBoxButtons[5].get());
 
         Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
         Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
+
         //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-        SmartDashboard.putNumber("Angle", navX.getAngle());
+        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
     }
 
     @Override

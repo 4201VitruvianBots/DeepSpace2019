@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
         intake.updateSmartDashboard();
 
         // TODO: Enable this when encoders are fixed
-        elevator.zeroEncoder();
+        //elevator.zeroEncoder();
         //wrist.zeroEncoder();
         intake.updateIntakeIndicator();
         intake.updateOuttakeState();
