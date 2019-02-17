@@ -105,7 +105,7 @@ public class Wrist extends Subsystem {
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
-        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
@@ -116,7 +116,7 @@ public class Wrist extends Subsystem {
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
-        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
