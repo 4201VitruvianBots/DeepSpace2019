@@ -47,9 +47,10 @@ public class Elevator extends Subsystem {
     private double arbitraryFFDown = -0.5 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 0;
+    public static int controlMode = 1;
 
     public static boolean initialCalibration = false;
+    boolean limitDebounce = false;
 
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.leftElevator),
@@ -67,14 +68,16 @@ public class Elevator extends Subsystem {
 
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
-            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
-            motor.configForwardSoftLimitEnable(true);
-            motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
-            motor.configReverseSoftLimitEnable(true);
-            motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
+            motor.configMotionCruiseVelocity(4500);
+            motor.configMotionAcceleration(9001);
+            //motor.configForwardSoftLimitEnable(true);
+            //motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
+            //motor.configReverseSoftLimitEnable(true);
+            //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
 
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
@@ -121,10 +124,14 @@ public class Elevator extends Subsystem {
         if(getLimitSwitchState(1)) {
             for (TalonSRX motor : elevatorMotors)
                 motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+            limitDebounce = true;
         } else if(getLimitSwitchState(0)) {
             for (TalonSRX motor : elevatorMotors)
                 motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
-        }
+            limitDebounce = true;
+        } else
+            limitDebounce = false;
+
     }
 
     public boolean getEncoderHealth(int encoderIndex) {
@@ -232,8 +239,8 @@ public class Elevator extends Subsystem {
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
-        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(0));
-        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
         Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());

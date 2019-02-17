@@ -118,8 +118,8 @@ public class Intake extends Subsystem {
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
 
         SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
-        SmartDashboard.putBoolean("Hatch", intakeIndicator[1]);
-        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[0]);
+        SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
+        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }
 

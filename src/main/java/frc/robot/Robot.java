@@ -63,6 +63,9 @@ public class Robot extends TimedRobot {
         controls.initTestSettings();
 
         vision.initUSBCamera();
+
+        //if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
+        //    Elevator.controlMode = 0;
     }
 
     /**
@@ -121,7 +124,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        driveTrain.setDriveMotorsState(false);
+        //driveTrain.setDriveMotorsState(false);
         m_autonomousCommand = m_autoChooser.getSelected();
 
         /*
@@ -165,7 +168,7 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        Robot.elevator.resetEncoderCount();
+        elevator.resetEncoderCount();
         VitruvianLogger.getInstance().startLogger();
 
         // Only reset shuffleboard's recording if starting from disabledInit
