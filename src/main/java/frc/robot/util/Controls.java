@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.SaveMe;
 import frc.robot.commands.test.*;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
@@ -68,6 +69,7 @@ public class Controls {
         Shuffleboard.putData("Controls", new ToggleWristControlMode());
         Shuffleboard.putData("Controls", new ZeroElevatorEncoder());
         Shuffleboard.putData("Controls", new ZeroWristEncoder());
+        Shuffleboard.putData("Controls", new SaveMe());
     }
 
     public static double getElevatorLeftCurrent() {

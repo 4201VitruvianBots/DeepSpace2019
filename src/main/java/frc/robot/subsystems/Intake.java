@@ -98,17 +98,13 @@ public class Intake extends Subsystem {
             outtakeState = intakeState;
     }
 
-    public int getIntakeState() {
-        return intakeState;
-    }
-
     public void updateSmartDashboard() {
         Shuffleboard.putNumber("Intake","Intake State", intakeState);
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
 
         SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
-        SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
         SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
+        SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }
 
