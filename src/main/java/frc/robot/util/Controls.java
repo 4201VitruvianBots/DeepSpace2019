@@ -39,13 +39,10 @@ public class Controls {
                 robotIni.store(iniFile);
             } else {
                 Wini robotIni = new Wini(iniFile);
-                int elevatorCalibration = Integer.valueOf(robotIni.get("Elevator", "Encoder_Calibration"));
-                int wristCalibration = Integer.valueOf(robotIni.get("Wrist", "Encoder_Calibration"));
-                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
-                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", wristCalibration);
-
-                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
-                Wrist.calibrationValue = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
+                Elevator.calibrationValue  = Integer.valueOf(robotIni.get("Elevator", "Encoder_Calibration"));
+                Wrist.calibrationValue = Integer.valueOf(robotIni.get("Wrist", "Encoder_Calibration"));
+                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", Elevator.calibrationValue);
+                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", Wrist.calibrationValue);
             }
         } catch (Exception e) {
 

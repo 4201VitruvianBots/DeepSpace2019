@@ -34,7 +34,7 @@ public class Wrist extends Subsystem {
     public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
     public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
-    int runningCalibrationValue = 0;
+    public int runningCalibrationValue = 0;
     double encoderCountsPerAngle = 37.236;
 
     public static int controlMode = 1;
@@ -60,6 +60,10 @@ public class Wrist extends Subsystem {
 
     public int getPosition() {
         return wristMotor.getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
+    }
+
+    public int getRawPosition() {
+        return wristMotor.getSelectedSensorPosition();
     }
 
     public double getVelocity() {

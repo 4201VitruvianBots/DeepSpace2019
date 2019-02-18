@@ -44,7 +44,7 @@ public class Elevator extends Subsystem {
     public static int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
     public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
-    int runningCalibrationValue = 0;
+    public int runningCalibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
     private double arbitraryFFUp = 2 / 12;
@@ -152,7 +152,18 @@ public class Elevator extends Subsystem {
             return elevatorMotors[0].getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
         else if(getEncoderHealth(1))
             return elevatorMotors[1].getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
-        else //TODO: Make this return an obviously bad value, e.g. 999999999
+        else
+            return calibrationValue;
+    }
+    
+    public int getRawPosition() {
+        if(getEncoderHealth(0) && getEncoderHealth(1))
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
+        else if(getEncoderHealth(0))
+            return elevatorMotors[0].getSelectedSensorPosition();
+        else if(getEncoderHealth(1))
+            return elevatorMotors[1].getSelectedSensorPosition();
+        else
             return 0;
     }
 
@@ -167,7 +178,7 @@ public class Elevator extends Subsystem {
             return elevatorMotors[0].getSelectedSensorVelocity();
         else if(getEncoderHealth(1))
             return elevatorMotors[1].getSelectedSensorVelocity();
-        else //TODO: Make this return an obviously bad value, e.g. 999999999
+        else
             return 0;
     }
 
