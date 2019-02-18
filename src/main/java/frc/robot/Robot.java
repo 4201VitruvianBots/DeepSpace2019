@@ -137,7 +137,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        //driveTrain.setDriveMotorsState(false);
+        elevator.setAbsoluteHeight(elevator.getHeight());
+        wrist.setAbsolutePosition(wrist.getAngle());
+        
         m_autonomousCommand = m_autoChooser.getSelected();
 
         /*

@@ -17,7 +17,7 @@ import frc.robot.subsystems.Intake;
 public class SetIntakeState extends InstantCommand {
     int state;
     public SetIntakeState(int state) {
-        //requires(Robot.intake);
+        requires(Robot.intake);
         this.state = state;
     }
 

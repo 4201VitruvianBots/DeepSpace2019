@@ -153,11 +153,11 @@ public class Elevator extends Subsystem {
 
     public int getPosition() {
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition()) + (2 * calibrationValue)/ 2);
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
         else if(getEncoderHealth(0))
-            return elevatorMotors[0].getSelectedSensorPosition() + calibrationValue;
+            return elevatorMotors[0].getSelectedSensorPosition();
         else if(getEncoderHealth(1))
-            return elevatorMotors[1].getSelectedSensorPosition() + calibrationValue;
+            return elevatorMotors[1].getSelectedSensorPosition();
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
     }
@@ -231,10 +231,10 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        if(encoderCounts > getPosition())
+        //if(encoderCounts > getPosition())
             elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        //else
+        //    elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double height) {
