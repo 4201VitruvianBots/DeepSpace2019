@@ -40,6 +40,7 @@ public class RobotMap {
     public static int rightElevator = 31;
 
     public static int wristMotor = 40;
+    public static int climbMotor = 50;
 
     public static int cargoIntakeMotor = 60;
     public static int hatchIntakeMotor = 61;
