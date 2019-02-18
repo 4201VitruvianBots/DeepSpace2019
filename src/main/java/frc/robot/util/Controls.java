@@ -10,10 +10,12 @@ import frc.robot.subsystems.Wrist;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 import org.ini4j.Wini;
 
-import javax.naming.ldap.Control;
 import java.io.File;
 
 public class Controls {
+
+    String roboRIOFilepath = "/home/lvuser/4201Robot/";
+    String iniFilename = "DeepSpace2019.ini";
 
     public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.pdp);
 
@@ -25,10 +27,10 @@ public class Controls {
 
     public void readIniFile() {
         try {
-
-            File iniFile = new File("/home/lvuser/4201Robot/DeepSpace2019.ini");
+            File iniFile = new File(roboRIOFilepath + iniFilename);
             if(!iniFile.exists()) {
-                iniFile.mkdirs();
+                File folderPath = new File(roboRIOFilepath);
+                folderPath.mkdirs();
                 iniFile.createNewFile();
 
                 Wini robotIni = new Wini(iniFile);
@@ -37,14 +39,13 @@ public class Controls {
                 robotIni.store(iniFile);
             } else {
                 Wini robotIni = new Wini(iniFile);
-                int elevatorCalibration = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
-                int wristCalibration = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
+                int elevatorCalibration = Integer.valueOf(robotIni.get("Elevator", "Encoder_Calibration"));
+                int wristCalibration = Integer.valueOf(robotIni.get("Wrist", "Encoder_Calibration"));
                 Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
-                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
-//                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
-//                Wrist.calibrationValue = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
-//                Robot.elevator.setEncoderPosition(Elevator.calibrationValue);
-//                Robot.wrist.setEncoderPosition(Wrist.calibrationValue);
+                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", wristCalibration);
+
+                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
+                Wrist.calibrationValue = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
             }
         } catch (Exception e) {
 

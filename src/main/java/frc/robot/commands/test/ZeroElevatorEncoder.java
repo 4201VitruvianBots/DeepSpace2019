@@ -2,6 +2,7 @@ package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Elevator;
 
 public class ZeroElevatorEncoder extends InstantCommand {
     public ZeroElevatorEncoder() {
@@ -12,9 +13,8 @@ public class ZeroElevatorEncoder extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.elevator.setEncoderPosition(0);
-        int calibrationValue = -Robot.elevator.getPosition();
-        //Robot.elevator.setEncoderPosition(calibrationValue);
+        int calibrationValue = Robot.elevator.getPosition() - Elevator.lowerLimitEncoderCounts;
+        Elevator.calibrationValue = calibrationValue;
         Robot.controls.writeIniFile("Elevator", "Encoder_Calibration", String.valueOf(calibrationValue));
     }
     @Override

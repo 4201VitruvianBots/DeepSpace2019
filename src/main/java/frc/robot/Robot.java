@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
         //    Elevator.controlMode = 0;
 
 
-//        elevator.setEncoderPosition();
-//        wrist.setEncoderPosition();
+//        elevator.calibrateEncoder();
+//        wrist.calibrateEncoder();
 
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();

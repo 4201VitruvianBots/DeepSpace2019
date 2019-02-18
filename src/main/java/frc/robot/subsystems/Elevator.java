@@ -41,9 +41,10 @@ public class Elevator extends Subsystem {
     private double kA = 0; //Voltage to hold constant acceleration
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
-    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
-    public int lowerLimitEncoderCounts = 0;
+    public static int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
+    public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
+    int runningCalibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
     private double arbitraryFFUp = 2 / 12;
@@ -131,20 +132,13 @@ public class Elevator extends Subsystem {
 
     public void zeroEncoder() {
         if(getLimitSwitchState(0)) {
-            for (TalonSRX motor : elevatorMotors)
-                motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
+            runningCalibrationValue =  getPosition() + lowerLimitEncoderCounts;
             limitDebounce = true;
 //        } else if(getLimitSwitchState(1)) {
-//            for (TalonSRX motor : elevatorMotors)
-//                motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+//            runningCalibrationValue =  upperLimitEncoderCounts - getPosition() ;
 //            limitDebounce = true;
         } else
             limitDebounce = false;
-    }
-
-    public void setEncoderPosition(int position) {
-        for(TalonSRX motor:elevatorMotors)
-            motor.setSelectedSensorPosition(position, 0, 0);
     }
 
     public boolean getEncoderHealth(int encoderIndex) {
@@ -153,11 +147,11 @@ public class Elevator extends Subsystem {
 
     public int getPosition() {
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition() + 2 * calibrationValue)/ 2) + runningCalibrationValue;
         else if(getEncoderHealth(0))
-            return elevatorMotors[0].getSelectedSensorPosition();
+            return elevatorMotors[0].getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
         else if(getEncoderHealth(1))
-            return elevatorMotors[1].getSelectedSensorPosition();
+            return elevatorMotors[1].getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
     }
