@@ -26,7 +26,7 @@ public class Intake extends Subsystem {
     public static int intakeState = 0;
     public static int outtakeState = 0;
 
-    boolean[] intakeIndicator = {false, false, false};
+    public boolean[] intakeIndicator = {false, false, false};
 
     DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
@@ -84,33 +84,22 @@ public class Intake extends Subsystem {
     }
 
     public void updateIntakeIndicator() {
-        switch (intakeState) {
-            case 2:
-                intakeIndicator[2] = true;
-                intakeIndicator[1] = false;
-                intakeIndicator[0] = false;
-                break;
-            case 1:
-                intakeIndicator[2] = false;
-                intakeIndicator[1] = true;
-                intakeIndicator[0] = false;
-                break;
-            case 0:
-            default:
-                intakeIndicator[2] = false;
-                intakeIndicator[1] = false;
-                intakeIndicator[0] = true;
-                break;
-        }
+        for(int i = 0; i < intakeIndicator.length; i++)
+            intakeIndicator[i] = false;
+        intakeIndicator[intakeState] = true;
     }
 
     public void updateOuttakeState() {
-        if(bannerIR.get())
-            outtakeState = 2;
-        else if(false)  // TODO: Add hatch sensor
-            outtakeState = 1;
-        else
+//        if(bannerIR.get())
+//            outtakeState = 2;
+//        else if(false)  // TODO: Add hatch sensor
+//            outtakeState = 1;
+//        else
             outtakeState = intakeState;
+    }
+
+    public int getIntakeState() {
+        return intakeState;
     }
 
     public void updateSmartDashboard() {

@@ -29,11 +29,11 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
  * project.
  */
 public class Robot extends TimedRobot {
+    public static Controls controls = new Controls();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
     //public static NerdyElevator nerdyElevator = new NerdyElevator();
     public static Intake intake = new Intake();
-    public static Controls controls = new Controls();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;
@@ -63,12 +63,17 @@ public class Robot extends TimedRobot {
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
+        controls.readIniFile();
         controls.initTestSettings();
 
         vision.initUSBCamera();
 
         //if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
         //    Elevator.controlMode = 0;
+
+
+//        elevator.setEncoderPosition();
+//        wrist.setEncoderPosition();
 
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();
@@ -88,11 +93,13 @@ public class Robot extends TimedRobot {
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
+        m_oi.updateSmartDashboard();
 
         // TODO: Enable this when encoders are fixed
-        //elevator.zeroEncoder();
-        //wrist.zeroEncoder();
+        elevator.zeroEncoder();
+        wrist.zeroEncoder();
         intake.updateIntakeIndicator();
+        m_oi.updateOIIndicators();
         intake.updateOuttakeState();
     }
 
@@ -174,7 +181,8 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        elevator.resetEncoderCount();
+        elevator.setAbsoluteHeight(elevator.getHeight());
+        wrist.setAbsolutePosition(wrist.getAngle());
         VitruvianLogger.getInstance().startLogger();
 
         // Only reset shuffleboard's recording if starting from disabledInit

@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.elevator.*;
 import frc.robot.commands.intake.*;
-import frc.robot.commands.test.SetElevatorVoltage;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -60,6 +61,9 @@ public class OI {
     public Button[] xBoxPOVButtons = new Button[4];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
 
+    public static int positionIndex = 0;
+    boolean[] positionIndicator = {false, false, false, false, false, false};
+
     public OI() {
         initializeButtons();
     }
@@ -72,7 +76,10 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
         for (int i = 0; i < xBoxPOVButtons.length; i++)
-            xBoxPOVButtons[i] = new POVButton(xBoxController, ((i + 1) * 90));
+            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+        //xBoxPOVButtons[0] = new POVButton(xBoxController, 0);
+        //xBoxPOVButtons[1] = new POVButton(xBoxController, 90);
+
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
 
@@ -103,9 +110,9 @@ public class OI {
         //rightButtons[3].whenPressed(new TurnToAngle(90));
 
         /*  xBox Controller Buttons:
-            0  - A Button: Set Mechanisms to Rocket Low
-            1  - B Button: Set Mechanisms to Rocket Medium
-            3  - Y Button: Set Mechanisms to Rocket High
+            0 - A Button: Set Mechanisms to Rocket Low
+            1 - B Button: Set Mechanisms to Rocket Medium
+            3 - Y Button: Set Mechanisms to Rocket High
             2 - X Button: Set Mechanisms to Cargo Ship
 
             4 Left Button: Elevator Increment Up 5 (?) inches
@@ -118,20 +125,20 @@ public class OI {
             7 - Start: KillAll
             9 - R3: Home all mechanisms
         */
-        xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints(2));
-        xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(3));
-        xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(1));
-        xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(4));
+        xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints(3));
+        xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(4));
+        xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
+        xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
-        xBoxLeftTrigger.whenPressed(new SetElevatorVoltage());
-        //xBoxButtons[4].whenPressed(new SetIntakeState(0));
+        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
+        //xBoxButtons[4].whenPressed(new IncrementElevatorHeight(3));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
-        xBoxPOVButtons[1].whenPressed(new SetIntakeState(1));
+        xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
         xBoxButtons[7].whenPressed(new KillAll());
-        xBoxButtons[9].whenPressed(new SetAllMechanismSetpoints(0));
+        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
@@ -139,6 +146,21 @@ public class OI {
 
         //xBoxButtons[0].whileHeld(new IntakeControl(true));
         //xBoxButtons[1].whileHeld(new IntakeControl(false));
+    }
+
+    public void updateOIIndicators(){
+        for(int i = 0; i < positionIndicator.length; i++)
+            positionIndicator[i] = false;
+        positionIndicator[positionIndex] = true;
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putBoolean("Rocket High", positionIndicator[5]);
+        SmartDashboard.putBoolean("Rocket Mid", positionIndicator[4]);
+        SmartDashboard.putBoolean("Rocket Low", positionIndicator[3]);
+        SmartDashboard.putBoolean("Cargo Ship", positionIndicator[2]);
+        SmartDashboard.putBoolean("Intake", positionIndicator[1]);
+        SmartDashboard.putBoolean("Stowed", positionIndicator[0]);
     }
 
     public double getLeftJoystickX() {
@@ -191,12 +213,8 @@ public class OI {
 
     public void enableXBoxRumbleTimed(){
         Thread t = new Thread(() -> {
-            Timer stopwatch = new Timer();
             setXBoxRumble(0.8);
-            stopwatch.start();
-            while(stopwatch.get() < 0.05){
-
-            }
+            Timer.delay(0.05);
             setXBoxRumble(0);
         });
         t.start();
@@ -206,5 +224,4 @@ public class OI {
         xBoxController.setRumble(GenericHID.RumbleType.kLeftRumble, value);
         xBoxController.setRumble(GenericHID.RumbleType.kRightRumble, value);
     }
-
 }

@@ -5,28 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Elevator;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeState extends InstantCommand {
-    int state;
-    public SetIntakeState(int state) {
-        //requires(Robot.intake);
-        this.state = state;
+public class IncrementElevatorHeight extends InstantCommand {
+    double increment;
+    public IncrementElevatorHeight(double increment) {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.elevator);
+        this.increment = increment;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-        Intake.intakeState = state;
+        double setpoint = Robot.elevator.getHeight() + increment;
+        if(Elevator.controlMode == 1)
+            Robot.elevator.setAbsoluteHeight(setpoint);
     }
 
     // Called once after isFinished returns true

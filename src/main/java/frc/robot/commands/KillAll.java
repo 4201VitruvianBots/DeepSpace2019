@@ -50,6 +50,4 @@ public class KillAll extends InstantCommand {
     protected void interrupted() {
         end();
     }
-
-
 }

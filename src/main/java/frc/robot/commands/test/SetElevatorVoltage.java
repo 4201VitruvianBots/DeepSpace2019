@@ -19,7 +19,6 @@ public class SetElevatorVoltage extends Command {
 
     public SetElevatorVoltage() {
         requires(Robot.elevator);
-
     }
 
     // Called just before this Command runs the first time
