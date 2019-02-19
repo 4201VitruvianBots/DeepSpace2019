@@ -17,6 +17,7 @@ public class ZeroWristEncoder extends InstantCommand {
         int calibrationValue = Wrist.upperLimitEncoderCounts - Robot.wrist.getRawPosition();
         Wrist.calibrationValue = calibrationValue;
         Robot.wrist.runningCalibrationValue = 0;
+        Robot.wrist.setPosition(Robot.wrist.getPosition() + calibrationValue);
         Robot.controls.writeIniFile("Wrist", "Encoder_Calibration", String.valueOf(calibrationValue));
     }
     @Override

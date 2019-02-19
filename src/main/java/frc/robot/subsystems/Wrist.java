@@ -59,7 +59,11 @@ public class Wrist extends Subsystem {
     }
 
     public int getPosition() {
-        return wristMotor.getSelectedSensorPosition() + calibrationValue + runningCalibrationValue;
+        return wristMotor.getSelectedSensorPosition();
+    }
+
+    public void setPosition(int position) {
+        wristMotor.setSelectedSensorPosition(position);
     }
 
     public int getRawPosition() {

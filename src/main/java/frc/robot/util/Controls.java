@@ -2,7 +2,6 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.test.*;
 import frc.robot.subsystems.Elevator;
@@ -34,14 +33,17 @@ public class Controls {
                 iniFile.createNewFile();
 
                 Wini robotIni = new Wini(iniFile);
-                robotIni.put("Elevator", "Encoder_Calibration", 0);
+                robotIni.put("Elevator", "Encoder_Left_Calibration", 0);
+                robotIni.put("Elevator", "Encoder_Right_Calibration", 0);
                 robotIni.put("Wrist", "Encoder_Calibration", 0);
                 robotIni.store(iniFile);
             } else {
                 Wini robotIni = new Wini(iniFile);
-                Elevator.calibrationValue  = Integer.valueOf(robotIni.get("Elevator", "Encoder_Calibration"));
+                Elevator.leftCalibrationValue = Integer.valueOf(robotIni.get("Elevator", "Encoder_Left_Calibration"));
+                Elevator.rightCalibrationValue = Integer.valueOf(robotIni.get("Elevator", "Encoder_Right_Calibration"));
                 Wrist.calibrationValue = Integer.valueOf(robotIni.get("Wrist", "Encoder_Calibration"));
-                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", Elevator.calibrationValue);
+                Shuffleboard.putNumber("Controls", "Initial Elevator Left Calibration", Elevator.leftCalibrationValue);
+                Shuffleboard.putNumber("Controls", "Initial Elevator Right Calibration", Elevator.rightCalibrationValue);
                 Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", Wrist.calibrationValue);
             }
         } catch (Exception e) {

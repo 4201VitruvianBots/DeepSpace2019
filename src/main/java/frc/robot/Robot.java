@@ -68,6 +68,9 @@ public class Robot extends TimedRobot {
 
         vision.initUSBCamera();
 
+        elevator.setPosition(0, elevator.getRawPosition(0) + Robot.elevator.leftCalibrationValue);
+        elevator.setPosition(1, elevator.getRawPosition(1) + Robot.elevator.rightCalibrationValue);
+        wrist.setPosition(wrist.getPosition() + Wrist.calibrationValue);
         //if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
         //    Elevator.controlMode = 0;
 
@@ -96,8 +99,8 @@ public class Robot extends TimedRobot {
         m_oi.updateSmartDashboard();
 
         // TODO: Enable this when encoders are fixed
-        elevator.zeroEncoder();
-        wrist.zeroEncoder();
+        //elevator.zeroEncoder();
+        //wrist.zeroEncoder();
         intake.updateIntakeIndicator();
         m_oi.updateOIIndicators();
         intake.updateOuttakeState();
