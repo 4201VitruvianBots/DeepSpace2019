@@ -33,6 +33,9 @@ public class SetAllMechanismSetpoints extends InstantCommand {
     protected void initialize() {
         OI.positionIndex = position;
         // Set the mechanismPositions of the elevator
+
+
+
         switch (position) {
             case 5: // Rocket Level 3 Scoring Positions
                 switch (Intake.intakeState) {
@@ -121,7 +124,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case -1:
                 switch (Intake.intakeState) {
                     case 2:
-                        Scheduler.getInstance().add(new SetWristSetpoint(RobotMap.WRIST_CARGO_INTAKE_ANGLE));
+                        Scheduler.getInstance().add(new SetWristSetpoint(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE));
                         Scheduler.getInstance().add(new SetElevatorSetpoint(RobotMap.ELEVATOR_CARGO_INATAKE_STATION_POSITION));
                         break;
                     case 1:

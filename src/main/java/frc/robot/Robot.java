@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         elevator.setAbsoluteHeight(elevator.getHeight());
         wrist.setAbsolutePosition(wrist.getAngle());
+        intake.setHarpoonSecure(true);
         
         m_autonomousCommand = m_autoChooser.getSelected();
 

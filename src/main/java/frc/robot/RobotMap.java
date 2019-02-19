@@ -63,25 +63,25 @@ public class RobotMap {
     public static int pdpChannelElevatorRight = 2;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 120;
+    public static double WRIST_RETRACTED_ANGLE = 125;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 20;
-    public static double WRIST_CARGO_INTAKE_ANGLE = 45;
+    public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 45;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
     public static double WRIST_HATCH_LOW_ANGLE = 45;
     public static double WRIST_HATCH_ANGLE = 85;
     public static double ELEVATOR_HOME_POSITION = 0;
     public static double ELEVATOR_HATCH_LOW_POSITION = 10.5;
     public static double ELEVATOR_HATCH_MID_POSITION = 39;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 63;
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 64;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 19;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
-    public static double ELEVATOR_CARGO_INATAKE_GROUND_POSITION = 1.5;
+    public static double ELEVATOR_CARGO_INATAKE_GROUND_POSITION = 2.75;
     public static double ELEVATOR_CARGO_INATAKE_STATION_POSITION = 12;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
     public static double ELEVATOR_CARGO_LOW_POSITION = 16;
-    public static double ELEVATOR_CARGO_MID_POSITION = 45;
+    public static double ELEVATOR_CARGO_MID_POSITION = 44;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
 
     // Pathfinder (Units in feet)

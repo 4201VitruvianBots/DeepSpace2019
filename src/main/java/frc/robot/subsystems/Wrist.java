@@ -31,7 +31,7 @@ public class Wrist extends Subsystem {
     static double kF = 0;
     static double arbitraryFF = 0;
                                                       //5026 135 4096 * 0.375 * (72/22)
-    public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
+    public static int upperLimitEncoderCounts = 4468; //4468 120 degrees, 4096 * 0.333 * (72/22)
     public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;

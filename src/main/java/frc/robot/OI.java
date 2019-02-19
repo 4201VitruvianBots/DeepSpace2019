@@ -125,13 +125,30 @@ public class OI {
             7 - Start: KillAll
             9 - R3: Home all mechanisms
         */
+
+        /* Game Piece
+        2 Cargo
+        1 Hatch Ground
+        0 Hatch
+        */
+
+        /* Position
+        5 Rocket High
+        4 Rocket Mid
+        3 Rocket Low
+        2 Cargo ship
+        1 intake
+        0 home
+        -1 Depot
+        */
+
         xBoxButtons[0].whenPressed(new SetAllMechanismSetpoints(3));
         xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(4));
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
-        //xBoxButtons[4].whenPressed(new IncrementElevatorHeight(3));
+        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
@@ -151,7 +168,7 @@ public class OI {
     public void updateOIIndicators(){
         for(int i = 0; i < positionIndicator.length; i++)
             positionIndicator[i] = false;
-        positionIndicator[positionIndex] = true;
+        positionIndicator[Math.abs(positionIndex)] = true;
     }
 
     public void updateSmartDashboard() {
