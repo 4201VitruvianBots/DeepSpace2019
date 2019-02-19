@@ -29,6 +29,7 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
  * project.
  */
 public class Robot extends TimedRobot {
+    public static Climber climber = new Climber();
     public static Controls controls = new Controls();
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();

@@ -51,7 +51,6 @@ public class IntakeIntake extends Command {
             case 1:
                 Robot.intake.setHatchGroundIntakeOutput(0.8);
                 break;
-            case 0:
             default:
             /*    Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);

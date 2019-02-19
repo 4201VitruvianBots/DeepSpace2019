@@ -18,9 +18,10 @@ public class RobotMap {
     public static int mechanismPositions;
     // Constants
 
-    public static int leftJoystick = 0;
+    public static int leftJoystick = 0; // I am pretending to type. I am pretending to type. I am pretending to type.
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
+    public static int climberMaster = 50; // This statement is false.
 
     public static int pdp = 0;
     public static int PCMOne = 11;
