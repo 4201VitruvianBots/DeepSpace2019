@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -38,6 +39,8 @@ public class Robot extends TimedRobot {
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static OI m_oi;
+
+    Notifier robotPeriodic;
 
     boolean shuffleboardTransition = false;
 
@@ -78,6 +81,9 @@ public class Robot extends TimedRobot {
 
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();
+
+        robotPeriodic = new Notifier(new PeriodicRunnable());
+        robotPeriodic.startPeriodic(0.02);
     }
 
     /**
@@ -90,18 +96,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        driveTrain.updateSmartDashboard();
-        elevator.updateSmartDashboard();
-        wrist.updateSmartDashboard();
-        intake.updateSmartDashboard();
-        m_oi.updateSmartDashboard();
 
-        // TODO: Enable this when encoders are fixed
-        elevator.zeroEncoder();
-        wrist.zeroEncoder();
-        intake.updateIntakeIndicator();
-        m_oi.updateOIIndicators();
-        intake.updateOuttakeState();
     }
 
     /**
@@ -215,5 +210,23 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+    }
+    class PeriodicRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            driveTrain.updateSmartDashboard();
+            elevator.updateSmartDashboard();
+            wrist.updateSmartDashboard();
+            intake.updateSmartDashboard();
+            m_oi.updateSmartDashboard();
+
+            // TODO: Enable this when encoders are fixed
+            elevator.zeroEncoder();
+            wrist.zeroEncoder();
+            intake.updateIntakeIndicator();
+            m_oi.updateOIIndicators();
+            intake.updateOuttakeState();
+        }
     }
 }

@@ -67,7 +67,7 @@ public class RobotMap {
     public static double WRIST_RETRACTED_ANGLE = 125;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 20;
-    public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 45;
+    public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
     public static double WRIST_HATCH_LOW_ANGLE = 45;
     public static double WRIST_HATCH_ANGLE = 85;

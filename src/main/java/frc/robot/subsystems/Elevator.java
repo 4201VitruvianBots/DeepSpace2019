@@ -72,7 +72,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
         elevatorMotors[1].setInverted(true);
 
-        elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
+        elevatorMotors[0].setSensorPhase(!Robot.controls.whichRobot.get()); // For whatever reason, Silicon is inverted
         elevatorMotors[1].setSensorPhase(false);
 
         for (TalonSRX motor : elevatorMotors) {
@@ -265,7 +265,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
         Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
         Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
-        Shuffleboard.putBoolean("Elevator", "Silicon", Robot.controls.whichRobot.get());
+        Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
 
 
 
