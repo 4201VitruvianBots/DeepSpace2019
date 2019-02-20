@@ -59,6 +59,10 @@ public class RobotMap {
     public static int elevatorTop = 3;
     public static int wristBottom = 4;
     public static int wristTop = 5;
+    public static int ledCh1 = 23;  //LED info channels start from 9 on NavX
+    public static int ledCh2 = 22;  //and go down
+    public static int ledCh3 = 21;
+    public static int ledCh4 = 20;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
@@ -90,13 +94,4 @@ public class RobotMap {
     public static double wheelbase = 2.20833;
     public static double max_vel_high = 0.5104167;
     public static double max_vel_low = 1.6;
-
-    // Intake
-    public static int IRPin = 0;  //IR's plugged into DIO port 0
-
-    //Bling
-    public static int LEDCh1 = 23;  //LED info channels start from 9 on NavX
-    public static int LEDCh2 = 22;  //and go down
-    public static int LEDCh3 = 21;
-    public static int LEDCh4 = 20;
 }

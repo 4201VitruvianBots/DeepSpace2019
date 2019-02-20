@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.LimToggle;
+import frc.robot.commands.LEDReaction;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -20,10 +20,10 @@ public class LEDOutput extends Subsystem {
   // here. Call these from Commands.
 
   public DigitalOutput[] digitalOutput = {  //array that creates digitalOutput0-4, I think.
-        new DigitalOutput(RobotMap.LEDCh1),  //actual pin numbers defined in RobotMap
-        new DigitalOutput(RobotMap.LEDCh2),
-        new DigitalOutput(RobotMap.LEDCh3),
-        new DigitalOutput(RobotMap.LEDCh4),
+        new DigitalOutput(RobotMap.ledCh1),  //actual pin numbers defined in RobotMap
+        new DigitalOutput(RobotMap.ledCh2),
+        new DigitalOutput(RobotMap.ledCh3),
+        new DigitalOutput(RobotMap.ledCh4),
     };
   private boolean[] DIOState = {
           false,       //initialises variables for all of the pins to false
@@ -32,7 +32,7 @@ public class LEDOutput extends Subsystem {
           false,
   };
 
-  public DigitalInput digitalInput = new DigitalInput(RobotMap.IRPin);  //defines the banner IR as an input
+  public DigitalInput digitalInput = new DigitalInput(RobotMap.bannerIR);  //defines the banner IR as an input
 
   public LEDOutput(){
       super("LED Output");
@@ -48,6 +48,6 @@ public class LEDOutput extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new LimToggle());
+    setDefaultCommand(new LEDReaction());
   }
 }

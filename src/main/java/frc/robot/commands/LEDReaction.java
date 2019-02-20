@@ -10,8 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class LimToggle extends Command {
-  public LimToggle() {
+public class LEDReaction extends Command {
+  public LEDReaction() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.ledOutput);
   }
