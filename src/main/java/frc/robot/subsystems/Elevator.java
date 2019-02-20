@@ -45,7 +45,6 @@ public class Elevator extends Subsystem {
     public static int lowerLimitEncoderCounts = 0;
     public static int leftCalibrationValue = 0;
     public static int rightCalibrationValue = 0;
-    public int runningCalibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
     private double arbitraryFFUp = 2 / 12;
@@ -133,7 +132,7 @@ public class Elevator extends Subsystem {
 
     public void zeroEncoder() {
         if(getLimitSwitchState(0)) {
-            runningCalibrationValue =  getPosition() + lowerLimitEncoderCounts;
+//            runningCalibrationValue =  getPosition() + lowerLimitEncoderCounts;
             limitDebounce = true;
 //        } else if(getLimitSwitchState(1)) {
 //            runningCalibrationValue =  upperLimitEncoderCounts - getPosition() ;
@@ -148,7 +147,7 @@ public class Elevator extends Subsystem {
 
     public int getPosition() {
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
+            return Math.round((getAdjustedPosition(0) + getAdjustedPosition(1))/ 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorPosition();
         else if(getEncoderHealth(1))
@@ -161,15 +160,15 @@ public class Elevator extends Subsystem {
         elevatorMotors[encoderIndex].setSelectedSensorPosition(position);
     }
 
-    public int getEncoderCount(int encoderIndex) {
-        if(encoderIndex == 0)
-            return elevatorMotors[0].getSelectedSensorPosition();
-        else
-            return elevatorMotors[1].getSelectedSensorPosition();
+    public int getPosition(int encoderIndex) {
+        return elevatorMotors[encoderIndex].getSelectedSensorPosition();
     }
 
-    public int getRawPosition(int encoderIndex) {
-        return elevatorMotors[encoderIndex].getSelectedSensorPosition();
+    public int getAdjustedPosition(int encoderIndex) {
+        if(encoderIndex == 0)
+            return elevatorMotors[0].getSelectedSensorPosition() + leftCalibrationValue;
+        else
+            return elevatorMotors[1].getSelectedSensorPosition() + rightCalibrationValue;
     }
 
     public double getHeight() {
@@ -268,8 +267,8 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
-        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", getEncoderCount(0));
-        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", getEncoderCount(1));
+        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", getPosition(0));
+        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", getPosition(1));
         Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
@@ -277,7 +276,8 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
         Shuffleboard.putBoolean("Elevator", "Silicon", Robot.controls.whichRobot.get());
 
-
+        Shuffleboard.putNumber("Controls", "Elevator Height", getHeight());
+        Shuffleboard.putNumber("Controls", "Elevator Control Mode", controlMode);
 
         SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 

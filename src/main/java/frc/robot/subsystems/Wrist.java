@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -34,7 +35,6 @@ public class Wrist extends Subsystem {
     public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
     public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
-    public int runningCalibrationValue = 0;
     double encoderCountsPerAngle = 37.236;
 
     public static int controlMode = 1;
@@ -50,7 +50,7 @@ public class Wrist extends Subsystem {
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(false);
-        wristMotor.setSensorPhase(true);
+        wristMotor.setSensorPhase(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
@@ -66,8 +66,8 @@ public class Wrist extends Subsystem {
         wristMotor.setSelectedSensorPosition(position);
     }
 
-    public int getRawPosition() {
-        return wristMotor.getSelectedSensorPosition();
+    public int getAdjustedPosition() {
+        return wristMotor.getSelectedSensorPosition() + calibrationValue;
     }
 
     public double getVelocity() {
@@ -89,7 +89,7 @@ public class Wrist extends Subsystem {
 
     public void zeroEncoder() {
         if(getLimitSwitchState(0)) {
-            runningCalibrationValue =  getPosition() + lowerLimitEncoderCounts;
+//            runningCalibrationValue =  getPosition() + lowerLimitEncoderCounts;
             limitDebounce = true;
 //        } else if(getLimitSwitchState(1)) {
 //            runningCalibrationValue =  upperLimitEncoderCounts - getPosition() ;
@@ -141,6 +141,10 @@ public class Wrist extends Subsystem {
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
         Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
+
+
+        Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
+        Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
 
         SmartDashboard.putNumber("Wrist Angle", getAngle());
     }

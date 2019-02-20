@@ -13,13 +13,13 @@ public class ZeroElevatorEncoder extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        int leftCalibrationValue = Elevator.lowerLimitEncoderCounts - Robot.elevator.getRawPosition(0);
-        int rightCalibrationValue = Elevator.lowerLimitEncoderCounts - Robot.elevator.getRawPosition(1);
+        int leftCalibrationValue = Elevator.lowerLimitEncoderCounts - Robot.elevator.getPosition(0);
+        int rightCalibrationValue = Elevator.lowerLimitEncoderCounts - Robot.elevator.getPosition(1);
         Elevator.leftCalibrationValue = leftCalibrationValue;
         Elevator.rightCalibrationValue = rightCalibrationValue;
-        Robot.elevator.runningCalibrationValue = 0;
-        Robot.elevator.setPosition(0, Robot.elevator.getRawPosition(0) + leftCalibrationValue);
-        Robot.elevator.setPosition(1, Robot.elevator.getRawPosition(1) + rightCalibrationValue);
+//        Robot.elevator.runningCalibrationValue = 0;
+//        Robot.elevator.setPosition(0, Robot.elevator.getPosition(0) + leftCalibrationValue);
+//        Robot.elevator.setPosition(1, Robot.elevator.getPosition(1) + rightCalibrationValue);
         Robot.controls.writeIniFile("Elevator", "Encoder_Left_Calibration", String.valueOf(leftCalibrationValue));
         Robot.controls.writeIniFile("Elevator", "Encoder_Right_Calibration", String.valueOf(rightCalibrationValue));
     }
