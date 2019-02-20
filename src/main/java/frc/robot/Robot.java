@@ -228,8 +228,8 @@ public class Robot extends TimedRobot {
             m_oi.updateSmartDashboard();
 
             // TODO: Enable this when encoders are fixed
-            elevator.zeroEncoder();
-            wrist.zeroEncoder();
+            //elevator.zeroEncoder();
+            //wrist.zeroEncoder();
             intake.updateIntakeIndicator();
             m_oi.updateOIIndicators();
             intake.updateOuttakeState();
