@@ -268,6 +268,8 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
 
 
+        Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
+        Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
 
         SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 

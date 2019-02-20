@@ -133,8 +133,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        elevator.setAbsoluteHeight(elevator.getHeight());
-        wrist.setAbsolutePosition(wrist.getAngle());
+        if(Elevator.controlMode == 1)
+            elevator.setAbsoluteHeight(elevator.getHeight());
+        if(Wrist.controlMode == 1)
+            wrist.setAbsolutePosition(wrist.getAngle());
+
         intake.setHarpoonSecure(true);
         
         m_autonomousCommand = m_autoChooser.getSelected();
@@ -180,8 +183,11 @@ public class Robot extends TimedRobot {
         if (m_teleopCommand != null)
             Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        elevator.setAbsoluteHeight(elevator.getHeight());
-        wrist.setAbsolutePosition(wrist.getAngle());
+        if(Elevator.controlMode == 1)
+           elevator.setAbsoluteHeight(elevator.getHeight());
+        if(Wrist.controlMode == 1)
+            wrist.setAbsolutePosition(wrist.getAngle());
+
         VitruvianLogger.getInstance().startLogger();
 
         // Only reset shuffleboard's recording if starting from disabledInit

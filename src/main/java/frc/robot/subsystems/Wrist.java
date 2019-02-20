@@ -48,8 +48,8 @@ public class Wrist extends Subsystem {
     public Wrist() {
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
-        wristMotor.setInverted(false);
-        wristMotor.setSensorPhase(true);
+        wristMotor.setInverted(true);
+        wristMotor.setSensorPhase(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
@@ -136,6 +136,9 @@ public class Wrist extends Subsystem {
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
         Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
+
+        Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
+        Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
 
         SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
