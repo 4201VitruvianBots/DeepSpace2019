@@ -47,7 +47,7 @@ public class Elevator extends Subsystem {
     private double arbitraryFFDown = -0.5 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 0;
+    public static int controlMode = 1;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
@@ -68,10 +68,12 @@ public class Elevator extends Subsystem {
 
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
-            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
+            motor.configMotionCruiseVelocity(4500);
+            motor.configMotionAcceleration(9001);
             //motor.configForwardSoftLimitEnable(true);
             //motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
             //motor.configReverseSoftLimitEnable(true);

@@ -16,7 +16,6 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class IntakeRelease extends Command {
-    Timer pause = new Timer();
     int outtakeState;
 
     public IntakeRelease() {
@@ -58,7 +57,6 @@ public class IntakeRelease extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        pause.reset();
         switch (outtakeState) {
             case 2:
             case 1:
@@ -67,12 +65,8 @@ public class IntakeRelease extends Command {
             case 0:
             default:
                 Robot.intake.setHarpoonSecure(false);
-                pause.start();
-                while(pause.get() < 0.2) {
-
-                }
+                Timer.delay(0.25);
                 Robot.intake.setHarpoonExtend(false);
-                pause.stop();
                 break;
         }
     }
