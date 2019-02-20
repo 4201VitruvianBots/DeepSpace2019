@@ -14,19 +14,14 @@ package frc.robot;
  * floating around.
  */
 public class RobotMap {
-    // For example to map the left and right motors, you could define the
-    // following variables to use with your drivetrain subsystem.
-    // public static int leftMotor = 1;
-    // public static int rightMotor = 2;
+    // global variables
+    public static int mechanismPositions;
+    // Constants
 
-    // If you are using multiple modules, make sure to define both the port
-    // number and the module. For example you with a rangefinder:
-    // public static int rangefinderPort = 1;
-    // public static int rangefinderModule = 1;
-
-    public static int leftJoystick = 0;
+    public static int leftJoystick = 0; // I am pretending to type. I am pretending to type. I am pretending to type.
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
+    public static int climberMaster = 50; // This statement is false.
 
     public static int pdp = 0;
     public static int PCMOne = 11;
@@ -58,6 +53,7 @@ public class RobotMap {
     public static int elevatorMid = 4;
     public static int wristBottom = 5;
     public static int wristTop = 6;
+    public static int robotSwitch = 9;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
@@ -68,22 +64,26 @@ public class RobotMap {
     public static int pdpChannelElevatorRight = 2;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 0;
+    public static double WRIST_RETRACTED_ANGLE = 125;
     public static double WRIST_EXTENDED_ANGLE = 0;
-    public static double WRIST_CARGO_ANGLE = 0;
-    public static double WRIST_CARGO_HIGH_ANGLE = 0;
-    public static double WRIST_HATCH_ANGLE = 0;
+    public static double WRIST_CARGO_ANGLE = 20;
+    public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
+    public static double WRIST_CARGO_HIGH_ANGLE = 40;
+    public static double WRIST_HATCH_LOW_ANGLE = 45;
+    public static double WRIST_HATCH_ANGLE = 85;
     public static double ELEVATOR_HOME_POSITION = 0;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 11;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 10.5;
     public static double ELEVATOR_HATCH_MID_POSITION = 39;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 65; // 67 ideal TODO: Validate if the robot is capable of this
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 64;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 19;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
-    public static double ELEVATOR_CARGO_SHIP_POSITION = 0; // TODO: Get Measurement
-    public static double ELEVATOR_CARGO_LOW_POSITION = 14;
-    public static double ELEVATOR_CARGO_MID_POSITION = 52;
-    public static double ELEVATOR_CARGO_HIGH_POSITION = 65;
+    public static double ELEVATOR_CARGO_INATAKE_GROUND_POSITION = 2.75;
+    public static double ELEVATOR_CARGO_INATAKE_STATION_POSITION = 12;
+    public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
+    public static double ELEVATOR_CARGO_LOW_POSITION = 16;
+    public static double ELEVATOR_CARGO_MID_POSITION = 44;
+    public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
 
     // Pathfinder (Units in feet)
     public static double wheel_diameter = 0.5104167;

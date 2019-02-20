@@ -25,17 +25,19 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 public class Wrist extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    static double kP = 0.03;
+    static double kP = 2;
     static double kI = 0;
     static double kD = 0;
     static double kF = 0;
     static double arbitraryFF = 0;
+                                                      //5026 135 4096 * 0.375 * (72/22)
+    public static int upperLimitEncoderCounts = 4468; //4468 120 degrees, 4096 * 0.333 * (72/22)
+    public static int lowerLimitEncoderCounts = 0;
+    public static int calibrationValue = 0;
+    double encoderCountsPerAngle = 37.236;
 
-    int upperLimitEncoderCounts;
-    int lowerLimitEncoderCounts;
-    double encoderCountsToAngle = 0.0879;
-
-    public static int controlMode = 0;
+    public static int controlMode = 1;
+    static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 
     private DigitalInput[] limitSwitches = {
@@ -46,16 +48,17 @@ public class Wrist extends Subsystem {
     public Wrist() {
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
-        wristMotor.setInverted(false);
+        wristMotor.setInverted(true);
+        wristMotor.setSensorPhase(false);
 
-        wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
     }
 
     public int getPosition() {
-        return wristMotor.getSelectedSensorPosition();
+        return wristMotor.getSelectedSensorPosition() + calibrationValue;
     }
 
     public double getVelocity() {
@@ -76,15 +79,22 @@ public class Wrist extends Subsystem {
     }
 
     public void zeroEncoder() {
-        if(getLimitSwitchState(1)) {
-            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
-        } else if(getLimitSwitchState(0)) {
+        if(getLimitSwitchState(0)) {
             wristMotor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
-        }
+            limitDebounce = true;
+        } else if(getLimitSwitchState(1)) {
+            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+            limitDebounce = true;
+        } else
+            limitDebounce = false;
+    }
+
+    public void setEncoderPosition(int position) {
+        wristMotor.setSelectedSensorPosition(position, 0, 0);
     }
 
     public double getAngle() {
-        return getPosition() * encoderCountsToAngle;
+        return getPosition() / encoderCountsPerAngle;
     }
 
     public void setDirectOutput(double output) {
@@ -98,25 +108,23 @@ public class Wrist extends Subsystem {
     }
     
     public void setIncrementedPosition(double angle) {
-        double angleToEncderCounts = 1;
         double currentPosition = getPosition();
-        double encoderCounts = angle * angleToEncderCounts + currentPosition;
+        double encoderCounts = angle * encoderCountsPerAngle + currentPosition;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
-        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
     public void setAbsolutePosition(double angle) {
-        double hieghtToEncoderCounts = 1;
-        double encoderCounts = angle * hieghtToEncoderCounts;
+        double encoderCounts = angle * encoderCountsPerAngle;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
-        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
@@ -124,11 +132,15 @@ public class Wrist extends Subsystem {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Angle", getAngle());
         Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
+        Shuffleboard.putNumber("Wrist","Control Mode", controlMode);
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
         Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
         Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
-        SmartDashboard.putNumber("Angle", getAngle());
+        Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
+        Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
+
+        SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
 
     @Override

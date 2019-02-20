@@ -10,6 +10,7 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -30,7 +31,6 @@ public class IntakeIntake extends Command {
             case 1:
                 Robot.intake.setHarpoonExtend(false);
                 Robot.intake.setHarpoonSecure(false);
-                // TODO: Set wrist ground
                 break;
             case 0:
             default:
@@ -46,12 +46,11 @@ public class IntakeIntake extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(-0.8);
+                Robot.intake.setCargoIntakeOutput(-1);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(-0.8);
+                Robot.intake.setHatchGroundIntakeOutput(0.8);
                 break;
-            case 0:
             default:
             /*    Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);

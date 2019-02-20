@@ -33,6 +33,7 @@ public class SetArcadeDrive extends Command {
         double joystickX = Robot.m_oi.getRightJoystickX() * 0.5;
 
         double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
+        throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.5), 0.5): throttle;
         double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
 
         Robot.driveTrain.setMotorArcadeDrive(throttle, turn);

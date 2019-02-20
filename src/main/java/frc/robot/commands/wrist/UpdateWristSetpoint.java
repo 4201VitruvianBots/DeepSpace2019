@@ -35,9 +35,9 @@ public class UpdateWristSetpoint extends Command {
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-        if (Wrist.controlMode == 1 && !override) {/*
+        if (Wrist.controlMode == 1 && !override) {
             if(Math.abs(joystickOutput) > 0.05)
-               Robot.wrist.setIncrementedHeight(joystickOutput * 2);*/
+               Robot.wrist.setIncrementedPosition(joystickOutput * 10);
         } else {
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {

@@ -15,9 +15,9 @@ public class VitruvianLogger {
     static VitruvianLogger logger;
     boolean isRunning = false;
     boolean isMatch = false;
-    String basePath = "/media/sda1/4201Robot/Logs/";
+    String usbPath = "/media/sda1/4201Robot/Logs/";
     String roboRioPath = "/home/lvuser/4201Robot/Logs/";
-    String logPath;
+    String basePath, logPath;
     List<VitruvianLog> logList = new ArrayList<>();
     public static double m_logStartTime;
 
@@ -46,9 +46,12 @@ public class VitruvianLogger {
     public void startLogger() {
         // Check if base path is a valid directory
         try {
-            File baseDir = new File(basePath);
-            if(baseDir.isDirectory())
+            File baseDir = new File(usbPath);
+            if(baseDir.isDirectory() && baseDir.exists() && baseDir.canWrite()) {
                 System.out.println("VitruvianLogger Info: Base Path found! Logging to USB...");
+                basePath = usbPath;
+            } else
+                basePath = roboRioPath;
         } catch(Exception e) {
             System.out.println("VitruvianLogger Error: USB Path not detected. Backing up to roboRIO path.");
             basePath = roboRioPath;
@@ -114,7 +117,7 @@ public class VitruvianLogger {
             e.printStackTrace();
 
             counter = 1;
-            logPath = "/media/sda1/4201Robot/Logs/UnsortedLogs/";
+            logPath = basePath + "/Logs/UnsortedLogs/";
             while (folderPath.exists() && folderPath.isDirectory() && counter < 99) {
                 String newPath = logPath + "_" + String.format("%02d", counter++);
                 folderPath = new File(newPath);

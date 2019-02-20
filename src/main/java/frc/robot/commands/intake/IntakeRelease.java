@@ -36,10 +36,10 @@ public class IntakeRelease extends Command {
     protected void execute() {
         switch (outtakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(0.8);
+                Robot.intake.setCargoIntakeOutput(1);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0.8);
+                Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             case 0:
             default:

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 
-
 /**
  * An example command.  You can replace me with your own command.
  */
@@ -27,12 +26,7 @@ public class SetIntakeState extends InstantCommand {
     protected void initialize() {
         //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
         //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-            Intake.intakeState = state;
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        Intake.intakeState = state;
     }
 
     // Called once after isFinished returns true

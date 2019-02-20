@@ -98,8 +98,8 @@ public class PathfinderReadInverted extends Command {
 
         Shuffleboard.putString("Pathfinder", "PathFinder Status", "Enabling...");
 
-        left.configureEncoder(-Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
-        right.configureEncoder(-Robot.driveTrain.getLeftEncoderCount(), 4096, RobotMap.wheel_diameter);
+        left.configureEncoder(-Robot.driveTrain.getEncoderCount(0), 4096, RobotMap.wheel_diameter);
+        right.configureEncoder(-Robot.driveTrain.getEncoderCount(2), 4096, RobotMap.wheel_diameter);
 
         // The A value here != max_accel. A here is an acceleration gain (adjusting acceleration to go faster/slower), while max_accel is the max acceleration of the robot.
         // Leave A here alone until robot is reaching its target, then adjust to get it to go faster/slower (typically a small value like ~0.03 is used).
@@ -142,9 +142,9 @@ public class PathfinderReadInverted extends Command {
                 FileWriter writer = new FileWriter("/media/sda1/4201Robot/Pathfinder/calibrationFile.txt", true);
                 BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-                bufferedWriter.write("Left Enc. Count: " + Robot.driveTrain.getLeftEncoderCount());
+                bufferedWriter.write("Left Enc. Count: " + Robot.driveTrain.getEncoderCount(0));
                 bufferedWriter.newLine();
-                bufferedWriter.write("Right Enc. Count: " + Robot.driveTrain.getRightEncoderCount());
+                bufferedWriter.write("Right Enc. Count: " + Robot.driveTrain.getEncoderCount(2));
 
                 bufferedWriter.close();
             } catch (Exception e) {
@@ -171,8 +171,8 @@ public class PathfinderReadInverted extends Command {
             Shuffleboard.putNumber("Pathfinder", "Segment", segment++);
 
             // Calculate the current motor outputs based on the trajectory values + encoder positions
-            double l = left.calculate(-Robot.driveTrain.getLeftEncoderCount());
-            double r = right.calculate(-Robot.driveTrain.getRightEncoderCount());
+            double l = left.calculate(-Robot.driveTrain.getEncoderCount(0));
+            double r = right.calculate(-Robot.driveTrain.getEncoderCount(2));
             Shuffleboard.putNumber("Pathfinder", "PathFinder L", l);
             Shuffleboard.putNumber("Pathfinder", "PathFinder R", r);
             Shuffleboard.putNumber("Pathfinder", "PathFinder H", Pathfinder.r2d(left.getHeading()));

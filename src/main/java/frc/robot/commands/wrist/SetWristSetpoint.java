@@ -9,6 +9,7 @@ package frc.robot.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -17,14 +18,15 @@ public class SetWristSetpoint extends InstantCommand {
     double setpoint;
     public SetWristSetpoint(double angle) {
         // Use requires() here to declare subsystem dependencies
-        //requires(Robot.elevator);
+        requires(Robot.wrist);
         this.setpoint = angle;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.wrist.setAbsolutePosition(setpoint);
+        if(Wrist.controlMode == 1)
+            Robot.wrist.setAbsolutePosition(setpoint);
     }
 
     // Called once after isFinished returns true
@@ -36,5 +38,6 @@ public class SetWristSetpoint extends InstantCommand {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }
