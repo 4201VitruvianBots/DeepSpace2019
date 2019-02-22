@@ -42,15 +42,20 @@ public class DriveTrain extends Subsystem {
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
     public AHRS navX = new AHRS(SPI.Port.kMXP);
 
-    private double DriveAlpha = 0.125;
-    private static double m_lastL = 0, m_lastR = 0;
-    public static double leftAdjustment = 0, rightAdjustment = 0;
+    public static int controlMode = 0;
 
     public DriveTrain() {
         super("DriveTrain");
 
-        for (TalonSRX motor : driveMotors)
+        for (TalonSRX motor : driveMotors) {
             motor.configFactoryDefault();
+            motor.config_kP(0, 0.25, 30);
+            motor.config_kI(0, 0, 30);
+            motor.config_kD(0, 10, 30);
+            motor.config_kF(0, 1023.0 / 72000.0, 30);
+            motor.configOpenloopRamp(0.4);
+            motor.configClosedloopRamp(0.4);
+        }
 
         driveMotors[0].setInverted(true);
         driveMotors[1].setInverted(true);
@@ -124,17 +129,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setMotorTankDrive(double leftOutput, double rightOutput) {
-
         setMotorPercentOutput(leftOutput, rightOutput);
-    }
-
-    public void setMotorGains(double kP, double kI, double kD, double kF) {
-        for (TalonSRX motor : driveMotors) {
-            motor.config_kF(0, kF, 30);
-            motor.config_kP(0, kP, 30);
-            motor.config_kI(0, kI, 30);
-            motor.config_kD(0, kD, 30);
-        }
     }
 
     public void setArcadeDriveVelocity(double throttle, double turn) {
@@ -155,13 +150,7 @@ public class DriveTrain extends Subsystem {
             leftPWM = -1.0;
         }
 
-        // Ramp Rate
-        double m_targetL = DriveAlpha * leftPWM + m_lastL * (1 - DriveAlpha);
-        double m_targetR = DriveAlpha * rightPWM + m_lastR * (1 - DriveAlpha);
-        m_lastL = m_targetL;
-        m_lastR = m_targetR;
-
-        setMotorVelocityOutput(m_targetL, m_targetR);
+        setMotorVelocityOutput(leftPWM, rightPWM);
     }
 
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
@@ -172,21 +161,14 @@ public class DriveTrain extends Subsystem {
         double leftVelocity = leftOutput * k_maxVelocity;
         double rightVelocity = rightOutput * k_maxVelocity;
 
-        if (Math.abs(leftVelocity) > k_maxVelocity)
-            leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : leftVelocity;
-
-        if (Math.abs(rightVelocity) > k_maxVelocity)
-            rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : rightVelocity;
+        leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : (leftVelocity < -k_maxVelocity) ? -k_maxVelocity: leftVelocity;
+        rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : (rightVelocity < -k_maxVelocity) ? -k_maxVelocity: rightVelocity;
 
         driveMotors[0].set(ControlMode.Velocity, leftVelocity);
         driveMotors[2].set(ControlMode.Velocity, rightVelocity);
     }
 
     public void setMotorPercentOutput(double leftOutput, double rightOutput) {
-        // TODO: Normalize this
-        leftOutput = leftOutput + leftAdjustment;
-        rightOutput = rightOutput + rightAdjustment;
-
         driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
         driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
     }
@@ -196,10 +178,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveShifterStatus(boolean state) {
-        if (state)
-            driveTrainShifters.set(DoubleSolenoid.Value.kForward);
-        else
-            driveTrainShifters.set(DoubleSolenoid.Value.kReverse);
+        driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
     public void updateSmartDashboard() {
@@ -208,6 +187,8 @@ public class DriveTrain extends Subsystem {
 
         Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
         Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
+
+        Shuffleboard.putNumber("Controls", "DriveTrain Control Mode", controlMode);
 
         //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
         SmartDashboard.putNumber("Robot Angle", navX.getAngle());

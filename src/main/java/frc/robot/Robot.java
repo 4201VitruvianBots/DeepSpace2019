@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,7 +18,6 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,9 +59,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
         m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
-        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
-        m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
         controls.readIniFile();
@@ -204,11 +199,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        // TODO: Update logic to specify tank/arcade drivetrain
-        // If drivetrain encoders are bad, revert to default arcade drivetrain.
-        if (!driveTrain.getEncoderHealth(0) || !driveTrain.getEncoderHealth(2)) {
-            Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
-        }
     }
 
     /**
@@ -231,7 +221,7 @@ public class Robot extends TimedRobot {
             //elevator.zeroEncoder();
             //wrist.zeroEncoder();
             intake.updateIntakeIndicator();
-            m_oi.updateOIIndicators();
+            m_oi.updateSetpointIndicator();
             intake.updateOuttakeState();
         }
     }

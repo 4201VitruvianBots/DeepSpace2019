@@ -15,10 +15,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.climber.ClimberNegative;
-import frc.robot.commands.climber.ClimberPositive;
+import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.drivetrain.*;
-import frc.robot.commands.elevator.*;
 import frc.robot.commands.intake.*;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
@@ -149,8 +147,8 @@ public class OI {
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
-        xBoxButtons[6].whileHeld(new ClimberPositive()); // One cannot be the first, second, and third person at once, except in the context of this sentence, which you have written with him.
-        xBoxButtons[7].whileHeld(new ClimberNegative()); // This powerful sentence is not what you think it could be, as long as you have the right idea in your mind, in which is contained the knowledge needed to comprehend what has not been comprehended (or even attempted to be) in the past, which was full of misunderstanding and uninquiring minds, such as the one that I am using currently.
+        //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
+        //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
@@ -159,7 +157,7 @@ public class OI {
         xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
-        //xBoxButtons[7].whenPressed(new KillAll());
+        xBoxButtons[7].whenPressed(new KillAll());
         xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
@@ -170,7 +168,7 @@ public class OI {
         //xBoxButtons[1].whileHeld(new IntakeControl(false));
     }
 
-    public void updateOIIndicators(){
+    public void updateSetpointIndicator(){
         for(int i = 0; i < positionIndicator.length; i++)
             positionIndicator[i] = false;
         positionIndicator[Math.abs(positionIndex)] = true;

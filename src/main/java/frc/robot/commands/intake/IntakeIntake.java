@@ -49,7 +49,7 @@ public class IntakeIntake extends Command {
                 Robot.intake.setCargoIntakeOutput(-1);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0.8);
+                Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
             default:
             /*    Robot.intake.setHarpoonExtend(true);

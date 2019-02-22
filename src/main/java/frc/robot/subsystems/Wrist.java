@@ -100,7 +100,7 @@ public class Wrist extends Subsystem {
     public void setDirectOutput(double output) {
         if (output == 0) {
             if(isEncoderHealthy())
-                wristMotor.set(ControlMode.Position, getPosition());
+                wristMotor.set(ControlMode.Position, getPosition(), DemandType.ArbitraryFeedForward, arbitraryFF);
             else
                 wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
         } else

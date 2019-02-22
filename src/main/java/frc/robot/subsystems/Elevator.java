@@ -182,10 +182,7 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        if(voltage >= 0)
-            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
     //PID(feedback loop)
@@ -204,6 +201,7 @@ public class Elevator extends Subsystem {
         double voltage = 0;
         double error = setPoint-encoderCountsToInches(getPosition()); //gives you the difference between your angle and the desired angle.
         double velocity = encoderCountsToInches(getVelocity());
+
         if (velocity <= maxVelocity && error >= velocity*velocity/(2*(maxAcceleration))) {
             voltage = kS + kV * velocity + kA * maxAcceleration;
         } else if (error <= velocity*velocity/(2*(maxAcceleration))) {
@@ -231,10 +229,7 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        //if(encoderCounts > getPosition())
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        //else
-        //    elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double height) {
@@ -245,10 +240,7 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        if(encoderCounts > getPosition())
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void updateSmartDashboard() {

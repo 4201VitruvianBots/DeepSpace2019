@@ -9,11 +9,15 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * An example command.  You can replace me with your own command.
  */
 public class SetArcadeDrive extends Command {
+
+    public static boolean override = false;
+
     public SetArcadeDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
@@ -27,8 +31,7 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        //double joystickY = Math.pow(Robot.m_oi.getLeftJoystickY(), 3.0);
-        //double joystickX = Math.pow(Robot.m_oi.getRightJoystickX(), 3.0) * 1;
+
         double joystickY = Robot.m_oi.getLeftJoystickY();
         double joystickX = Robot.m_oi.getRightJoystickX() * 0.5;
 
@@ -36,7 +39,10 @@ public class SetArcadeDrive extends Command {
         throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.5), 0.5): throttle;
         double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
 
-        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
+            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+        else
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -36,8 +36,17 @@ public class UpdateWristSetpoint extends Command {
         double joystickOutput = Robot.m_oi.getXBoxRightY();
 
         if (Wrist.controlMode == 1 && !override) {
-            if(Math.abs(joystickOutput) > 0.05)
-               Robot.wrist.setIncrementedPosition(joystickOutput * 10);
+            if(Math.abs(joystickOutput) > 0.05) {
+                double setpoint = joystickOutput * 10;
+
+                // TODO: Change this logic to use limit switches when they are fixed
+                if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
+                    Robot.m_oi.setXBoxRumble(0.5);
+                else
+                    Robot.m_oi.setXBoxRumble(0);
+
+                Robot.wrist.setIncrementedPosition(setpoint);
+            }
         } else {
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {

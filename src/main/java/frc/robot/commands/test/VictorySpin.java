@@ -5,52 +5,56 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetTankDrive extends Command {
-    public SetTankDrive() {
-        // Use requires() here to declare subsystem dependencies
+public class VictorySpin extends Command {
+    boolean invert = false;
+    int initialState = 0;
+
+    public VictorySpin(double duration) {
         requires(Robot.driveTrain);
+        setTimeout(duration);
+    }
+
+    public VictorySpin(double duration, boolean invert) {
+        requires(Robot.driveTrain);
+        setTimeout(duration);
+        this.invert = invert;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        initialState = DriveTrain.controlMode;
+        DriveTrain.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double leftInput = Robot.m_oi.getLeftJoystickY();
-        double rightInput = Robot.m_oi.getRightJoystickY();
-
-        double leftOutput = (Math.abs(leftInput) > 0.05) ? leftInput : 0;
-        double rightOutput = (Math.abs(rightInput) > 0.05) ? rightInput : 0;
-
-        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
-           Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
+        if(invert)
+            Robot.driveTrain.setMotorPercentOutput(-1, 1);
         else
-            Robot.driveTrain.setMotorTankDrive(leftOutput, rightOutput);
-
+            Robot.driveTrain.setMotorPercentOutput(1, -1);
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     @Override
-    protected boolean isFinished() {
-        return false;
+    protected boolean isFinished(){
+        return isTimedOut();
     }
-
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.driveTrain.setMotorTankDrive(0, 0);
+        Robot.driveTrain.setMotorPercentOutput(0, 0);
+        DriveTrain.controlMode = initialState;
     }
 
     // Called when another command which requires one or more of the same
