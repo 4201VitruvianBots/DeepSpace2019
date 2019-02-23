@@ -28,6 +28,7 @@ public class RobotMap {
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
 
+    // Pneumatics
     public static int pdp = 0;
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
@@ -37,6 +38,7 @@ public class RobotMap {
         public static int hatchIntakeSecureForward = 4;
         public static int hatchIntakeSecureReverse = 5;
 
+    // Drivetrain
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
@@ -57,6 +59,10 @@ public class RobotMap {
     public static int elevatorTop = 3;
     public static int wristBottom = 4;
     public static int wristTop = 5;
+    public static int ledCh1 = 23;  //LED info channels start from 9 on NavX
+    public static int ledCh2 = 22;  //and go down
+    public static int ledCh3 = 21;
+    public static int ledCh4 = 20;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;

@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
     public static Controls controls = new Controls();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
+    public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
 
     boolean shuffleboardTransition = false;
