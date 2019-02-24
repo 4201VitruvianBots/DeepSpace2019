@@ -32,7 +32,7 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 public class DriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private TalonSRX[] driveMotors = {
+    public TalonSRX[] driveMotors = {
         new TalonSRX(RobotMap.leftFrontDriveMotor),
         new TalonSRX(RobotMap.leftRearDriveMotor),
         new TalonSRX(RobotMap.rightFrontDriveMotor),
@@ -84,6 +84,12 @@ public class DriveTrain extends Subsystem {
     public int getEncoderCount(int sensorIndex) {
         return driveMotors[sensorIndex].getSelectedSensorPosition();
     }
+
+    public void zeroEncoderCount() {
+        driveMotors[0].setSelectedSensorPosition(0);
+        driveMotors[2].setSelectedSensorPosition(0);
+    }
+
 
     public double getLeftEncoderVelocity() {
         return driveMotors[0].getSelectedSensorVelocity();

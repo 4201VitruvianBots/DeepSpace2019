@@ -9,12 +9,15 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 import org.ini4j.Wini;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class Controls {
 
     public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.pdp);
 
     public DigitalInput whichRobot = new DigitalInput(RobotMap.robotSwitch);
+
+    public static HashMap<String, Boolean> systemsChecks = new HashMap<String, Boolean>();
 
     public Controls() {
 

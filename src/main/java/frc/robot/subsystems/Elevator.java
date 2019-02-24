@@ -162,6 +162,10 @@ public class Elevator extends Subsystem {
             return 0;
     }
 
+    public int getEncoderPosition(int encoderIndex) {
+        return  elevatorMotors[encoderIndex].getSelectedSensorPosition();
+    }
+
     public double getHeight() {
         return getPosition() / encoderCountsPerInch;
     }

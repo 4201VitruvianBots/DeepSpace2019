@@ -97,6 +97,10 @@ public class Wrist extends Subsystem {
         return getPosition() / encoderCountsPerAngle;
     }
 
+    public double getMotorOutputPercent() {
+        return wristMotor.getMotorOutputPercent();
+    }
+
     public void setDirectOutput(double output) {
         if (output == 0) {
             if(isEncoderHealthy())
