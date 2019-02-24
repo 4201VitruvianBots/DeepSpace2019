@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import frc.robot.commands.*;
-import frc.robot.commands.FollowVisionTarget;
+import frc.robot.commands.drivetrain.FollowVisionTarget;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.SetElevatorVoltage;
@@ -131,6 +131,7 @@ public class OI {
         xBoxPOVButtons[1].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
+        xBoxButtons[6].whenPressed(new CycleLEDStates());   //For testing purposes, does what it says on the tin.
         xBoxButtons[7].whenPressed(new KillAll());
         xBoxButtons[9].whenPressed(new SetAllMechanismSetpoints(0));
 

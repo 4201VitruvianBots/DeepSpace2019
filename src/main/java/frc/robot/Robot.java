@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
         elevator.zeroEncoder();
         //wrist.zeroEncoder();
         intake.updateOuttakeState();
+        //ledOutput.updateLEDState();
     }
 
     /**

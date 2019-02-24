@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.LEDOutput;
 
 public class LEDReaction extends Command {
   public LEDReaction() {
@@ -24,15 +25,38 @@ public class LEDReaction extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.ledOutput.setPinOutput(false,2);
-    Robot.ledOutput.setPinOutput(false,3);
-    if(Robot.ledOutput.getBannerState()){                //check if the limit switch is open
-      Robot.ledOutput.setPinOutput(true,1);  // if it is turn pin 1 on
-      Robot.ledOutput.setPinOutput(false, 0);
-    }
-    else{
-      Robot.ledOutput.setPinOutput(true, 0);  //if it's closed turn pin 0 on
-      Robot.ledOutput.setPinOutput(false, 1);
+    switch (LEDOutput.state) {
+      case 3:      //LEDCh3 on, should be green.
+        Robot.ledOutput.setPinOutput(true,3);
+        Robot.ledOutput.setPinOutput(false,2);
+        Robot.ledOutput.setPinOutput(false,1);
+        Robot.ledOutput.setPinOutput(false,0);
+        break;
+      case 2:     //LEDCh2 on, should be magenta
+        Robot.ledOutput.setPinOutput(false,3);
+        Robot.ledOutput.setPinOutput(true,2);
+        Robot.ledOutput.setPinOutput(false,1);
+        Robot.ledOutput.setPinOutput(false,0);
+        break;
+      case 1:     //LEDCh1 on, should be red
+        Robot.ledOutput.setPinOutput(false,3);
+        Robot.ledOutput.setPinOutput(false,2);
+        Robot.ledOutput.setPinOutput(true,1);
+        Robot.ledOutput.setPinOutput(false,0);
+        break;
+      case 0:     //LEDCh0 on, should be green
+        Robot.ledOutput.setPinOutput(false,3);
+        Robot.ledOutput.setPinOutput(false,2);
+        Robot.ledOutput.setPinOutput(false,1);
+        Robot.ledOutput.setPinOutput(true,0);
+        break;
+      case -1:    //This should only really happen when the robot is disabled
+      default:
+        Robot.ledOutput.setPinOutput(false,3);
+        Robot.ledOutput.setPinOutput(false,2);
+        Robot.ledOutput.setPinOutput(false,1);
+        Robot.ledOutput.setPinOutput(false,0);
+        break;
     }
   }
 
