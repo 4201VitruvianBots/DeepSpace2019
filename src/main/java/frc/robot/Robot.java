@@ -216,7 +216,8 @@ public class Robot extends TimedRobot {
             wrist.updateSmartDashboard();
             intake.updateSmartDashboard();
             m_oi.updateSmartDashboard();
-
+            vision.updateSmartDashboard();
+            
             // TODO: Enable this when encoders are fixed
             //elevator.zeroEncoder();
             //wrist.zeroEncoder();
