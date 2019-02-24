@@ -232,6 +232,7 @@ public class Robot extends TimedRobot {
             intake.updateIntakeIndicator();
             m_oi.updateSetpointIndicator();
             intake.updateOuttakeState();
+            ledOutput.updateLEDState();
         }
     }
 }

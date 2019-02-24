@@ -158,6 +158,7 @@ public class OI {
         xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
+        xBoxButtons[6].whenPressed(new CycleLEDStates());   //For testing purposes, does what it says on the tin.
         xBoxButtons[7].whenPressed(new KillAll());
         xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
