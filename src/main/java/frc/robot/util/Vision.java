@@ -48,6 +48,10 @@ public class Vision {
         limelightTable.getEntry("camMode").setDouble(camMode);
     }
 
+    public boolean isValidTarget() {
+        return (limelightTable.getEntry("tv").getDouble(0) == 1) ? true : false;
+    }
+
     public double getTargetX() {
         return limelightTable.getEntry("tx").getDouble(0);
     }
@@ -60,9 +64,48 @@ public class Vision {
         return limelightTable.getEntry("ta").getDouble(0);
     }
 
-    public boolean isValidTarget() {
-        return (limelightTable.getEntry("tv").getDouble(0) == 1) ? true : false;
+    public double getTargetSkew() {
+        return limelightTable.getEntry("ts").getDouble(0);
     }
+
+    public double getLatency() {
+        return limelightTable.getEntry("tl").getDouble(0);
+    }
+
+    public double getTShort() {
+        return limelightTable.getEntry("tshort").getDouble(0);
+    }
+
+    public double getTLong() {
+        return limelightTable.getEntry("tlong").getDouble(0);
+    }
+
+    public double getTHorz() {
+        return limelightTable.getEntry("thor").getDouble(0);
+    }
+
+    public double getTVert() {
+        return limelightTable.getEntry("tvert").getDouble(0);
+    }
+
+    public double getRawTx(int index) {
+        return limelightTable.getEntry("tx" + Integer.toString(index)).getDouble(0);
+    }
+
+    public double getRawTy(int index) {
+            return limelightTable.getEntry("ty" + Integer.toString(index)).getDouble(0);
+    }
+
+    public double getRawTa(int index) {
+        return limelightTable.getEntry("ta" + Integer.toString(index)).getDouble(0);
+    }
+
+    public double getRawTs(int index) {
+        return limelightTable.getEntry("ts" + Integer.toString(index)).getDouble(0);
+    }
+
+
+
 
     public boolean IsTargetGood() {
         // TODO: Update with valid values
@@ -88,5 +131,22 @@ public class Vision {
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
         Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
+        Shuffleboard.putNumber("Vision", "Pipeline", getPipeline());
+        Shuffleboard.putNumber("Vision", "tx", getTargetX());
+        Shuffleboard.putNumber("Vision", "ty", getTargetY());
+        Shuffleboard.putNumber("Vision", "ta", getTargetArea());
+        Shuffleboard.putNumber("Vision", "ts", getTargetSkew());
+        Shuffleboard.putNumber("Vision", "tl", getLatency());
+        Shuffleboard.putNumber("Vision", "tshort", getTShort());
+        Shuffleboard.putNumber("Vision", "tlong", getTLong());
+        Shuffleboard.putNumber("Vision", "thorz", getTHorz());
+        Shuffleboard.putNumber("Vision", "tvert", getTVert());
+
+        for(int i = 0; i < 3; i++) {
+            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));
+            Shuffleboard.putNumber("Vision", "Raw ty" + Integer.toString(i), getRawTy(i));
+            Shuffleboard.putNumber("Vision", "Raw ta" + Integer.toString(i), getRawTa(i));
+            Shuffleboard.putNumber("Vision", "Raw ts" + Integer.toString(i), getRawTs(i));
+        }
     }
 }
