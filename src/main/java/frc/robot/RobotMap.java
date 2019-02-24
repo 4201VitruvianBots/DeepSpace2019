@@ -31,6 +31,8 @@ public class RobotMap {
         public static int hatchIntakeExtendReverse = 3;
         public static int hatchIntakeSecureForward = 4;
         public static int hatchIntakeSecureReverse = 5;
+        public static int climbPistonForward = 6;
+        public static int climbPistonReverse = 7;
 
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;

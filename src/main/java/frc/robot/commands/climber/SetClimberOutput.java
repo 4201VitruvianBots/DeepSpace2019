@@ -7,8 +7,10 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 /**
  * An example command.  You can replace me with your own command.

@@ -53,8 +53,8 @@ public class DriveTrain extends Subsystem {
             motor.config_kI(0, 0, 30);
             motor.config_kD(0, 10, 30);
             motor.config_kF(0, 1023.0 / 72000.0, 30);
-            motor.configOpenloopRamp(0.4);
-            motor.configClosedloopRamp(0.4);
+            motor.configOpenloopRamp(0.2);
+            motor.configClosedloopRamp(0.2);
         }
 
         driveMotors[0].setInverted(true);

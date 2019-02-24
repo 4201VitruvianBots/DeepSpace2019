@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -20,12 +21,22 @@ public class Climber extends Subsystem {
     // here. Call these from Commands.
     public TalonSRX master = new TalonSRX(RobotMap.climberMaster);
 
+    DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
+
     public Climber() {
         super("Climber");
     }
 
     public void setClimberOutput(double output){
         master.set(ControlMode.PercentOutput, output);
+    }
+
+    public void setClimbPistonState(boolean state) {
+        climbPistons.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    }
+
+    public boolean getClimbPistonState() {
+        return climbPistons.get() == DoubleSolenoid.Value.kForward ? true : false;
     }
 
     @Override
