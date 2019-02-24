@@ -166,3 +166,5 @@ bin/
 PathWeaver/output/
 
 src/main/deploy/output/
+
+PathWeaver/Paths/

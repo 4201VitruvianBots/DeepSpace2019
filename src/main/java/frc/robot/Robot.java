@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.auto.PathfinderReadLevel1;
+import frc.robot.commands.auto.routines.LeftLevel1ToRocket;
+import frc.robot.commands.auto.routines.PathfinderCalibration;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
@@ -54,8 +57,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Elevator.initialCalibration = false;
         m_oi = new OI();
-        //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
-        // chooser.addOption("My Auto", new MyAutoCommand());
+        m_autoChooser.addOption("Pathfinder Calibration", new PathfinderCalibration());
+        m_autoChooser.addOption("Get Off Level 1", new PathfinderReadLevel1("getOffLevel1"));
+        m_autoChooser.addOption("Left Level 1 To Rocket", new LeftLevel1ToRocket());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
         m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
@@ -145,6 +149,7 @@ public class Robot extends TimedRobot {
          */
 
         // schedule the autonomous command (example)
+        driveTrain.zeroEncoderCounts();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.start();
         }

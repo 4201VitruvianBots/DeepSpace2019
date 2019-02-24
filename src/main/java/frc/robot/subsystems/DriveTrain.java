@@ -53,8 +53,10 @@ public class DriveTrain extends Subsystem {
             motor.config_kI(0, 0, 30);
             motor.config_kD(0, 10, 30);
             motor.config_kF(0, 1023.0 / 72000.0, 30);
-            motor.configOpenloopRamp(0.2);
-            motor.configClosedloopRamp(0.2);
+            motor.configVoltageCompSaturation(12);
+            motor.enableVoltageCompensation(true);
+            //motor.configOpenloopRamp(0.2);
+            //motor.configClosedloopRamp(0.2);
         }
 
         driveMotors[0].setInverted(true);
@@ -85,12 +87,14 @@ public class DriveTrain extends Subsystem {
         return driveMotors[sensorIndex].getSelectedSensorPosition();
     }
 
-    public double getLeftEncoderVelocity() {
-        return driveMotors[0].getSelectedSensorVelocity();
+    public double getEncoderVelocity(int sensorIndex) {
+        return driveMotors[sensorIndex].getSelectedSensorVelocity();
     }
 
-    public double getRightEncoderVelocity() {
-        return driveMotors[2].getSelectedSensorVelocity();
+
+    public void zeroEncoderCounts() {
+        driveMotors[0].setSelectedSensorPosition(0);
+        driveMotors[2].setSelectedSensorPosition(0);
     }
 
     public ControlMode getTalonControlMode() {
@@ -111,16 +115,16 @@ public class DriveTrain extends Subsystem {
         double leftPWM = throttle + turn;
         double rightPWM = throttle - turn;
 
-        if (rightPWM > 1.0) {
+        if(rightPWM > 1.0) {
             leftPWM -= rightPWM - 1.0;
             rightPWM = 1.0;
-        } else if (rightPWM < -1.0) {
+        } else if(rightPWM < -1.0) {
             leftPWM -= rightPWM + 1.0;
             rightPWM = -1.0;
-        } else if (leftPWM > 1.0) {
+        } else if(leftPWM > 1.0) {
             rightPWM -= leftPWM - 1.0;
             leftPWM = 1.0;
-        } else if (leftPWM < -1.0) {
+        } else if(leftPWM < -1.0) {
             rightPWM -= leftPWM + 1.0;
             leftPWM = -1.0;
         }
