@@ -50,7 +50,7 @@ public class Elevator extends Subsystem {
     private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 1;
+    public static int controlMode = 0;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;

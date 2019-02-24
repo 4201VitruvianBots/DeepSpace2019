@@ -91,8 +91,6 @@ public class HoldToAlignWithTarget extends PIDCommand {
     protected void end() {
         Robot.vision.setPipeline(0);
         getPIDController().disable();
-        Robot.driveTrain.leftAdjustment = 0;
-        Robot.driveTrain.rightAdjustment = 0;
         Robot.driveTrain.setDriveMotorsState(true);
         Robot.driveTrain.setMotorArcadeDrive(0, 0);
     }

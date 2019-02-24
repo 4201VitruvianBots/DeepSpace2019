@@ -60,8 +60,6 @@ public class HoldToAlignWithTargetNotifier extends Command {
     protected void end() {
         turnPID.disable();
         periodicRunnable.stop();
-        Robot.driveTrain.leftAdjustment = 0;
-        Robot.driveTrain.rightAdjustment = 0;
         Robot.driveTrain.setDriveMotorsState(true);
     }
 
