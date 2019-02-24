@@ -41,9 +41,9 @@ public class SetArcadeDrive extends Command {
         if(Elevator.controlMode == 1)
             throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.5), 0.5): throttle;
 
-        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
-            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
-        else
+//        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
+//            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+//        else
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 

@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
     public static Intake intake = new Intake();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
+    public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
 
     Notifier robotPeriodic;
@@ -132,6 +133,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        driveTrain.setDriveMotorsState(true);
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
         if(Wrist.controlMode == 1)
@@ -151,6 +153,7 @@ public class Robot extends TimedRobot {
         // schedule the autonomous command (example)
         driveTrain.zeroEncoderCounts();
         if (m_autonomousCommand != null) {
+            driveTrain.setDriveMotorsState(false);
             m_autonomousCommand.start();
         }
 

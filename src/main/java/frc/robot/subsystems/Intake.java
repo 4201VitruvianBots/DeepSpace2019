@@ -17,9 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
-/**
- * An example subsystem.  You can replace me with your own Subsystem.
- */
 public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
