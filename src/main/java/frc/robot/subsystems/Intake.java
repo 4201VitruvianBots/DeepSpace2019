@@ -69,6 +69,10 @@ public class Intake extends Subsystem {
         return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
     }
 
+    public double getMotorOutputPercent() {
+        return intakeMotors[0].getMotorOutputPercent();
+    }
+
     public void setHarpoonExtend(boolean state){
         if (state)
             harpoonExtend.set(DoubleSolenoid.Value.kForward);

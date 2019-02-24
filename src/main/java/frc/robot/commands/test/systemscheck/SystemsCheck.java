@@ -20,5 +20,11 @@ public class SystemsCheck extends CommandGroup {
         // Wrist tests
         addSequential(new TestElevator("Up", 0.1));
         addSequential(new TestElevator("Down", -0.1));
+
+        // Cargo Intake tests
+        addSequential(new TestCargoIntake("Forward", 0.1));
+
+        // Hatch Ground Intake test
+        addSequential(new TestHatchGroundIntake("Forward", 0.1));
     }
 }

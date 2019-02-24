@@ -3,7 +3,6 @@ package frc.robot.commands.test.systemscheck;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.util.Controls;
 
-import static frc.robot.Robot.driveTrain;
 import static frc.robot.Robot.elevator;
 
 public class TestElevator extends Command {
