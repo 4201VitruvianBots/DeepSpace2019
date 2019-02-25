@@ -58,11 +58,10 @@ public class RobotMap {
     public static int wristBottom = 5;
     public static int wristTop = 6;
     public static int robotSwitch = 9;
-
-    public static int ledCh0 = 20;  //LED info channels start from 9 on NavX
-    public static int ledCh1 = 21;  //and go down
-    public static int ledCh2 = 22;
-    public static int ledCh3 = 23;  // NavX Port 9
+    public static int ledCh0 = 23;  //LED info channels start from 6 on NavX    (blue)
+    public static int ledCh1 = 22;  //and go up                                 (magenta)
+    public static int ledCh2 = 21;  //                                          (red)
+    public static int ledCh3 = 20;  //                                          (green)
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
@@ -77,7 +76,7 @@ public class RobotMap {
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 20;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
-    public static double WRIST_CARGO_HIGH_ANGLE = 50;
+    public static double WRIST_CARGO_HIGH_ANGLE = 40;
     public static double WRIST_HATCH_LOW_ANGLE = 45;
     public static double WRIST_HATCH_ANGLE = 85;
     public static double ELEVATOR_HOME_POSITION = 0;

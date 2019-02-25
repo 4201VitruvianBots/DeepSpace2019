@@ -54,24 +54,17 @@ public class LEDOutput extends Subsystem {
 
     public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
         if(Robot.vision.isValidTarget()) { //if the limelight detects any target at all, light up magenta
-            if(Intake.intakeState == 2) {
-                if (Robot.vision.getTargetArea() > 5.0 && Math.abs(Robot.vision.getTargetX()) < 1) //if the target is in the centre and is big, light up blue
-                    state = 3;
-                else
-                    state = 2;
-            } else {
-                if (Robot.vision.getTargetArea() > 6.8 && Math.abs(Robot.vision.getTargetX()) < 1) //if the target is in the centre and is big, light up blue
-                    state = 3;
-                else
-                    state = 2;
-            }
+            if(Robot.vision.getTargetArea() > 0.85 && Math.abs(Robot.vision.getTargetX()) < 0.1) //if the target is in the centre and is big, light up blue
+                state = 0;
+            else
+                state = 1;
         } else if(Robot.wrist.getAngle()<3 && Robot.elevator.getHeight()<5) {  //if the elevator's < 5" and wrist is < 3 deg, light up red
             if(Robot.intake.bannerIR.get()) {  //if the cargo is detected by the banner IR, light up green
-                state = 0;
+                state = 3;
             } else
-                state = 1;
+                state = 2;
         } else {
-            state = 0;
+            state = 3;
         }
     }
 
