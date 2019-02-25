@@ -19,7 +19,7 @@ import frc.robot.RobotMap;
 public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    public TalonSRX master = new TalonSRX(RobotMap.climberMaster);
+    public TalonSRX master = new TalonSRX(RobotMap.climbMotor);
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 

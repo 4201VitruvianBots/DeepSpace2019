@@ -18,10 +18,9 @@ public class RobotMap {
     public static int mechanismPositions;
     // Constants
 
-    public static int leftJoystick = 0; // I am pretending to type. I am pretending to type. I am pretending to type.
+    public static int leftJoystick = 0;
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
-    public static int climberMaster = 50; // This statement is false.
 
     // Pneumatics
     public static int pdp = 0;
@@ -45,6 +44,7 @@ public class RobotMap {
     public static int rightElevator = 31;
 
     public static int wristMotor = 40;
+    public static int climbMotor = 50;
 
     public static int cargoIntakeMotor = 60;
     public static int hatchIntakeMotor = 61;
@@ -62,7 +62,7 @@ public class RobotMap {
     public static int ledCh0 = 20;  //LED info channels start from 9 on NavX
     public static int ledCh1 = 21;  //and go down
     public static int ledCh2 = 22;
-    public static int ledCh3 = 23;
+    public static int ledCh3 = 23;  // NavX Port 9
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
