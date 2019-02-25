@@ -33,19 +33,19 @@ public class LEDReaction extends Command {
                 Robot.ledOutput.setPinOutput(false,1);
                 Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 2:     //LEDCh2 on, should be magenta
+            case 2:     //LEDCh2 on, should be red
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(true,2);
                 Robot.ledOutput.setPinOutput(false,1);
                 Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 1:     //LEDCh1 on, should be red
+            case 1:     //LEDCh1 on, should be magenta
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(false,2);
                 Robot.ledOutput.setPinOutput(true,1);
                 Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 0:     //LEDCh0 on, should be green
+            case 0:     //LEDCh0 on, should be blue
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(false,2);
                 Robot.ledOutput.setPinOutput(false,1);
