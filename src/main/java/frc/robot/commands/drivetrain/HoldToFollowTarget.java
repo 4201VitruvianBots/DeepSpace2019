@@ -42,7 +42,7 @@ public class HoldToFollowTarget extends Command {
 
     @Override
     protected boolean isFinished() {
-        if(Robot.driveTrain.getLeftEncoderVelocity() <= 0 && Robot.driveTrain.getLeftEncoderVelocity() <= 0){
+        if(Robot.driveTrain.getEncoderVelocity(0) <= 0 && Robot.driveTrain.getEncoderVelocity(2) <= 0){
             return true;
         }
         else {

@@ -5,29 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Elevator;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
+public class IncrementElevatorHeight extends InstantCommand {
+    double increment;
+    public IncrementElevatorHeight(double increment) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.elevator);
+        this.increment = increment;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        double setpoint = Robot.elevator.getHeight() + increment;
+        if(Elevator.controlMode == 1)
+            Robot.elevator.setAbsoluteHeight(setpoint);
     }
 
     // Called once after isFinished returns true

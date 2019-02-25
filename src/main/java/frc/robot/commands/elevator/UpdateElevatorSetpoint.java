@@ -37,7 +37,7 @@ public class UpdateElevatorSetpoint extends Command {
         double joystickOutput = Robot.m_oi.getXBoxLeftY();
 
         if(!Elevator.initialCalibration) {
-             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(0)) {
+             if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
                  Elevator.initialCalibration = true;
                  //Elevator.controlMode = 1;
              }
@@ -54,17 +54,27 @@ public class UpdateElevatorSetpoint extends Command {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
             */
-            if(Math.abs(joystickOutput) > 0.05)
-                Robot.elevator.setIncrementedHeight(joystickOutput * 6);
+            if(Math.abs(joystickOutput) > 0.05) {
+                double setpoint = joystickOutput * 6;
+
+                // TODO: Change this logic to use limit switches when they are fixed
+                if(setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
+                    Robot.m_oi.setXBoxRumble(0.5);
+                else
+                    Robot.m_oi.setXBoxRumble(0);
+
+                Robot.elevator.setIncrementedPosition(setpoint);
+
+            }
         } else {
             double voltage = 0;
             if (Math.abs(joystickOutput) > 0.05)
                 voltage = 12 * joystickOutput;
             else {
-                if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
-                    Robot.elevator.setCurrentPositionHold();
-                else
-                    voltage = 1;
+                //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
+                //    Robot.elevator.setCurrentPositionHold();
+                //else if(Robot.m_oi.xBoxPOVButtons[0].get())
+                //    voltage = 2;
             }
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {

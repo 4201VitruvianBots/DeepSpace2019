@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -41,15 +42,22 @@ public class DriveTrain extends Subsystem {
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
     public AHRS navX = new AHRS(SPI.Port.kMXP);
 
-    private double DriveAlpha = 0.125;
-    private static double m_lastL = 0, m_lastR = 0;
-    public static double leftAdjustment = 0, rightAdjustment = 0;
+    public static int controlMode = 0;
 
     public DriveTrain() {
         super("DriveTrain");
 
-        for (TalonSRX motor : driveMotors)
+        for (TalonSRX motor : driveMotors) {
             motor.configFactoryDefault();
+            motor.config_kP(0, 0.25, 30);
+            motor.config_kI(0, 0, 30);
+            motor.config_kD(0, 10, 30);
+            motor.config_kF(0, 1023.0 / 72000.0, 30);
+            motor.configVoltageCompSaturation(12);
+            motor.enableVoltageCompensation(true);
+            //motor.configOpenloopRamp(0.2);
+            //motor.configClosedloopRamp(0.2);
+        }
 
         driveMotors[0].setInverted(true);
         driveMotors[1].setInverted(true);
@@ -64,34 +72,29 @@ public class DriveTrain extends Subsystem {
 
 
         VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
-        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
-        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
-        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
-        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
-        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
-        //drivetrainLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
-        //drivetrainLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
+        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
+        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
+        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
+        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
         VitruvianLogger.getInstance().addLog(drivetrainLog);
-
     }
 
-    public int getLeftEncoderCount() {
-        return driveMotors[0].getSelectedSensorPosition();
+    public int getEncoderCount(int sensorIndex) {
+        return driveMotors[sensorIndex].getSelectedSensorPosition();
     }
 
-    public int getRightEncoderCount() {
-        return driveMotors[2].getSelectedSensorPosition();
+    public double getEncoderVelocity(int sensorIndex) {
+        return driveMotors[sensorIndex].getSelectedSensorVelocity();
     }
 
-    public double getLeftEncoderVelocity() {
-        return driveMotors[0].getSelectedSensorVelocity();
-    }
 
-    public double getRightEncoderVelocity() {
-        return driveMotors[2].getSelectedSensorVelocity();
+    public void zeroEncoderCounts() {
+        driveMotors[0].setSelectedSensorPosition(0);
+        driveMotors[2].setSelectedSensorPosition(0);
     }
 
     public ControlMode getTalonControlMode() {
@@ -103,7 +106,6 @@ public class DriveTrain extends Subsystem {
         return driveMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
-
     public void setDriveMotorsState(boolean state) {
         for (TalonSRX driveMotor : driveMotors)
             driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
@@ -113,16 +115,16 @@ public class DriveTrain extends Subsystem {
         double leftPWM = throttle + turn;
         double rightPWM = throttle - turn;
 
-        if (rightPWM > 1.0) {
+        if(rightPWM > 1.0) {
             leftPWM -= rightPWM - 1.0;
             rightPWM = 1.0;
-        } else if (rightPWM < -1.0) {
+        } else if(rightPWM < -1.0) {
             leftPWM -= rightPWM + 1.0;
             rightPWM = -1.0;
-        } else if (leftPWM > 1.0) {
+        } else if(leftPWM > 1.0) {
             rightPWM -= leftPWM - 1.0;
             leftPWM = 1.0;
-        } else if (leftPWM < -1.0) {
+        } else if(leftPWM < -1.0) {
             rightPWM -= leftPWM + 1.0;
             leftPWM = -1.0;
         }
@@ -131,17 +133,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setMotorTankDrive(double leftOutput, double rightOutput) {
-
         setMotorPercentOutput(leftOutput, rightOutput);
-    }
-
-    public void setMotorGains(double kP, double kI, double kD, double kF) {
-        for (TalonSRX motor : driveMotors) {
-            motor.config_kF(0, kF, 30);
-            motor.config_kP(0, kP, 30);
-            motor.config_kI(0, kI, 30);
-            motor.config_kD(0, kD, 30);
-        }
     }
 
     public void setArcadeDriveVelocity(double throttle, double turn) {
@@ -162,13 +154,7 @@ public class DriveTrain extends Subsystem {
             leftPWM = -1.0;
         }
 
-        // Ramp Rate
-        double m_targetL = DriveAlpha * leftPWM + m_lastL * (1 - DriveAlpha);
-        double m_targetR = DriveAlpha * rightPWM + m_lastR * (1 - DriveAlpha);
-        m_lastL = m_targetL;
-        m_lastR = m_targetR;
-
-        setMotorVelocityOutput(m_targetL, m_targetR);
+        setMotorVelocityOutput(leftPWM, rightPWM);
     }
 
     public void setMotorVelocityOutput(double leftOutput, double rightOutput) {
@@ -179,21 +165,14 @@ public class DriveTrain extends Subsystem {
         double leftVelocity = leftOutput * k_maxVelocity;
         double rightVelocity = rightOutput * k_maxVelocity;
 
-        if (Math.abs(leftVelocity) > k_maxVelocity)
-            leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : leftVelocity;
-
-        if (Math.abs(rightVelocity) > k_maxVelocity)
-            rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : rightVelocity;
+        leftVelocity = (leftVelocity > k_maxVelocity) ? k_maxVelocity : (leftVelocity < -k_maxVelocity) ? -k_maxVelocity: leftVelocity;
+        rightVelocity = (rightVelocity > k_maxVelocity) ? k_maxVelocity : (rightVelocity < -k_maxVelocity) ? -k_maxVelocity: rightVelocity;
 
         driveMotors[0].set(ControlMode.Velocity, leftVelocity);
         driveMotors[2].set(ControlMode.Velocity, rightVelocity);
     }
 
     public void setMotorPercentOutput(double leftOutput, double rightOutput) {
-        // TODO: Normalize this
-        leftOutput = leftOutput + leftAdjustment;
-        rightOutput = rightOutput + rightAdjustment;
-
         driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
         driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
     }
@@ -203,27 +182,20 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveShifterStatus(boolean state) {
-        if (state)
-            driveTrainShifters.set(DoubleSolenoid.Value.kForward);
-        else
-            driveTrainShifters.set(DoubleSolenoid.Value.kReverse);
+        driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
     public void updateSmartDashboard() {
-
-        SmartDashboard.putNumber("Left Joy Y", Robot.m_oi.getLeftJoystickY());
-        SmartDashboard.putNumber("Left Joy X", Robot.m_oi.getLeftJoystickX());
-        SmartDashboard.putNumber("Right Joy Y", Robot.m_oi.getRightJoystickY());
-        SmartDashboard.putNumber("Right Joy X", Robot.m_oi.getRightJoystickX());
-
         Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
-        Shuffleboard.putBoolean("DriveTrain", "xBox Button Test", Robot.m_oi.xBoxButtons[5].get());
 
-        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getLeftEncoderCount());
-        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getRightEncoderCount());
+        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
+        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
+
+        Shuffleboard.putNumber("Controls", "DriveTrain Control Mode", controlMode);
+
         //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-        SmartDashboard.putNumber("Angle", navX.getAngle());
+        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
     }
 
     @Override

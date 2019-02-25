@@ -10,11 +10,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.UpdateElevatorSetpoint;
 import frc.robot.util.Controls;
@@ -31,7 +33,7 @@ public class Elevator extends Subsystem {
     private Timer elevatorTimer;
     private double elevatorPreviousTime;
     private double elevatorPreviousError;
-    private double kP = 0.3;
+    private double kP = 0.5;
     private double kI = 0;
     private double kD = 0;
     private double kS = 0; //Voltage to break static friction
@@ -41,15 +43,17 @@ public class Elevator extends Subsystem {
     private double maxAcceleration = 5;
     public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
     public int lowerLimitEncoderCounts = 0;
+    public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
     private double arbitraryFFUp = 2 / 12;
-    private double arbitraryFFDown = -0.5 / 12;
+    private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;
     public static int controlMode = 0;
 
     public static boolean initialCalibration = false;
+    boolean limitDebounce = false;
 
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.leftElevator),
@@ -58,23 +62,41 @@ public class Elevator extends Subsystem {
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
-        new DigitalInput(RobotMap.elevatorTop)
+        new DigitalInput(RobotMap.elevatorTop),
+        new DigitalInput(RobotMap.elevatorMid)
     };
 
     public Elevator() {
         super("Elevator");
 
+        elevatorMotors[0].setInverted(false);   // Set true for silicon?
+        elevatorMotors[1].setInverted(true);
+
+        elevatorMotors[0].setSensorPhase(!Robot.controls.whichRobot.get()); // For whatever reason, Silicon is inverted
+        elevatorMotors[1].setSensorPhase(false);
+
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
-            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
+            motor.configMotionCruiseVelocity(7500);
+            motor.configMotionAcceleration(13500);
+            motor.configContinuousCurrentLimit(30);
+            motor.configPeakCurrentLimit(40);
+            motor.configPeakCurrentDuration(2000);
+            motor.enableCurrentLimit(true);
+
+            // Fixes watchdog issue?
+            motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
+            motor.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 5);
+            motor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 5);
+            //motor.configForwardSoftLimitEnable(true);
+            //motor.configForwardSoftLimitThreshold(upperLimitEncoderCounts);
+            //motor.configReverseSoftLimitEnable(true);
+            //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
-        elevatorMotors[0].setInverted(false);   // Set true for silicon?
-        elevatorMotors[1].setInverted(true);
-        elevatorMotors[0].setSensorPhase(false);
-        elevatorMotors[1].setSensorPhase(false);
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
@@ -107,18 +129,22 @@ public class Elevator extends Subsystem {
         return elevatorMotors[motorIndex].getMotorOutputPercent();
     }
 
-    public void resetEncoderCount() {
-        for(TalonSRX talon:elevatorMotors)
-            talon.setSelectedSensorPosition(0);
-    }
     public void zeroEncoder() {
-        if(getLimitSwitchState(1)) {
-            for (TalonSRX motor : elevatorMotors)
-                motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
-        } else if(getLimitSwitchState(0)) {
+        if(getLimitSwitchState(0)) {
             for (TalonSRX motor : elevatorMotors)
                 motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
-        }
+            limitDebounce = true;
+//        } else if(getLimitSwitchState(1)) {
+//            for (TalonSRX motor : elevatorMotors)
+//                motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+//            limitDebounce = true;
+        } else
+            limitDebounce = false;
+    }
+
+    public void setEncoderPosition(int position) {
+        for(TalonSRX motor:elevatorMotors)
+            motor.setSelectedSensorPosition(position, 0, 0);
     }
 
     public boolean getEncoderHealth(int encoderIndex) {
@@ -127,13 +153,17 @@ public class Elevator extends Subsystem {
 
     public int getPosition() {
         if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition()) / 2);
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorPosition();
         else if(getEncoderHealth(1))
             return elevatorMotors[1].getSelectedSensorPosition();
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
+    }
+
+    public double getHeight() {
+        return getPosition() / encoderCountsPerInch;
     }
 
     public int getVelocity(){
@@ -152,10 +182,7 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        if(voltage >= 0)
-            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+        elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
     //PID(feedback loop)
@@ -174,6 +201,7 @@ public class Elevator extends Subsystem {
         double voltage = 0;
         double error = setPoint-encoderCountsToInches(getPosition()); //gives you the difference between your angle and the desired angle.
         double velocity = encoderCountsToInches(getVelocity());
+
         if (velocity <= maxVelocity && error >= velocity*velocity/(2*(maxAcceleration))) {
             voltage = kS + kV * velocity + kA * maxAcceleration;
         } else if (error <= velocity*velocity/(2*(maxAcceleration))) {
@@ -192,7 +220,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].set(ControlMode.Position, getPosition());
     }
 
-    public void setIncrementedHeight(double height) {
+    public void setIncrementedPosition(double height) {
         double currentPosition = getPosition();
         double encoderCounts = (height * encoderCountsPerInch) + currentPosition;
 
@@ -200,10 +228,8 @@ public class Elevator extends Subsystem {
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
-        if(getPosition() >= encoderCounts)
-            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+
+        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double height) {
@@ -213,24 +239,35 @@ public class Elevator extends Subsystem {
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
-        if(getPosition() >= encoderCounts)
-            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFUp);
-        else
-            elevatorMotors[0].set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFFDown);
+
+        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
-        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(0));
-        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
+        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", elevatorMotors[0].getSelectedSensorPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", elevatorMotors[1].getSelectedSensorPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
         Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
         Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
         Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
+        Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
+
+
+        Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
+        Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
 
         SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
+
+
+        Shuffleboard.putNumber("Elevator", "Control Mode", controlMode);
+        SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 
     @Override

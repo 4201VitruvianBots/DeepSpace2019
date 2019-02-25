@@ -9,6 +9,7 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -33,7 +34,11 @@ public class SetTankDrive extends Command {
         double leftOutput = (Math.abs(leftInput) > 0.05) ? leftInput : 0;
         double rightOutput = (Math.abs(rightInput) > 0.05) ? rightInput : 0;
 
-        Robot.driveTrain.setMotorTankDrive(leftOutput, rightOutput);
+        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
+           Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
+        else
+            Robot.driveTrain.setMotorTankDrive(leftOutput, rightOutput);
+
     }
 
     // Make this return true when this Command no longer needs to run execute()

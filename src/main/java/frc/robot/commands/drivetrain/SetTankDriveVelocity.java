@@ -22,7 +22,6 @@ public class SetTankDriveVelocity extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
     }
 
     // Called repeatedly when this Command is scheduled to run

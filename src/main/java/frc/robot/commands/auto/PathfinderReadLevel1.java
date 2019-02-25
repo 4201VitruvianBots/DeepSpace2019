@@ -8,14 +8,12 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.driverstation.Shuffleboard;
-
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
@@ -28,7 +26,7 @@ import java.io.FileWriter;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class PathfinderReadInverted extends Command {
+public class PathfinderReadLevel1 extends Command {
     String filename;
     Trajectory leftTrajectory;
     Trajectory rightTrajectory;
@@ -40,11 +38,11 @@ public class PathfinderReadInverted extends Command {
     boolean first = false;
     Notifier periodicRunnable;
 
-    double kP = 0.8;
-    double kD = 0.002;
-    double max_vel = 1.6035;
+    double kP = 0.9;
+    double kD = 1;
+    double max_vel = 2;
 
-    public PathfinderReadInverted(String filename) {
+    public PathfinderReadLevel1(String filename) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
         this.filename = filename;
@@ -58,14 +56,13 @@ public class PathfinderReadInverted extends Command {
 
         try {
             // Try to read the .csv files
-            File leftFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".left.pf1.csv");
+            File leftFile = new File("/media/sda1/4201Robot/Pathfinder/Paths/" + filename + "_Left.csv");
             Trajectory lT = Pathfinder.readFromCSV(leftFile);
             leftTrajectory = lT;
 
-            File rightFile = new File(Filesystem.getDeployDirectory() + "/output/" + filename + ".right.pf1.csv");
+            File rightFile = new File("/media/sda1/4201Robot/Pathfinder/Paths/" + filename + "_Right.csv");
             Trajectory rT = Pathfinder.readFromCSV(rightFile);
             rightTrajectory = rT;
-            Shuffleboard.putString("Pathfinder", "PathFinder Read", "Trajectory Read Success!");
 
             this.setTimeout(lT.segments.length * 0.05 * 1.1);
         } catch (Exception e) {
@@ -98,8 +95,8 @@ public class PathfinderReadInverted extends Command {
 
         Shuffleboard.putString("Pathfinder", "PathFinder Status", "Enabling...");
 
-        left.configureEncoder(-Robot.driveTrain.getEncoderCount(0), 4096, RobotMap.wheel_diameter);
-        right.configureEncoder(-Robot.driveTrain.getEncoderCount(2), 4096, RobotMap.wheel_diameter);
+        left.configureEncoder(Robot.driveTrain.getEncoderCount(0), 4096, RobotMap.wheel_diameter);
+        right.configureEncoder(Robot.driveTrain.getEncoderCount(2), 4096, RobotMap.wheel_diameter);
 
         // The A value here != max_accel. A here is an acceleration gain (adjusting acceleration to go faster/slower), while max_accel is the max acceleration of the robot.
         // Leave A here alone until robot is reaching its target, then adjust to get it to go faster/slower (typically a small value like ~0.03 is used).
@@ -171,8 +168,8 @@ public class PathfinderReadInverted extends Command {
             Shuffleboard.putNumber("Pathfinder", "Segment", segment++);
 
             // Calculate the current motor outputs based on the trajectory values + encoder positions
-            double l = left.calculate(-Robot.driveTrain.getEncoderCount(0));
-            double r = right.calculate(-Robot.driveTrain.getEncoderCount(2));
+            double l = left.calculate(Robot.driveTrain.getEncoderCount(0));
+            double r = right.calculate(Robot.driveTrain.getEncoderCount(2));
             Shuffleboard.putNumber("Pathfinder", "PathFinder L", l);
             Shuffleboard.putNumber("Pathfinder", "PathFinder R", r);
             Shuffleboard.putNumber("Pathfinder", "PathFinder H", Pathfinder.r2d(left.getHeading()));
@@ -196,7 +193,7 @@ public class PathfinderReadInverted extends Command {
             Shuffleboard.putNumber("Pathfinder", "Timer", stopwatch.get());
 
             // Set the output to the motors
-            Robot.driveTrain.setMotorPercentOutput(-(r - turn), -(l + turn));
+            Robot.driveTrain.setMotorPercentOutput(l + turn, r - turn);
 
             // Continue sending output values until the path has been completely followed.
             if (left.isFinished() && right.isFinished() && (Math.abs(angleDifference) < 4)) {

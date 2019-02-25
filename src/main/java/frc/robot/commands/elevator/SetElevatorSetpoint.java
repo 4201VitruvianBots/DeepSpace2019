@@ -9,6 +9,7 @@ package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Elevator;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -17,14 +18,15 @@ public class SetElevatorSetpoint extends InstantCommand {
     double setpoint;
     public SetElevatorSetpoint(double position) {
         // Use requires() here to declare subsystem dependencies
-        //requires(Robot.elevator);
+        requires(Robot.elevator);
         this.setpoint = position;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.elevator.setAbsoluteHeight(setpoint);
+        if(Elevator.controlMode == 1)
+            Robot.elevator.setAbsoluteHeight(setpoint);
     }
 
     // Called once after isFinished returns true
@@ -36,5 +38,6 @@ public class SetElevatorSetpoint extends InstantCommand {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        end();
     }
 }
