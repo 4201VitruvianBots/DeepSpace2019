@@ -136,17 +136,17 @@ public class Vision {
         Shuffleboard.putNumber("Vision", "ty", getTargetY());
         Shuffleboard.putNumber("Vision", "ta", getTargetArea());
         Shuffleboard.putNumber("Vision", "ts", getTargetSkew());
-        Shuffleboard.putNumber("Vision", "tl", getLatency());
-        Shuffleboard.putNumber("Vision", "tshort", getTShort());
-        Shuffleboard.putNumber("Vision", "tlong", getTLong());
-        Shuffleboard.putNumber("Vision", "thorz", getTHorz());
-        Shuffleboard.putNumber("Vision", "tvert", getTVert());
-
-        for(int i = 0; i < 3; i++) {
-            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));
-            Shuffleboard.putNumber("Vision", "Raw ty" + Integer.toString(i), getRawTy(i));
-            Shuffleboard.putNumber("Vision", "Raw ta" + Integer.toString(i), getRawTa(i));
-            Shuffleboard.putNumber("Vision", "Raw ts" + Integer.toString(i), getRawTs(i));
-        }
+//        Shuffleboard.putNumber("Vision", "tl", getLatency());
+//        Shuffleboard.putNumber("Vision", "tshort", getTShort());
+//        Shuffleboard.putNumber("Vision", "tlong", getTLong());
+//        Shuffleboard.putNumber("Vision", "thorz", getTHorz());
+//        Shuffleboard.putNumber("Vision", "tvert", getTVert());
+//
+//        for(int i = 0; i < 3; i++) {
+//            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));
+//            Shuffleboard.putNumber("Vision", "Raw ty" + Integer.toString(i), getRawTy(i));
+//            Shuffleboard.putNumber("Vision", "Raw ta" + Integer.toString(i), getRawTa(i));
+//            Shuffleboard.putNumber("Vision", "Raw ts" + Integer.toString(i), getRawTs(i));
+//        }
     }
 }

@@ -87,6 +87,7 @@ public class Elevator extends Subsystem {
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
+            motor.configMotionSCurveStrength(4);
 
             // Fixes watchdog issue?
             motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
