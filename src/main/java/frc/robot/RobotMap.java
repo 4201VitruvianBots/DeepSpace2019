@@ -56,10 +56,10 @@ public class RobotMap {
     public static int elevatorTop = 3;
     public static int wristBottom = 4;
     public static int wristTop = 5;
-    public static int ledCh0 = 23;  //LED info channels start from 9 on NavX
-    public static int ledCh1 = 22;  //and go down
-    public static int ledCh2 = 21;
-    public static int ledCh3 = 20;
+    public static int ledCh0 = 20;  //LED info channels start from 6 on NavX
+    public static int ledCh1 = 21;  //and go up
+    public static int ledCh2 = 22;
+    public static int ledCh3 = 23;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
