@@ -54,8 +54,10 @@ public class RobotMap {
     public static int hatchSensor = 1;
     public static int elevatorBottom = 2;
     public static int elevatorTop = 3;
-    public static int wristBottom = 4;
-    public static int wristTop = 5;
+    public static int elevatorMid = 4;
+    public static int wristBottom = 5;
+    public static int wristTop = 6;
+    public static int robotSwitch = 9;
     public static int ledCh0 = 20;  //LED info channels start from 6 on NavX
     public static int ledCh1 = 21;  //and go up
     public static int ledCh2 = 22;
