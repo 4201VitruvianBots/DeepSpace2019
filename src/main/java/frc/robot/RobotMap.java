@@ -58,6 +58,7 @@ public class RobotMap {
     public static int wristBottom = 5;
     public static int wristTop = 6;
     public static int robotSwitch = 9;
+
     public static int ledCh0 = 23;  //LED info channels start from 6 on NavX    (blue)
     public static int ledCh1 = 22;  //and go up                                 (magenta)
     public static int ledCh2 = 21;  //                                          (red)
@@ -84,7 +85,7 @@ public class RobotMap {
     public static double ELEVATOR_HATCH_MID_POSITION = 39;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 64;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
-    public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 19;
+    public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INATAKE_GROUND_POSITION = 2.75;
     public static double ELEVATOR_CARGO_INATAKE_STATION_POSITION = 12;

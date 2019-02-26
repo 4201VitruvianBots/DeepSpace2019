@@ -46,11 +46,11 @@ public class Elevator extends Subsystem {
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
-    private double arbitraryFFUp = 2 / 12;
+    private double arbitraryFFUp = 1.5 / 12;
     private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 0;
+    public static int controlMode = 1;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
@@ -72,7 +72,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
         elevatorMotors[1].setInverted(true);
 
-        elevatorMotors[0].setSensorPhase(!Robot.controls.whichRobot.get()); // For whatever reason, Silicon is inverted
+        elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
         elevatorMotors[1].setSensorPhase(false);
 
         for (TalonSRX motor : elevatorMotors) {
@@ -81,7 +81,7 @@ public class Elevator extends Subsystem {
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
-            motor.configMotionCruiseVelocity(7500);
+            motor.configMotionCruiseVelocity(6000); //7500 is possibly bad
             motor.configMotionAcceleration(13500);
             motor.configContinuousCurrentLimit(30);
             motor.configPeakCurrentLimit(40);

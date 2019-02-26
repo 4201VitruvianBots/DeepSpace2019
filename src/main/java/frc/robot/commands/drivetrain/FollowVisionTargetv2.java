@@ -90,7 +90,7 @@ public class FollowVisionTargetv2 extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.vision.setPipeline(0);
+        Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(true);
         //Robot.driveTrain.setDriveOutput(0, 0);
     }

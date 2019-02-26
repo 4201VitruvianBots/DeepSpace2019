@@ -20,6 +20,7 @@ public class FollowVisionTarget extends PIDCommand {
     static double kD = 0; //Proportion for turning
     double tta = 0.85; //Target TA val
 
+    static double lastTx = 0;
     public FollowVisionTarget() {
         super(kP, kI, kD);
         // Use requires() here to declare subsystem dependencies
@@ -30,21 +31,36 @@ public class FollowVisionTarget extends PIDCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        lastTx = 0;
         Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(false);
-
         this.getPIDController().setAbsoluteTolerance(1);
         this.getPIDController().setOutputRange(-1, 1);
     }
 
     @Override
     protected double returnPIDInput() {
-        return Robot.vision.getTargetX();
+        double targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
+
+        if(targetRatio > .45 || targetRatio < 0.15)
+            lastTx = lastTx;
+        else {
+            lastTx = Robot.vision.getTargetX();
+        }
+            return lastTx;
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        Robot.driveTrain.setMotorPercentOutput((Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output, (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output);
+        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+
+        if(lastTx > 15)
+            leftOutput = leftOutput * 0.8;
+        else if(lastTx < -15)
+            rightOutput = rightOutput * 0.8;
+
+        Robot.driveTrain.setMotorPercentOutput(leftOutput, rightOutput);
     }
 
     // Called repeatedly when this Command is scheduled to run
