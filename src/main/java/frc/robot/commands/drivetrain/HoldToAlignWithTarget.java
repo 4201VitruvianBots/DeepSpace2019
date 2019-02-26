@@ -15,15 +15,16 @@ import frc.robot.Robot;
  * An example command.  You can replace me with your own command.
  */
 public class HoldToAlignWithTarget extends PIDCommand {
-    static double kP = 0.003;   //0.1
+    static double kP = 0.015;   //0.1
     static double kI = 0;
     static double kD = 0;  //10
     static double kF = 0;  //1023.0 / 72000.0;
     static double period = 0.02;
-    double lastLimelightAngle = 0;
-    double throttle, turn;
-    //Notifier periodicRunnable;
+
+
     boolean isFinished = false;
+
+    double lastTx = 0;
 
     public HoldToAlignWithTarget() {
         super(kP, kI, kD, period);
@@ -34,12 +35,13 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        lastTx = 0;
         Robot.driveTrain.setDriveMotorsState(false);
         getPIDController().setF(kF);
-        //getPIDController().get
-        //getPIDController().setContinuous(true);
+        getPIDController().setInputRange(-180.0f, 180.0f);
+        getPIDController().setContinuous(true);
         getPIDController().setAbsoluteTolerance(1);
-        getPIDController().setOutputRange(-0.5, 0.5);
+        getPIDController().setOutputRange(-1, 1);
 
         Robot.vision.setPipeline(1);
     }
@@ -47,35 +49,33 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
         if (Robot.vision.isValidTarget()) {
-            double limelightAngle = Robot.vision.getTargetX();
-            lastLimelightAngle = limelightAngle;
-            getPIDController().enable();
-            if(limelightAngle != lastLimelightAngle) {
-                double currentNavXAngle = Robot.driveTrain.navX.getAngle();
-                double setpoint = currentNavXAngle - lastLimelightAngle;
-                getPIDController().setSetpoint(setpoint);
+            double targetRatio = 0;
+            try {
+                targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
+            } catch (Exception e) {
+
             }
-        } else {
+            if(targetRatio > .45 || targetRatio < 0.15)
+                lastTx = lastTx;
+            else {
+                lastTx = Robot.vision.getTargetX();
+            }
+
+            getPIDController().setSetpoint(lastTx);
+            getPIDController().enable();
+        } else
             getPIDController().disable();
-            turn = Robot.m_oi.getRightJoystickX();
-        }
     }
 
     @Override
-    protected double returnPIDInput() {
-        return Robot.driveTrain.navX.getAngle();
+    protected double returnPIDInput() { return Robot.driveTrain.navX.getAngle();
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        double adjustment = -output;
-        throttle = Robot.m_oi.getLeftJoystickY();
-        turn = Robot.m_oi.getRightJoystickX();
-
-        double leftOutput = throttle - turn - adjustment;
-        double rightOutput = throttle + turn + adjustment;
+        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
             Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);

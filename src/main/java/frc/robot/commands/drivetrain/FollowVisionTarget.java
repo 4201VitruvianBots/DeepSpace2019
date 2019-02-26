@@ -7,6 +7,7 @@
 
 package frc.robot.commands.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
@@ -20,7 +21,7 @@ public class FollowVisionTarget extends PIDCommand {
     static double kD = 0; //Proportion for turning
     double tta = 0.85; //Target TA val
 
-    static double lastTx = 0;
+    double lastTx = 0;
     public FollowVisionTarget() {
         super(kP, kI, kD);
         // Use requires() here to declare subsystem dependencies
@@ -32,10 +33,22 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected void initialize() {
         lastTx = 0;
-        Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(false);
         this.getPIDController().setAbsoluteTolerance(1);
         this.getPIDController().setOutputRange(-1, 1);
+
+        Robot.vision.setPipeline(1);
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        if(Robot.vision.isValidTarget()) {
+            this.getPIDController().enable();
+            //double correction = Robot.limelight.getTargetX() * kP;
+            //Robot.driveTrain.setDriveOutput((Robot.m_oi.getLeftY() - Robot.m_oi.getRightX()) + correction, (Robot.m_oi.getLeftY() + Robot.m_oi.getRightX()) - correction);
+        } else
+            this.getPIDController().disable();
     }
 
     @Override
@@ -55,23 +68,13 @@ public class FollowVisionTarget extends PIDCommand {
         double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
         double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
 
-        if(lastTx > 15)
-            leftOutput = leftOutput * 0.8;
-        else if(lastTx < -15)
-            rightOutput = rightOutput * 0.8;
+        leftOutput = lastTx > 15 ? leftOutput * 0.8 : leftOutput;
+        rightOutput = lastTx < -15 ? rightOutput * 0.8 : rightOutput;
 
-        Robot.driveTrain.setMotorPercentOutput(leftOutput, rightOutput);
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        if(Robot.vision.isValidTarget()) {
-            this.getPIDController().enable();
-            //double correction = Robot.limelight.getTargetX() * kP;
-            //Robot.driveTrain.setDriveOutput((Robot.m_oi.getLeftY() - Robot.m_oi.getRightX()) + correction, (Robot.m_oi.getLeftY() + Robot.m_oi.getRightX()) - correction);
-        } else
-            this.getPIDController().disable();
+        if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
+            Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
+        else
+            Robot.driveTrain.setMotorPercentOutput(leftOutput, rightOutput);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -83,6 +86,7 @@ public class FollowVisionTarget extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        getPIDController().disable();
         Robot.driveTrain.setDriveMotorsState(true);
         //Robot.driveTrain.setDriveOutput(0, 0);
     }
