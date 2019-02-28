@@ -22,6 +22,9 @@ public class FollowVisionTarget extends PIDCommand {
     double tta = 0.85; //Target TA val
 
     double lastTx = 0;
+    double lastRatio = 0;
+    double idealRatio = 5.825 / 14.5;
+
     public FollowVisionTarget() {
         super(kP, kI, kD);
         // Use requires() here to declare subsystem dependencies
@@ -54,13 +57,19 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected double returnPIDInput() {
         double targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
+        double currentTx = Robot.vision.getTargetX();
 
-        if(targetRatio > .45 || targetRatio < 0.15)
-            lastTx = lastTx;
-        else {
-            lastTx = Robot.vision.getTargetX();
+        lastTx = Robot.vision.getTargetSkew() > 10 ? lastTx : currentTx;
+        lastTx = (targetRatio > .45 || targetRatio < 0.15) ? lastTx : currentTx;
+        lastTx = (Math.abs(currentTx - lastTx) > 10) ? lastTx : currentTx;
+        lastTx = (Math.abs(currentTx - lastTx) < 10) && Math.abs(lastTx) < Math.abs(currentTx) ? lastTx : currentTx;
+        if(Math.abs(targetRatio - idealRatio) < Math.abs(lastRatio - idealRatio)) {
+            lastTx = currentTx;
+            lastRatio = targetRatio;
         }
-            return lastTx;
+
+
+        return lastTx;
     }
 
     @Override
