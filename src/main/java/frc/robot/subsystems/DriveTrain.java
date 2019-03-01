@@ -56,8 +56,7 @@ public class DriveTrain extends Subsystem {
             motor.config_kF(0, 1023.0 / 72000.0, 30);
             motor.configVoltageCompSaturation(12);
             motor.enableVoltageCompensation(true);
-            //motor.configOpenloopRamp(0.2);
-            //motor.configClosedloopRamp(0.2);
+            motor.configOpenloopRamp(0.6);
         }
 
         driveMotors[0].setInverted(true);
@@ -72,16 +71,16 @@ public class DriveTrain extends Subsystem {
         driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
 
 
-        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
-        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
-        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
-        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
-        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
-        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
-        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
-        VitruvianLogger.getInstance().addLog(drivetrainLog);
+//        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
+//        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
+//        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
+//        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
+//        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
+//        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
+//        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
+//        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
+//        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
+//        VitruvianLogger.getInstance().addLog(drivetrainLog);
     }
 
     public int getEncoderCount(int sensorIndex) {
@@ -187,16 +186,16 @@ public class DriveTrain extends Subsystem {
     }
 
     public void updateSmartDashboard() {
-        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
-        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
-
-        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
-        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
-
-        Shuffleboard.putNumber("Controls", "DriveTrain Control Mode", controlMode);
-
-        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
+//        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
+//        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
+//
+//        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
+//        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
+//
+//        Shuffleboard.putNumber("Controls", "DriveTrain Control Mode", controlMode);
+//
+//        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+//        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
     }
 
     @Override

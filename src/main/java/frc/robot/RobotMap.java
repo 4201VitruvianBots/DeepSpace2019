@@ -73,7 +73,7 @@ public class RobotMap {
     public static int pdpChannelElevatorRight = 2;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 125;
+    public static double WRIST_RETRACTED_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 20;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
@@ -81,8 +81,9 @@ public class RobotMap {
     public static double WRIST_HATCH_LOW_ANGLE = 45;
     public static double WRIST_HATCH_ANGLE = 85;
     public static double ELEVATOR_HOME_POSITION = 0;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 10.5;
-    public static double ELEVATOR_HATCH_MID_POSITION = 39;
+    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 10;
+    public static double ELEVATOR_HATCH_MID_POSITION = 38;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 64;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;

@@ -25,6 +25,8 @@ public class FollowVisionTarget extends PIDCommand {
     double lastRatio = 0;
     double idealRatio = 5.825 / 14.5;
 
+    double[] targetsArray;
+
     public FollowVisionTarget() {
         super(kP, kI, kD);
         // Use requires() here to declare subsystem dependencies
@@ -36,9 +38,9 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected void initialize() {
         lastTx = 0;
-        Robot.driveTrain.setDriveMotorsState(false);
+//        Robot.driveTrain.setDriveMotorsState(false);
         this.getPIDController().setAbsoluteTolerance(1);
-        this.getPIDController().setOutputRange(-1, 1);
+        this.getPIDController().setOutputRange(-0.25, 0.25);
 
         Robot.vision.setPipeline(1);
     }
@@ -56,29 +58,33 @@ public class FollowVisionTarget extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        double targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
-        double currentTx = Robot.vision.getTargetX();
+//        double targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
+        double currentTx = -Robot.vision.getTargetX();
 
-        lastTx = Robot.vision.getTargetSkew() > 10 ? lastTx : currentTx;
-        lastTx = (targetRatio > .45 || targetRatio < 0.15) ? lastTx : currentTx;
-        lastTx = (Math.abs(currentTx - lastTx) > 10) ? lastTx : currentTx;
-        lastTx = (Math.abs(currentTx - lastTx) < 10) && Math.abs(lastTx) < Math.abs(currentTx) ? lastTx : currentTx;
-        if(Math.abs(targetRatio - idealRatio) < Math.abs(lastRatio - idealRatio)) {
+        if(Robot.vision.isValidTarget())
             lastTx = currentTx;
-            lastRatio = targetRatio;
-        }
-
+//        if(targetRatio < 0.45 && targetRatio > 0.15)
+//            lastTx = currentTx;
+//            lastRatio = targetRatio;
+//        }
+//        lastTx = Robot.vision.getTargetSkew() > 10 ? lastTx : currentTx;
+//        lastTx = (targetRatio > .45 || targetRatio < 0.15) ? lastTx : currentTx;
+//        lastTx = (Math.abs(currentTx - lastTx) > 10) ? lastTx : currentTx;
+//        lastTx = (Math.abs(currentTx - lastTx) < 10) && Math.abs(lastTx) < Math.abs(currentTx) ? lastTx : currentTx;
 
         return lastTx;
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
-        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+//        double leftOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+//        double rightOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
 
-        leftOutput = lastTx > 15 ? leftOutput * 0.8 : leftOutput;
-        rightOutput = lastTx < -15 ? rightOutput * 0.8 : rightOutput;
+//        leftOutput = lastTx > 15 ? leftOutput * 0.8 : leftOutput;
+//        rightOutput = lastTx < -15 ? rightOutput * 0.8 : rightOutput;
+
+        double leftOutput = Robot.m_oi.getLeftJoystickY() + output;
+        double rightOutput = Robot.m_oi.getLeftJoystickY() - output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
             Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
@@ -96,7 +102,7 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected void end() {
         getPIDController().disable();
-        Robot.driveTrain.setDriveMotorsState(true);
+//        Robot.driveTrain.setDriveMotorsState(true);
         //Robot.driveTrain.setDriveOutput(0, 0);
     }
 

@@ -104,10 +104,10 @@ public class Elevator extends Subsystem {
         elevatorLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
         elevatorLog.addLogField("elevatorTalonLeftCurrent", () -> getMotorCurrent(0));
         elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(1));
-        elevatorLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
-        elevatorLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
-        elevatorLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
-        elevatorLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
+//        elevatorLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
+//        elevatorLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
+//        elevatorLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
+//        elevatorLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
         elevatorLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
         elevatorLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
         VitruvianLogger.getInstance().addLog(elevatorLog);
@@ -147,6 +147,10 @@ public class Elevator extends Subsystem {
             motor.setSelectedSensorPosition(position, 0, 0);
     }
 
+    public int getEncoderPosition(int encoderIndex) {
+        return  elevatorMotors[encoderIndex].getSelectedSensorPosition();
+    }
+
     public boolean getEncoderHealth(int encoderIndex) {
         return elevatorMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
@@ -163,7 +167,7 @@ public class Elevator extends Subsystem {
     }
 
     public double getHeight() {
-        return getPosition() / encoderCountsPerInch;
+        return (double) getPosition() / (double) encoderCountsPerInch;
     }
 
     public int getVelocity(){
@@ -246,24 +250,24 @@ public class Elevator extends Subsystem {
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
-        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
-        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
-        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
+//        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
+//        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
+//        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
-        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", elevatorMotors[0].getSelectedSensorPosition());
-        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", elevatorMotors[1].getSelectedSensorPosition());
+        Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", getEncoderPosition(0));
+        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", getEncoderPosition(1));
         Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
-        Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
-        Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
-        Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
-        Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
+//        Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
+//        Shuffleboard.putNumber("Elevator", "Talon Right Current", getMotorCurrent(1));
+//        Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
+        //Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
 
 
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
 
-        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
+//        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 
 
         Shuffleboard.putNumber("Elevator", "Control Mode", controlMode);

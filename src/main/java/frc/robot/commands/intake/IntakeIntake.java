@@ -17,6 +17,7 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class IntakeIntake extends Command {
+
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
@@ -72,9 +73,9 @@ public class IntakeIntake extends Command {
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if(Robot.intake.bannerIR.get())
-                   Robot.intake.setCargoIntakeOutput(-0.2);
-                else
+                if (Robot.intake.bannerIR.get()) {
+                    Robot.intake.setCargoIntakeOutput(-0.5);
+                } else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:

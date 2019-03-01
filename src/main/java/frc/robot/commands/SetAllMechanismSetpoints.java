@@ -117,7 +117,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                     case 0:
                     default:
                         Scheduler.getInstance().add(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
-                        Scheduler.getInstance().add(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_LOW_POSITION));
+                        Scheduler.getInstance().add(new SetElevatorSetpoint(RobotMap.ELEVATOR_HATCH_INTAKE_POSITION));
                         break;
                 }
                 break;
