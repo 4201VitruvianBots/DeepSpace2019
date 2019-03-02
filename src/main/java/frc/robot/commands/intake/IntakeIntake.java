@@ -20,7 +20,6 @@ public class IntakeIntake extends Command {
 
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
@@ -37,7 +36,7 @@ public class IntakeIntake extends Command {
             default:
                 Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.2);
+                Timer.delay(0.3);
                 Robot.intake.setHarpoonSecure(true);
                 break;
         }

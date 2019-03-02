@@ -16,9 +16,9 @@ import frc.robot.Robot;
  */
 
 public class FollowVisionTarget extends PIDCommand {
-    static double kP = 0.015; //Proportion for turning
+    static double kP = 0.01; //Proportion for turning
     static double kI = 0; //Proportion for turning
-    static double kD = 0; //Proportion for turning
+    static double kD = 0.00015; //Proportion for turning
     double tta = 0.85; //Target TA val
 
     double lastTx = 0;
@@ -27,10 +27,10 @@ public class FollowVisionTarget extends PIDCommand {
 
     double[] targetsArray;
 
+    boolean targetLocked = false;
+
     public FollowVisionTarget() {
         super(kP, kI, kD);
-        // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
         requires(Robot.driveTrain);
     }
 
@@ -38,9 +38,10 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected void initialize() {
         lastTx = 0;
-//        Robot.driveTrain.setDriveMotorsState(false);
+        targetLocked = false;
+        Robot.driveTrain.setDriveMotorsState(false);
         this.getPIDController().setAbsoluteTolerance(1);
-        this.getPIDController().setOutputRange(-0.25, 0.25);
+        this.getPIDController().setOutputRange(-1, 1);
 
         Robot.vision.setPipeline(1);
     }
@@ -63,6 +64,13 @@ public class FollowVisionTarget extends PIDCommand {
 
         if(Robot.vision.isValidTarget())
             lastTx = currentTx;
+
+        if(Math.abs(lastTx) < 3)
+            targetLocked = true;
+
+        if(targetLocked)
+            getPIDController().setD(0);
+
 //        if(targetRatio < 0.45 && targetRatio > 0.15)
 //            lastTx = currentTx;
 //            lastRatio = targetRatio;
@@ -77,14 +85,14 @@ public class FollowVisionTarget extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
-//        double leftOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
-//        double rightOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+        double leftOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+        double rightOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
 
 //        leftOutput = lastTx > 15 ? leftOutput * 0.8 : leftOutput;
 //        rightOutput = lastTx < -15 ? rightOutput * 0.8 : rightOutput;
 
-        double leftOutput = Robot.m_oi.getLeftJoystickY() + output;
-        double rightOutput = Robot.m_oi.getLeftJoystickY() - output;
+//        double leftOutput = Robot.m_oi.getLeftJoystickY() + output;
+//        double rightOutput = Robot.m_oi.getLeftJoystickY() - output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
             Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
@@ -102,7 +110,7 @@ public class FollowVisionTarget extends PIDCommand {
     @Override
     protected void end() {
         getPIDController().disable();
-//        Robot.driveTrain.setDriveMotorsState(true);
+        Robot.driveTrain.setDriveMotorsState(true);
         //Robot.driveTrain.setDriveOutput(0, 0);
     }
 

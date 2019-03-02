@@ -73,8 +73,8 @@ public class Robot extends TimedRobot {
         //    Elevator.controlMode = 0;
 
 
-//        elevator.setEncoderPosition();
-//        wrist.setEncoderPosition();
+        elevator.zeroEncoder();
+        wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
 
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();
@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
+        climber.updateSmartDashboard();
         m_oi.updateSmartDashboard();
         vision.updateSmartDashboard();
 
@@ -119,7 +120,7 @@ public class Robot extends TimedRobot {
         VitruvianLogger.getInstance().startLogger();
 
         // Default VP Pipeline
-        vision.setPipeline(1);
+        vision.setPipeline(0);
     }
 
     @Override
@@ -140,6 +141,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        Robot.vision.setPipeline(1);
         driveTrain.setDriveMotorsState(true);
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
@@ -180,6 +182,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        Robot.vision.setPipeline(1);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove

@@ -34,8 +34,6 @@ public class SetAllMechanismSetpoints extends InstantCommand {
         OI.positionIndex = position;
         // Set the mechanismPositions of the elevator
 
-
-
         switch (position) {
             case 5: // Rocket Level 3 Scoring Positions
                 switch (Intake.intakeState) {
@@ -139,7 +137,6 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 Scheduler.getInstance().add(new SetElevatorSetpoint(RobotMap.ELEVATOR_HOME_POSITION));
                 break;
         }
-
     }
 
     // Called once after isFinished returns true

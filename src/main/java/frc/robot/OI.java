@@ -158,7 +158,7 @@ public class OI {
         xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
-        xBoxButtons[6].whenPressed(new ReviveAll());   //For testing purposes, does what it says on the tin.
+        xBoxButtons[6].whenPressed(new ReviveAll());
         xBoxButtons[7].whenPressed(new KillAll());
         xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
@@ -187,17 +187,25 @@ public class OI {
 
     public double getLeftJoystickX() {
         return leftJoystick.getX();
-    } // That wasn't a sentence.
+    }
 
     public double getLeftJoystickY() {
         return -leftJoystick.getY();
-    } // This isn't a sentence.
+    }
+
+    public double getLeftJoystickZ() {
+        return -leftJoystick.getZ();
+    }
 
     public double getRightJoystickX() {
         return rightJoystick.getX();
     }
 
     public double getRightJoystickY() {
+        return -rightJoystick.getY();
+    }
+
+    public double getRightJoystickZ() {
         return -rightJoystick.getY();
     }
 
