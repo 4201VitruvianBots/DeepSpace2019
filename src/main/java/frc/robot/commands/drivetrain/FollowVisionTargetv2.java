@@ -34,7 +34,7 @@ public class FollowVisionTargetv2 extends PIDCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.vision.setPipeline(1);
+        //Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(false);
 
         this.getPIDController().setAbsoluteTolerance(1);
@@ -90,7 +90,7 @@ public class FollowVisionTargetv2 extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.vision.setPipeline(1);
+        //Robot.vision.setPipeline(1);
         Robot.driveTrain.setDriveMotorsState(true);
         //Robot.driveTrain.setDriveOutput(0, 0);
     }

@@ -43,7 +43,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
         getPIDController().setAbsoluteTolerance(1);
         getPIDController().setOutputRange(-1, 1);
 
-        Robot.vision.setPipeline(1);
+        //Robot.vision.setPipeline(1);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -90,7 +90,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.vision.setPipeline(1);
+        //Robot.vision.setPipeline(1);
         getPIDController().disable();
         Robot.driveTrain.setDriveMotorsState(true);
     }

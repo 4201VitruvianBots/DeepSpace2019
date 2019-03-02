@@ -43,7 +43,7 @@ public class FollowVisionTarget extends PIDCommand {
         this.getPIDController().setAbsoluteTolerance(1);
         this.getPIDController().setOutputRange(-1, 1);
 
-        Robot.vision.setPipeline(1);
+        Robot.vision.setPipeline(0);
     }
 
     // Called repeatedly when this Command is scheduled to run

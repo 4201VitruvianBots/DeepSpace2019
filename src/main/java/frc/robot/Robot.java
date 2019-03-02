@@ -76,6 +76,8 @@ public class Robot extends TimedRobot {
         elevator.zeroEncoder();
         wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
 
+        vision.setPipeline(0);
+
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();
     }
@@ -141,7 +143,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        Robot.vision.setPipeline(1);
+        Robot.vision.setPipeline(0);
         driveTrain.setDriveMotorsState(true);
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
@@ -182,7 +184,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Robot.vision.setPipeline(1);
+        Robot.vision.setPipeline(0);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove

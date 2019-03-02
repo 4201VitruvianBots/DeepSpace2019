@@ -28,6 +28,11 @@ public class SetIntakeState extends InstantCommand {
         //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
 
         // Safety
+        if(state == 2) {
+            Robot.intake.setHarpoonSecure(false);
+            Robot.intake.setHarpoonExtend(false);
+        }
+
         if(state != 2)
             Robot.intake.setCargoIntakeOutput(0);
 
