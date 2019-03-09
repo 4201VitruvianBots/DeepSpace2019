@@ -7,6 +7,7 @@
 
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
@@ -35,11 +36,15 @@ public class SetArcadeDrive extends Command {
 
         double joystickY = Robot.m_oi.getLeftJoystickY();
         double joystickX = Robot.m_oi.getRightJoystickX() * 0.5;
+        double joystickZ = Robot.m_oi.getRightJoystickZ();
 
         double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
+        throttle = throttle < 0 ? throttle * 0.7 : throttle;
+        //double turn = (Math.abs(joystickX) > 0.05) ? joystickX : Math.abs(joystickZ) > 0.05 ? joystickZ : 0;
         double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
+
         if(Elevator.controlMode == 1)
-            throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.5), 0.5): throttle;
+            throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
 
 //        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
 //            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);

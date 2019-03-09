@@ -31,7 +31,7 @@ public class Wrist extends Subsystem {
     static double kF = 0;
     static double arbitraryFF = 0;
                                                       //5026 135 4096 * 0.375 * (72/22)
-    public static int upperLimitEncoderCounts = 4468; //4468 120 degrees, 4096 * 0.333 * (72/22)
+    public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
     public static int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;
@@ -131,11 +131,11 @@ public class Wrist extends Subsystem {
     public void updateSmartDashboard() {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Angle", getAngle());
-        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
+//        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putNumber("Wrist","Control Mode", controlMode);
         Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
-        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
-        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
+//        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
+//        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);

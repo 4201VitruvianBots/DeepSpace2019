@@ -45,6 +45,11 @@ public class UpdateWristSetpoint extends Command {
                 else
                     Robot.m_oi.setXBoxRumble(0);
 
+                if(setpoint < Robot.wrist.getPosition() && setpoint < 15) {
+                    Robot.intake.setHarpoonExtend(false);
+                    Robot.intake.setHarpoonSecure(false);
+                }
+
                 Robot.wrist.setIncrementedPosition(setpoint);
             }
         } else {
