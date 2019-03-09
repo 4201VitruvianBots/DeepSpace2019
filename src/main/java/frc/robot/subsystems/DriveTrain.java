@@ -56,6 +56,10 @@ public class DriveTrain extends Subsystem {
             motor.config_kF(0, 1023.0 / 72000.0, 30);
             motor.configVoltageCompSaturation(12);
             motor.enableVoltageCompensation(true);
+            motor.configContinuousCurrentLimit(30);
+            motor.configPeakCurrentLimit(40);
+            motor.configPeakCurrentDuration(2000);
+            motor.enableCurrentLimit(true);
             motor.configOpenloopRamp(0.6);
         }
 
