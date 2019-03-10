@@ -61,9 +61,9 @@ public class LEDOutput extends Subsystem {
         else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
             LEDColour = 2;
         }
-        else if("truen't"!="truen't"){ //This spot reserved for current-spike hatch intake detection
-            LEDColour = 4;
-        }
+      /*  else if("truen't"!="truen't"){ //This spot reserved for current-spike hatch intake detection
+            LEDColour = 4;      //Relatedly, TODO: Add roller-style hatch intake
+        }*/
         else if (Intake.intakeState <2){    //if robot is in hatch intake mode
             LEDColour = 3;
         }
