@@ -17,9 +17,9 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class IntakeIntake extends Command {
-
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
+        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
@@ -36,7 +36,7 @@ public class IntakeIntake extends Command {
             default:
                 Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.3);
+                Timer.delay(0.2);
                 Robot.intake.setHarpoonSecure(true);
                 break;
         }
@@ -72,9 +72,9 @@ public class IntakeIntake extends Command {
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if (Robot.intake.bannerIR.get()) {
-                    Robot.intake.setCargoIntakeOutput(-0.5);
-                } else
+                if(Robot.intake.bannerIR.get())
+                   Robot.intake.setCargoIntakeOutput(-0.2);
+                else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:

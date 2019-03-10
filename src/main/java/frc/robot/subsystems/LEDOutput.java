@@ -26,8 +26,7 @@ public class LEDOutput extends Subsystem {
        1 (Green):
        0 (default): LEDs default state
      */
-    public static int LEDColour = 0;
-    public boolean getShifterState = false;
+    public static int state = 0;
 
     private DigitalOutput[] digitalOutput = {  //array that creates digitalOutput0-4, I think.
             new DigitalOutput(RobotMap.ledCh0),  //actual pin numbers defined in RobotMap
@@ -54,18 +53,18 @@ public class LEDOutput extends Subsystem {
     public boolean getDIOState(int pin){ return DIOState[pin]; }  //returns the value of the pin, used for toggles & the like
 
     public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
-        getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
-        if(Wrist.controlMode == 0){ //if wrist is in manual mode
-            LEDColour = 1;
-        }
-        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
-            LEDColour = 2;
-        }
-        else if("truen't"!="truen't"){ //This spot reserved for current-spike hatch intake detection
-            LEDColour = 4;
-        }
-        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
-            LEDColour = 3;
+        if(Robot.vision.isValidTarget()) { //if the limelight detects any target at all, light up magenta
+            if(Robot.vision.getTargetArea() > 0.85 && Math.abs(Robot.vision.getTargetX()) < 0.1) //if the target is in the centre and is big, light up blue
+                state = 0;
+            else
+                state = 1;
+        } else if(Robot.wrist.getAngle()<3 && Robot.elevator.getHeight()<5) {  //if the elevator's < 5" and wrist is < 3 deg, light up red
+            if(Robot.intake.bannerIR.get()) {  //if the cargo is detected by the banner IR, light up green
+                state = 3;
+            } else
+                state = 2;
+        } else {
+            state = 3;
         }
     }
 
