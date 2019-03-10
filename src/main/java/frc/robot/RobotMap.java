@@ -59,10 +59,10 @@ public class RobotMap {
     public static int wristTop = 6;
     public static int robotSwitch = 9;
 
-    public static int ledCh0 = 23;  //LED info channels start from 6 on NavX    (blue)
-    public static int ledCh1 = 22;  //and go up                                 (magenta)
-    public static int ledCh2 = 21;  //                                          (red)
-    public static int ledCh3 = 20;  //                                          (green)
+    public static int ledCh0 = 23;  //LED info channels start from 9 on NavX    Arduino port 12
+    public static int ledCh1 = 22;  //and go down                               Arduino port 11
+    public static int ledCh2 = 21;  //                                          Arduino port 10
+    public static int ledCh3 = 20;  //                                          Arduino port 9
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
