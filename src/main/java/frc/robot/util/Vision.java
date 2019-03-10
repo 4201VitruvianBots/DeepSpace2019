@@ -110,8 +110,6 @@ public class Vision {
     public boolean IsTargetGood() {
         // TODO: Update with valid values
         boolean isAlignedX = Math.abs(getTargetX()) < 1;
-        //boolean isAlignedY = Math.abs(getTargetY()) < 5;
-        //boolean isAreaValid = getTargetArea() > 0.85;
 
         return isAlignedX; //&& isAlignedY & isAreaValid;
     }
@@ -130,23 +128,23 @@ public class Vision {
 
     public void updateSmartDashboard() {
         Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
-        Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
+//        Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
         Shuffleboard.putNumber("Vision", "Pipeline", getPipeline());
         Shuffleboard.putNumber("Vision", "tx", getTargetX());
         Shuffleboard.putNumber("Vision", "ty", getTargetY());
         Shuffleboard.putNumber("Vision", "ta", getTargetArea());
         Shuffleboard.putNumber("Vision", "ts", getTargetSkew());
-        Shuffleboard.putNumber("Vision", "tl", getLatency());
+//        Shuffleboard.putNumber("Vision", "tl", getLatency());
         Shuffleboard.putNumber("Vision", "tshort", getTShort());
         Shuffleboard.putNumber("Vision", "tlong", getTLong());
         Shuffleboard.putNumber("Vision", "thorz", getTHorz());
         Shuffleboard.putNumber("Vision", "tvert", getTVert());
 
-        for(int i = 0; i < 3; i++) {
-            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));
-            Shuffleboard.putNumber("Vision", "Raw ty" + Integer.toString(i), getRawTy(i));
-            Shuffleboard.putNumber("Vision", "Raw ta" + Integer.toString(i), getRawTa(i));
-            Shuffleboard.putNumber("Vision", "Raw ts" + Integer.toString(i), getRawTs(i));
-        }
+//        for(int i = 0; i < 3; i++) {
+//            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));
+//            Shuffleboard.putNumber("Vision", "Raw ty" + Integer.toString(i), getRawTy(i));
+//            Shuffleboard.putNumber("Vision", "Raw ta" + Integer.toString(i), getRawTa(i));
+//            Shuffleboard.putNumber("Vision", "Raw ts" + Integer.toString(i), getRawTs(i));
+//        }
     }
 }

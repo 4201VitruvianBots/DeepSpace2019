@@ -8,23 +8,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
-import frc.robot.subsystems.LEDOutput;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class CycleLEDStates extends InstantCommand {
-
-    private static int stateCount = 0;   //how many times have we cycled through this
-    public CycleLEDStates() {
-        requires(Robot.ledOutput);
+public class ReviveAll extends InstantCommand {
+    public ReviveAll() {
+        requires(Robot.elevator);
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        LEDOutput.LEDColour = (stateCount++ % 5) - 1;   //LED State will be -1 - 4 depending on how many times we've done this
+        Scheduler.getInstance().removeAll();
+        Elevator.controlMode = 1;
+        Wrist.controlMode = 1;
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
     }
 
     // Called once after isFinished returns true
@@ -38,6 +46,4 @@ public class CycleLEDStates extends InstantCommand {
     protected void interrupted() {
         end();
     }
-
-
 }
