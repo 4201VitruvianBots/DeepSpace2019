@@ -65,7 +65,7 @@ public class IntakeRelease extends Command {
             case 0:
             default:
                 Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.4);
+                Timer.delay(0.25);
                 Robot.intake.setHarpoonExtend(false);
                 break;
         }

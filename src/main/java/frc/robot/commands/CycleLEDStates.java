@@ -24,7 +24,7 @@ public class CycleLEDStates extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        LEDOutput.LEDColour = (stateCount++ % 5) - 1;   //LED State will be -1 - 4 depending on how many times we've done this
+        LEDOutput.state = (stateCount++ % 5) - 1;   //LED State will be -1 - 4 depending on how many times we've done this
     }
 
     // Called once after isFinished returns true

@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -39,6 +40,8 @@ public class Robot extends TimedRobot {
     public static Wrist wrist = new Wrist();
     public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
+
+    Notifier robotPeriodic;
 
     boolean shuffleboardTransition = false;
 
@@ -73,13 +76,14 @@ public class Robot extends TimedRobot {
         //    Elevator.controlMode = 0;
 
 
-        elevator.zeroEncoder();
-        wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
-
-        vision.setPipeline(0);
+//        elevator.setEncoderPosition();
+//        wrist.setEncoderPosition();
 
         // Our robot code is so complex we have to do this
         LiveWindow.disableAllTelemetry();
+
+        robotPeriodic = new Notifier(new PeriodicRunnable());
+        robotPeriodic.startPeriodic(0.02);
     }
 
     /**
@@ -92,21 +96,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        driveTrain.updateSmartDashboard();
-        elevator.updateSmartDashboard();
-        wrist.updateSmartDashboard();
-        intake.updateSmartDashboard();
-        climber.updateSmartDashboard();
-        m_oi.updateSmartDashboard();
-        vision.updateSmartDashboard();
 
-        // TODO: Enable this when encoders are fixed
-        //elevator.zeroEncoder();
-        //wrist.zeroEncoder();
-        intake.updateIntakeIndicator();
-        m_oi.updateSetpointIndicator();
-        intake.updateOuttakeState();
-        ledOutput.updateLEDState();
     }
 
     /**
@@ -122,7 +112,7 @@ public class Robot extends TimedRobot {
         VitruvianLogger.getInstance().startLogger();
 
         // Default VP Pipeline
-        vision.setPipeline(0);
+        vision.setPipeline(1);
     }
 
     @Override
@@ -143,7 +133,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        Robot.vision.setPipeline(0);
         driveTrain.setDriveMotorsState(true);
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
@@ -184,7 +173,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Robot.vision.setPipeline(0);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -226,5 +214,25 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+    }
+    class PeriodicRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            driveTrain.updateSmartDashboard();
+            elevator.updateSmartDashboard();
+            wrist.updateSmartDashboard();
+            intake.updateSmartDashboard();
+            m_oi.updateSmartDashboard();
+            vision.updateSmartDashboard();
+            
+            // TODO: Enable this when encoders are fixed
+            //elevator.zeroEncoder();
+            //wrist.zeroEncoder();
+            intake.updateIntakeIndicator();
+            m_oi.updateSetpointIndicator();
+            intake.updateOuttakeState();
+            ledOutput.updateLEDState();
+        }
     }
 }
