@@ -26,33 +26,34 @@ public class LEDReaction extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        switch (LEDOutput.state) {
-            case 3:      //LEDCh3 on, should be green.
+        if(Robot.ledOutput.getShifterState){    //if we're in "high" gear
+            Robot.ledOutput.setPinOutput(false,0);   //first bit off
+        }
+        else{   //if we're in low(er) gear
+            Robot.ledOutput.setPinOutput(true,0);  //first bit on
+        }
+        switch (LEDOutput.LEDColour) {
+            case 4:      //If we detect a successful hatch intake, should be green
                 Robot.ledOutput.setPinOutput(true,3);
                 Robot.ledOutput.setPinOutput(false,2);
                 Robot.ledOutput.setPinOutput(false,1);
-                Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 2:     //LEDCh2 on, should be red
+            case 3:      //If we're using the hatch intake, should be yellow
+                Robot.ledOutput.setPinOutput(true,3);
+                Robot.ledOutput.setPinOutput(true,2);
+                Robot.ledOutput.setPinOutput(true,1);
+                break;
+            case 2:     //if we're using the cargo intake, should be red
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(true,2);
                 Robot.ledOutput.setPinOutput(false,1);
-                Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 1:     //LEDCh1 on, should be magenta
+            case 1:     //if we're climbing, should be blue
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(false,2);
                 Robot.ledOutput.setPinOutput(true,1);
-                Robot.ledOutput.setPinOutput(false,0);
                 break;
-            case 0:     //LEDCh0 on, should be blue
-                Robot.ledOutput.setPinOutput(false,3);
-                Robot.ledOutput.setPinOutput(false,2);
-                Robot.ledOutput.setPinOutput(false,1);
-                Robot.ledOutput.setPinOutput(true,0);
-                break;
-            case -1:    //This should only really happen when the robot is disabled
-            default:
+            default:    //should only really happen if robot is disabled
                 Robot.ledOutput.setPinOutput(false,3);
                 Robot.ledOutput.setPinOutput(false,2);
                 Robot.ledOutput.setPinOutput(false,1);
