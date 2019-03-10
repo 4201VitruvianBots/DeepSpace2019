@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -19,7 +20,7 @@ import frc.robot.RobotMap;
 public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    public TalonSRX master = new TalonSRX(RobotMap.climberMaster);
+    public TalonSRX master = new TalonSRX(RobotMap.climbMotor);
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 
@@ -37,6 +38,14 @@ public class Climber extends Subsystem {
 
     public boolean getClimbPistonState() {
         return climbPistons.get() == DoubleSolenoid.Value.kForward ? true : false;
+    }
+
+    public boolean isClimbMode() {
+        return Elevator.controlMode == 0 && Wrist.controlMode == 0;
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putBoolean("Climb Mode", isClimbMode());
     }
 
     @Override
