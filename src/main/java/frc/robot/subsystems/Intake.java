@@ -50,12 +50,10 @@ public class Intake extends Subsystem {
 
     public void setCargoIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, output);
-        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public void setHatchGroundIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, -output);
-        intakeMotors[1].set(ControlMode.PercentOutput, -output);
     }
 
     public boolean getHarpoonSecureStatus(){
@@ -73,11 +71,15 @@ public class Intake extends Subsystem {
             harpoonExtend.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void setHarpoonSecure(boolean state){
+    /*public void setHarpoonSecure(boolean state){
         if (state)
             harpoonSecure.set(DoubleSolenoid.Value.kForward);
         else
             harpoonSecure.set(DoubleSolenoid.Value.kReverse);
+    }*/
+
+    public void setHatchIntakeMotor(double output){
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public void updateIntakeIndicator() {
