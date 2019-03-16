@@ -15,55 +15,60 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeRelease extends Command {
-    int outtakeState;
+public class IntakeExtend extends Command {
 
-    public IntakeRelease() {
+    public IntakeExtend() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.wrist);
         requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        // Read this initially to avoid flickering
-        outtakeState = Intake.outtakeState;
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        switch (outtakeState) {
+        switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(1);
-                break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0.8);
+                Robot.intake.setHarpoonExtend(false);
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeMotor(-0.5);
+                Robot.intake.setHarpoonExtend(true);
                 break;
+        }
+    }
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+                Robot.intake.setCargoIntakeOutput(-1);
+                break;
+            case 1:
+                Robot.intake.setHatchGroundIntakeOutput(-0.8);
+                break;
+            default:
+            /*    Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHarpoonSecure(false);
+                Timer.delay(0.2);
+                Robot.intake.setHarpoonSecure(true);
+    */            break;
         }
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+            return false;
     }
-
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        switch (outtakeState) {
+        switch (Intake.intakeState) {
             case 2:
             case 1:
-                Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeMotor(0);
+                Robot.intake.setHarpoonExtend(false);
                 break;
         }
     }

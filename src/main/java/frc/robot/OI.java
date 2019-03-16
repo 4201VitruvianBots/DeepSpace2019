@@ -152,10 +152,10 @@ public class OI {
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
+        xBoxLeftTrigger.whileHeld(new IntakeExtend());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
-        xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
         xBoxButtons[6].whenPressed(new ReviveAll());

@@ -81,8 +81,8 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_LOW_POSITION);
+                        //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                        //Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_LOW_POSITION);
                         break;
                 }
                 break;
@@ -120,7 +120,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                         break;
                 }
                 break;
-            case -1:
+            case -1: //Depot
                 switch (Intake.intakeState) {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);

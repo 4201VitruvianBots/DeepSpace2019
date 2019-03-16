@@ -29,15 +29,8 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
-                Robot.intake.setHarpoonExtend(false);
-                Robot.intake.setHarpoonSecure(false);
-                break;
             case 0:
             default:
-                Robot.intake.setHarpoonExtend(true);
-                Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.3);
-                Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -51,6 +44,8 @@ public class IntakeIntake extends Command {
             case 1:
                 Robot.intake.setHatchGroundIntakeOutput(-0.8);
                 break;
+            case 0:
+                Robot.intake.setHatchIntakeMotor(0.5);
             default:
             /*    Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHarpoonSecure(false);
@@ -82,9 +77,7 @@ public class IntakeIntake extends Command {
                 break;
             case 0:
             default:
-                //Robot.intake.setHarpoonSecure(true);
-                //Timer.delay(0.15);
-                Robot.intake.setHarpoonExtend(false);
+                Robot.intake.setHatchIntakeMotor(0);
                 break;
         }
     }

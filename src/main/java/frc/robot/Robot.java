@@ -60,8 +60,10 @@ public class Robot extends TimedRobot {
         m_autoChooser.addOption("Left Level 1 To Rocket", new LeftLevel1ToRocket());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
+        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDrive());
+        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
+        m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
         controls.readIniFile();
@@ -150,7 +152,6 @@ public class Robot extends TimedRobot {
         if(Wrist.controlMode == 1)
             wrist.setAbsolutePosition(wrist.getAngle());
 
-        intake.setHarpoonSecure(true);
         
         m_autonomousCommand = m_autoChooser.getSelected();
 
