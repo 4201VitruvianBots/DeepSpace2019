@@ -185,11 +185,20 @@ public class DriveTrain extends Subsystem {
         return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
     }
 
+    public double getLeftInputY(){
+        return Robot.m_oi.getLeftJoystickY();
+    }
+
+    public double getRightInputX(){
+        return Robot.m_oi.getRightJoystickX();
+    }
+
     public void setDriveShifterStatus(boolean state) {
         driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
     public void updateSmartDashboard() {
+<<<<<<< Updated upstream
 //        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
 //        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
 //
@@ -200,6 +209,20 @@ public class DriveTrain extends Subsystem {
 //
 //        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
 //        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
+=======
+        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
+        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
+
+        Shuffleboard.putNumber("DriveTrain", "Left Encoder Count", getEncoderCount(0));
+        Shuffleboard.putNumber("DriveTrain", "Right Encoder Count", getEncoderCount(2));
+
+        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
+        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
+        SmartDashboard.putNumber("Output left-master", driveMotors[0].getOutputCurrent());
+        SmartDashboard.putNumber("Output left-slave", driveMotors[1].getOutputCurrent());
+        SmartDashboard.putNumber("Output right-master", driveMotors[2].getOutputCurrent());
+        SmartDashboard.putNumber("Output right-slave", driveMotors[3].getOutputCurrent());
+>>>>>>> Stashed changes
     }
 
     @Override

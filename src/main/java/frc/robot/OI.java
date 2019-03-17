@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.climber.ToggleClimbPistons;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
+import frc.vitruvianlib.util.DoubleButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -61,6 +63,7 @@ public class OI {
     public Button[] xBoxButtons = new Button[10];
     public Button[] xBoxPOVButtons = new Button[4];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
+    public Button climbButton;
 
     public static int positionIndex = 0;
     boolean[] positionIndicator = {false, false, false, false, false, false};
@@ -83,6 +86,7 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
+        climbButton = new DoubleButton(leftJoystick, 6, rightJoystick, 6);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
@@ -148,6 +152,8 @@ public class OI {
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
+        climbButton.whenPressed(new SetClimbMode());
+
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
@@ -197,6 +203,9 @@ public class OI {
         return -leftJoystick.getZ();
     }
 
+    public double getLeftRotation(){
+        return leftJoystick.getZ();
+    }
     public double getRightJoystickX() {
         return rightJoystick.getX();
     }
