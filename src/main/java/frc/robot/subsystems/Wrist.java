@@ -128,7 +128,7 @@ public class Wrist extends Subsystem {
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Angle", getAngle());
 //        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
@@ -139,7 +139,9 @@ public class Wrist extends Subsystem {
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
+    }
 
+    public void updateSmartDashboard() {
         SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
 

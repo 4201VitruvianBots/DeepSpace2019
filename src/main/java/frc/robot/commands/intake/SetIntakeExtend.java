@@ -9,17 +9,21 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeExtend extends Command {
+public class SetIntakeExtend extends InstantCommand {
+    boolean extend;
 
-    public IntakeExtend() {
+    public SetIntakeExtend(boolean extend) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+        requires(Robot.intakeExtend);
+
+        this.extend = extend;
     }
 
     // Called just before this Command runs the first time
@@ -28,47 +32,20 @@ public class IntakeExtend extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
-                Robot.intake.setHarpoonExtend(false);
-                break;
             case 0:
             default:
-                Robot.intake.setHarpoonExtend(true);
+                Robot.intakeExtend.setHarpoonExtend(extend);
                 break;
-        }
-    }
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        switch (Intake.intakeState) {
-            case 2:
-                Robot.intake.setCargoIntakeOutput(-1);
-                break;
-            case 1:
-                Robot.intake.setHatchGroundIntakeOutput(-0.8);
-                break;
-            default:
-            /*    Robot.intake.setHarpoonExtend(true);
-                Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.2);
-                Robot.intake.setHarpoonSecure(true);
-    */            break;
         }
     }
 
-    @Override
-    protected boolean isFinished() {
-            return false;
-    }
-    // Called once after isFinished returns true
     @Override
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
             case 1:
-                break;
             case 0:
             default:
-                Robot.intake.setHarpoonExtend(false);
                 break;
         }
     }

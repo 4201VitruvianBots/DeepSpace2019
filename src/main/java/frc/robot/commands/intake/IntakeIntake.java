@@ -31,6 +31,7 @@ public class IntakeIntake extends Command {
             case 1:
             case 0:
             default:
+                //Robot.intake.setHarpoonExtend(false);
                 break;
         }
     }
@@ -39,19 +40,19 @@ public class IntakeIntake extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(-1);
+                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(-0.8);
+                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
                 break;
             case 0:
-                Robot.intake.setHatchIntakeMotor(0.5);
             default:
-            /*    Robot.intake.setHarpoonExtend(true);
-                Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.2);
-                Robot.intake.setHarpoonSecure(true);
-    */            break;
+                //Robot.intake.setHarpoonExtend(true);
+                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+                //Robot.intake.setHarpoonSecure(false);
+                //Timer.delay(0.2);
+                //Robot.intake.setHarpoonSecure(true);
+                break;
         }
     }
 
@@ -68,16 +69,19 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
                 if (Robot.intake.bannerIR.get()) {
-                    Robot.intake.setCargoIntakeOutput(-0.5);
+                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                 } else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:
-                Robot.intake.setCargoIntakeOutput(0);
+                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeMotor(0);
+                //Robot.intake.setHarpoonSecure(true);
+                Timer.delay(0.25);
+                Robot.intake.setHatchIntakeOutput(0);
                 break;
         }
     }

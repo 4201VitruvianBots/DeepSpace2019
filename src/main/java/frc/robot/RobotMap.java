@@ -64,6 +64,11 @@ public class RobotMap {
     public static int ledCh2 = 21;  //                                          Arduino port 10
     public static int ledCh3 = 20;  //                                          Arduino port 9
 
+    public static int LED_BLUE = 1;
+    public static int LED_RED = 2;
+    public static int LED_YELLOW = 3;
+    public static int LED_GREEN = 4;
+
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
     public static int pdpChannelDriveTrainLeftReverse = 15;
@@ -82,18 +87,31 @@ public class RobotMap {
     public static double WRIST_HATCH_ANGLE = 85;
     public static double ELEVATOR_HOME_POSITION = 0;
     public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 10;
+    //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 10.4;
     public static double ELEVATOR_HATCH_MID_POSITION = 38;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 64;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
-    public static double ELEVATOR_CARGO_INATAKE_GROUND_POSITION = 2.75;
-    public static double ELEVATOR_CARGO_INATAKE_STATION_POSITION = 10.5;
+    public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 2.75;
+    public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
     public static double ELEVATOR_CARGO_LOW_POSITION = 16;
     public static double ELEVATOR_CARGO_MID_POSITION = 44;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
+
+    //
+    public static double CARGO_INTAKE_SPEED = -1;
+    public static double CARGO_OUTTAKE_SPEED = 1;
+    public static double CARGO_HOLD_SPEED = -0.25;
+    public static double HATCH_INTAKE_SPEED = -0.8;
+    public static double HATCH_HOLD_SPEED = 0;
+    public static double HATCH_OUTTAKE_SPEED = 0.8;
+    public static double HATCH_GROUND_INTAKE_SPEED = -0.8;
+    public static double HATCH_GROUND_HOLD_SPEED = -0.1;
+    public static double HATCH_GROUND_OUTTAKE_SPEED = 0.8;
+
 
     // Pathfinder (Units in feet)
     public static double wheel_diameter = 0.5104167;

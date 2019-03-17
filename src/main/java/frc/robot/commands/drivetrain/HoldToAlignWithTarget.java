@@ -74,8 +74,10 @@ public class HoldToAlignWithTarget extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
-        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
-        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+//        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+//        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+        double leftOutput = Robot.m_oi.getLeftJoystickY() - output;
+        double rightOutput = Robot.m_oi.getLeftJoystickY() + output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
             Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);

@@ -189,7 +189,7 @@ public class DriveTrain extends Subsystem {
         driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
 //        Shuffleboard.putBoolean("DriveTrain", "Left Encoder Health", getEncoderHealth(0));
 //        Shuffleboard.putBoolean("DriveTrain", "Right Encoder Health", getEncoderHealth(2));
 //
@@ -199,7 +199,12 @@ public class DriveTrain extends Subsystem {
 //        Shuffleboard.putNumber("Controls", "DriveTrain Control Mode", controlMode);
 //
 //        //SmartDashboard.putNumber("NavX Temp (C)", navX.getTempC());
-//        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
+
+        Shuffleboard.putNumber("DriveTrain","Robot Angle", navX.getAngle());
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putNumber("Robot Angle", navX.getAngle());
     }
 
     @Override
