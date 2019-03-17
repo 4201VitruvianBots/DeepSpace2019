@@ -32,35 +32,10 @@ public class LEDReaction extends Command {
         else{   //if we're in "high" gear
             Robot.ledOutput.setPinOutput(false,0);  //first bit on
         }
-        switch (LEDOutput.LEDColour) {
-            case 4:      //If we detect a successful hatch intake, should be green
-                Robot.ledOutput.setPinOutput(false,3);
-                Robot.ledOutput.setPinOutput(false,2);
-                Robot.ledOutput.setPinOutput(true,1);
-                break;
-            case 3:      //If we're using the hatch intake, should be yellow
-                Robot.ledOutput.setPinOutput(true,3);
-                Robot.ledOutput.setPinOutput(true,2);
-                Robot.ledOutput.setPinOutput(false,1);
-                break;
-            case 2:     //if we're using the cargo intake, should be red
-                Robot.ledOutput.setPinOutput(false,3);
-                Robot.ledOutput.setPinOutput(true,2);
-                Robot.ledOutput.setPinOutput(false,1);
-                break;
-            case 1:     //if we're climbing, should be blue
-                Robot.ledOutput.setPinOutput(true,3);
-                Robot.ledOutput.setPinOutput(false,2);
-                Robot.ledOutput.setPinOutput(false,1);
-                break;
-            default:    //should only really happen if robot is disabled
-                Robot.ledOutput.setPinOutput(false,3);
-                Robot.ledOutput.setPinOutput(false,2);
-                Robot.ledOutput.setPinOutput(false,1);
-                Robot.ledOutput.setPinOutput(false,0);
-                break;
-        }
-    }
+       Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 8 > 3), 1);  //checks what each digit of the state # is
+       Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 4 > 1), 2);  //in binary, with pin 1 as a 4s place, 2 as
+       Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 2 > 0), 3);  //2s, and 3 as 1s. Pin on for 1 & off for 0.
+    }                                                                        //If # is > 7, the binary # overflows.
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
