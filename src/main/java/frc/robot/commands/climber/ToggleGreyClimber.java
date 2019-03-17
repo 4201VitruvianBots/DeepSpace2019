@@ -7,43 +7,31 @@
 
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimber2Output extends Command {
-    double output;
-
-    public SetClimber2Output(double output) {
-        // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
-        requires(Robot.climber2);
-        this.output = output;
+public class ToggleGreyClimber extends InstantCommand {
+    public ToggleGreyClimber() {
+        requires(Robot.greyClimber);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        Robot.greyClimber.setClimbPistonState(!Robot.greyClimber.getClimbPistonState() ? true : false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.climber2.setClimberOutput(output);
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.climber2.setClimberOutput(0);
     }
 
     // Called when another command which requires one or more of the same

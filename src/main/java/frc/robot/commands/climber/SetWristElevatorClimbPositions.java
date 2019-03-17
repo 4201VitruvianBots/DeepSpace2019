@@ -15,9 +15,9 @@ import frc.robot.commands.wrist.SetWristSetpoint;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetWristElevator extends CommandGroup {
-    public SetWristElevator() {
+public class SetWristElevatorClimbPositions extends CommandGroup {
+    public SetWristElevatorClimbPositions() {
         addParallel(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
-        addParallel(new SetElevatorSetpoint(0));
+        addParallel(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
     }
 }

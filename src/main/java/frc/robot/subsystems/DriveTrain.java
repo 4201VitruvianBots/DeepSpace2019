@@ -38,6 +38,7 @@ public class DriveTrain extends Subsystem {
         new TalonSRX(RobotMap.leftRearDriveMotor),
         new TalonSRX(RobotMap.rightFrontDriveMotor),
         new TalonSRX(RobotMap.rightRearDriveMotor),
+        new TalonSRX(RobotMap.climbDriveMotor)
     };
 
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
@@ -67,6 +68,7 @@ public class DriveTrain extends Subsystem {
         driveMotors[1].setInverted(true);
         driveMotors[2].setInverted(false);
         driveMotors[3].setInverted(false);
+        driveMotors[4].setInverted(false);
 
         driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -74,6 +76,7 @@ public class DriveTrain extends Subsystem {
         driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
         driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
 
+        driveMotors[4].configPeakOutputReverse(0);
 
 //        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
 //        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
@@ -179,6 +182,10 @@ public class DriveTrain extends Subsystem {
     public void setMotorPercentOutput(double leftOutput, double rightOutput) {
         driveMotors[0].set(ControlMode.PercentOutput, leftOutput);
         driveMotors[2].set(ControlMode.PercentOutput, rightOutput);
+    }
+
+    public void setClimbMotorPercentOutput(double output) {
+        driveMotors[4].set(ControlMode.PercentOutput, output);
     }
 
     public boolean getDriveShifterStatus() {

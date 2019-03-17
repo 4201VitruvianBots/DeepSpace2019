@@ -35,12 +35,7 @@ public class SetArcadeDrive extends Command {
     protected void execute() {
 
         double joystickY = Robot.m_oi.getLeftJoystickY();
-<<<<<<< Updated upstream
-        double joystickX = Robot.m_oi.getRightJoystickX() * 0.5;
-        double joystickZ = Robot.m_oi.getRightJoystickZ();
-=======
         double joystickX = Robot.m_oi.getLeftRotation() * 0.5;
->>>>>>> Stashed changes
 
         double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
         throttle = throttle < 0 ? throttle * 0.7 : throttle;
@@ -54,6 +49,10 @@ public class SetArcadeDrive extends Command {
 //            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
 //        else
         Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+
+        if(Robot.greyClimber.getClimbPistonState()) {
+            Robot.driveTrain.setClimbMotorPercentOutput(throttle);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

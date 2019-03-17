@@ -17,28 +17,14 @@ import frc.robot.RobotMap;
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
-public class Climber2 extends Subsystem {
+public class GreyClimber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    public TalonSRX leftMaster = new TalonSRX(RobotMap.climbLeftMaster);
-    public TalonSRX leftSlave = new TalonSRX(RobotMap.climbLeftSlave);
-    public TalonSRX rightMaster = new TalonSRX(RobotMap.climbRightMaster);
-    public TalonSRX rightSlave = new TalonSRX(RobotMap.climbRightSlave);
-    public TalonSRX drive = new TalonSRX(RobotMap.climbDrive);
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 
-    public Climber2() {
-        super("Climber2");
-
-        leftSlave.set(ControlMode.Follower, RobotMap.climbLeftMaster);
-        rightSlave.set(ControlMode.Follower, RobotMap.climbRightMaster);
-    }
-
-    public void setClimberOutput(double output){
-        leftMaster.set(ControlMode.PercentOutput, output);
-        rightMaster.set(ControlMode.PercentOutput, output);
-        drive.set(ControlMode.PercentOutput, output);
+    public GreyClimber() {
+        super("GreyClimber");
     }
 
     public void setClimbPistonState(boolean state) {
@@ -49,12 +35,8 @@ public class Climber2 extends Subsystem {
         return climbPistons.get() == DoubleSolenoid.Value.kForward;
     }
 
-    public boolean isClimbMode() {
-        return Elevator.controlMode == 0 && Wrist.controlMode == 0;
-    }
-
     public void updateSmartDashboard() {
-        SmartDashboard.putBoolean("Climb Mode", isClimbMode());
+        SmartDashboard.putBoolean("Climb Mode", getClimbPistonState());
     }
 
     @Override

@@ -7,9 +7,7 @@
 
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
 import frc.robot.commands.KillAll;
 
 /**
@@ -17,8 +15,8 @@ import frc.robot.commands.KillAll;
  */
 public class SetClimbMode extends CommandGroup {
     public SetClimbMode() {
-        addSequential(new SetWristElevator());
-        addSequential(new EnableClimb2Pistons());
+        addSequential(new SetWristElevatorClimbPositions());
+        addSequential(new ToggleGreyClimber());
         addSequential(new KillAll());
     }
 }

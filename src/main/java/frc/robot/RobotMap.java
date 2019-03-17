@@ -39,20 +39,16 @@ public class RobotMap {
     public static int leftRearDriveMotor = 21;
     public static int rightFrontDriveMotor = 22;
     public static int rightRearDriveMotor = 23;
+    public static int climbDriveMotor = 25;
 
-    public static int leftElevator = 30;
-    public static int rightElevator = 31;
+    public static int leftElevatorA = 30;
+    public static int leftElevatorB = 31;
+    public static int rightElevatorA = 32;
+    public static int rightElevatorB = 33;
 
     public static int wristMotor = 40;
 
     public static int climbMotor = 50;
-
-    //Climber 2
-    public static int climbLeftMaster = 50;
-    public static int climbLeftSlave = 51;
-    public static int climbRightMaster = 52;
-    public static int climbRightSlave = 53;
-    public static int climbDrive = 70;
 
     public static int cargoIntakeMotor = 60;
     public static int hatchIntakeMotor = 61;
@@ -108,6 +104,7 @@ public class RobotMap {
     public static double ELEVATOR_CARGO_LOW_POSITION = 16;
     public static double ELEVATOR_CARGO_MID_POSITION = 44;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
+    public static double ELEVATOR_CLIMB_POSITION = 30;
 
     //
     public static double CARGO_INTAKE_SPEED = -1;

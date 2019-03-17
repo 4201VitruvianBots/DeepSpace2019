@@ -56,8 +56,10 @@ public class Elevator extends Subsystem {
     boolean limitDebounce = false;
 
     private TalonSRX[] elevatorMotors = {
-        new TalonSRX(RobotMap.leftElevator),
-        new TalonSRX(RobotMap.rightElevator),
+        new TalonSRX(RobotMap.leftElevatorA),
+        new TalonSRX(RobotMap.leftElevatorB),
+        new TalonSRX(RobotMap.rightElevatorA),
+        new TalonSRX(RobotMap.rightElevatorB),
     };
 
     private DigitalInput[] limitSwitches = {

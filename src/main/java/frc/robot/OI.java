@@ -86,7 +86,7 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
-        climbButton = new DoubleButton(leftJoystick, 6, rightJoystick, 6);
+        climbButton = new DoubleButton(leftJoystick, 2, rightJoystick, 2);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
