@@ -247,7 +247,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
 //        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
@@ -263,14 +263,15 @@ public class Elevator extends Subsystem {
 //        Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
         //Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
 
-
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
 
 //        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 
-
         Shuffleboard.putNumber("Elevator", "Control Mode", controlMode);
+    }
+
+    public void updateSmartDashboard() {
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 

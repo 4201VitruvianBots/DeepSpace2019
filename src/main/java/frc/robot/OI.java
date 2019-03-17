@@ -94,10 +94,10 @@ public class OI {
             2 (?) - Right Button: Set DriveTrain Low Gear
             3 (?) - Left Button: Set DriveTrain High Gear
         */
-        leftButtons[0].whileHeld(new IntakeIntake());
+        //leftButtons[0].whileHeld(new IntakeIntake());
         leftButtons[1].whenPressed(new ToggleClimbPistons());
-        leftButtons[2].whenPressed(new SetDriveShifters(true));
-        leftButtons[3].whenPressed(new SetDriveShifters(false));
+        leftButtons[3].whenPressed(new SetDriveShifters(true));
+        leftButtons[4].whenPressed(new SetDriveShifters(false));
 
         /*  Right Joystick Buttons:
             0 - Trigger: Deploy/Score Game Piece
@@ -157,11 +157,14 @@ public class OI {
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
-        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
-        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
+        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(-1));
+        //xBoxLeftTrigger.whenPressed(new SetIntakeExtend(true));
+        xBoxLeftTrigger.whileHeld(new HoldHatchIntakeExtend());
+        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(1));
+        xBoxButtons[4].whileHeld(new HoldHatchIntakeIntake());
+        //xBoxButtons[4].whenPressed(new SetIntakeExtend(false));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
-        xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
         xBoxButtons[6].whenPressed(new ReviveAll());

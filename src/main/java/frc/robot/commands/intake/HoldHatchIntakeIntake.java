@@ -7,43 +7,60 @@
 
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeState extends InstantCommand {
-    int state;
-    public SetIntakeState(int state) {
+public class HoldHatchIntakeIntake extends Command {
+    public HoldHatchIntakeIntake() {
+        // Use requires() here to declare subsystem dependencies
         requires(Robot.intake);
-        requires(Robot.intakeExtend);
-        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-
-        // Safety
-        if(state == 2) {
-            //Robot.intake.setHarpoonSecure(false);
-            Robot.intake.setHatchIntakeOutput(0);
-            Robot.intakeExtend.setHarpoonExtend(false);
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                break;
         }
-
-        if(state != 2)
-            Robot.intake.setCargoIntakeOutput(0);
-
-        Intake.intakeState = state;
     }
 
-    // Called once after isFinished returns true
+    @Override
+    protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+                break;
+        }
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
     @Override
     protected void end() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                Robot.intake.setHatchIntakeOutput(0);
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

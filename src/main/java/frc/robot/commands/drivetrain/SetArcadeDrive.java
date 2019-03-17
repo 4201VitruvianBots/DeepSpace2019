@@ -53,7 +53,7 @@ public class SetArcadeDrive extends Command {
 //        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
 //            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
 //        else
-            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

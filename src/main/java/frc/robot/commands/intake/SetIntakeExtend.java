@@ -7,6 +7,8 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
@@ -14,36 +16,38 @@ import frc.robot.subsystems.Intake;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeState extends InstantCommand {
-    int state;
-    public SetIntakeState(int state) {
-        requires(Robot.intake);
+public class SetIntakeExtend extends InstantCommand {
+    boolean extend;
+
+    public SetIntakeExtend(boolean extend) {
+        // Use requires() here to declare subsystem dependencies
         requires(Robot.intakeExtend);
-        this.state = state;
+
+        this.extend = extend;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-
-        // Safety
-        if(state == 2) {
-            //Robot.intake.setHarpoonSecure(false);
-            Robot.intake.setHatchIntakeOutput(0);
-            Robot.intakeExtend.setHarpoonExtend(false);
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                Robot.intakeExtend.setHarpoonExtend(extend);
+                break;
         }
-
-        if(state != 2)
-            Robot.intake.setCargoIntakeOutput(0);
-
-        Intake.intakeState = state;
     }
 
-    // Called once after isFinished returns true
     @Override
     protected void end() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

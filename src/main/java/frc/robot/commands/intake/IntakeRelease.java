@@ -7,9 +7,9 @@
 
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -36,15 +36,14 @@ public class IntakeRelease extends Command {
     protected void execute() {
         switch (outtakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(1);
+                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_OUTTAKE_SPEED);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(0.8);
+                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_OUTTAKE_SPEED);
                 break;
             case 0:
             default:
-                Robot.intake.setHarpoonExtend(true);
-                Robot.intake.setHarpoonSecure(true);
+                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_OUTTAKE_SPEED);
                 break;
         }
     }
@@ -64,9 +63,7 @@ public class IntakeRelease extends Command {
                 break;
             case 0:
             default:
-                Robot.intake.setHarpoonSecure(false);
-                Timer.delay(0.4);
-                Robot.intake.setHarpoonExtend(false);
+                Robot.intake.setHatchIntakeOutput(0);
                 break;
         }
     }
