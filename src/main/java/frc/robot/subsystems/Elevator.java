@@ -72,10 +72,12 @@ public class Elevator extends Subsystem {
         super("Elevator");
 
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
-        elevatorMotors[1].setInverted(true);
+        elevatorMotors[1].setInverted(false);   // Set true for silicon?
+        elevatorMotors[2].setInverted(true);
+        elevatorMotors[3].setInverted(true);
 
         elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
-        elevatorMotors[1].setSensorPhase(false);
+        elevatorMotors[2].setSensorPhase(false);
 
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
@@ -99,7 +101,9 @@ public class Elevator extends Subsystem {
             //motor.configReverseSoftLimitEnable(true);
             //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
-        elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//        elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//        elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//        elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
         elevatorLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
@@ -158,12 +162,12 @@ public class Elevator extends Subsystem {
     }
 
     public int getPosition() {
-        if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[1].getSelectedSensorPosition())/ 2);
+        if(getEncoderHealth(0) && getEncoderHealth(2))
+            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[2].getSelectedSensorPosition())/ 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorPosition();
-        else if(getEncoderHealth(1))
-            return elevatorMotors[1].getSelectedSensorPosition();
+        else if(getEncoderHealth(2))
+            return elevatorMotors[2].getSelectedSensorPosition();
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
     }
@@ -173,12 +177,12 @@ public class Elevator extends Subsystem {
     }
 
     public int getVelocity(){
-        if(getEncoderHealth(0) && getEncoderHealth(1))
-            return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[1].getSelectedSensorVelocity()) / 2);
+        if(getEncoderHealth(0) && getEncoderHealth(2))
+            return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[2].getSelectedSensorVelocity()) / 2);
         else if(getEncoderHealth(0))
             return elevatorMotors[0].getSelectedSensorVelocity();
-        else if(getEncoderHealth(1))
-            return elevatorMotors[1].getSelectedSensorVelocity();
+        else if(getEncoderHealth(2))
+            return elevatorMotors[2].getSelectedSensorVelocity();
         else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
     }
@@ -188,7 +192,8 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
+        for(TalonSRX elevatorMotor : elevatorMotors)
+            elevatorMotor.set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
     //PID(feedback loop)
@@ -235,7 +240,8 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+        for(TalonSRX elevatorMotor : elevatorMotors)
+            elevatorMotor.set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double height) {
@@ -246,18 +252,20 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+        for(TalonSRX elevatorMotor : elevatorMotors)
+            elevatorMotor.set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
+
 
     public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
-        Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
+        Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(2));
 //        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
 //        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
 //        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
         Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", getEncoderPosition(0));
-        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", getEncoderPosition(1));
+        Shuffleboard.putNumber("Elevator", "Elevator Right Enc Count", getEncoderPosition(2));
         Shuffleboard.putNumber("Elevator", "Elevator Height", getHeight());
         Shuffleboard.putNumber("Elevator", "Elevator Enc Velocity", getVelocity());
 //        Shuffleboard.putNumber("Elevator", "Talon Left Current", getMotorCurrent(0));
