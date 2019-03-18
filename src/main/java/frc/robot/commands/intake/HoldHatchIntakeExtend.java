@@ -18,8 +18,7 @@ import frc.robot.subsystems.Intake;
 public class HoldHatchIntakeExtend extends Command {
     public HoldHatchIntakeExtend() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
-
+        requires(Robot.intakeExtend);
     }
 
     // Called just before this Command runs the first time
