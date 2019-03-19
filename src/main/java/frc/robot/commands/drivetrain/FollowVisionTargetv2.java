@@ -35,7 +35,7 @@ public class FollowVisionTargetv2 extends PIDCommand {
     @Override
     protected void initialize() {
         //Robot.vision.setPipeline(1);
-        Robot.driveTrain.setDriveMotorsState(false);
+        Robot.driveTrain.setDriveMotorsState(true);
 
         this.getPIDController().setAbsoluteTolerance(1);
         this.getPIDController().setOutputRange(-1, 1);

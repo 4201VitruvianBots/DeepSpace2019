@@ -35,7 +35,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 5: // Rocket Level 3 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_HIGH_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_HIGH_POSITION);
                         break;
                     case 1:
@@ -69,9 +69,8 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 3: // Rocket Level 1 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
-                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_LOW_POSITION);
                         break;
                     case 1:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_HATCH_LOW_ANGLE);
@@ -137,6 +136,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                 Robot.intake.setCargoIntakeOutput(0);
+                Robot.intakeExtend.setHarpoonExtend(false);
                 break;
         }
     }

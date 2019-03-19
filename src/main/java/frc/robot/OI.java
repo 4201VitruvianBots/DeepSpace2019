@@ -58,7 +58,7 @@ public class OI {
     public Button[] leftButtons = new Button[7];
     public Button[] rightButtons = new Button[7];
     public Button[] xBoxButtons = new Button[10];
-    public Button[] xBoxPOVButtons = new Button[4];
+    public Button[] xBoxPOVButtons = new Button[8];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
 
     public static int positionIndex = 0;
@@ -76,7 +76,7 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
         for (int i = 0; i < xBoxPOVButtons.length; i++)
-            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 45));
         //xBoxPOVButtons[0] = new POVButton(xBoxController, 0);
         //xBoxPOVButtons[1] = new POVButton(xBoxController, 90);
 
@@ -162,7 +162,9 @@ public class OI {
 
         xBoxButtons[6].whenPressed(new ReviveAll());
         xBoxButtons[7].whenPressed(new KillAll());
-        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
+        for(Button xBoxPOVButton : xBoxPOVButtons)
+            xBoxPOVButton.whenPressed(new SetAllMechanismSetpoints(0));
+//        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));

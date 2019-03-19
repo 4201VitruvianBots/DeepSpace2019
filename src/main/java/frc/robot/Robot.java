@@ -190,7 +190,7 @@ public class Robot extends TimedRobot {
         // schedule the autonomous command (example)
         driveTrain.zeroEncoderCounts();
         if (m_autonomousCommand != null) {
-            driveTrain.setDriveMotorsState(false);
+//            driveTrain.setDriveMotorsState(false);
             m_autonomousCommand.start();
         }
         Scheduler.getInstance().add(new InitIntakeHold());
