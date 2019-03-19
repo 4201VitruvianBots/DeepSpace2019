@@ -221,8 +221,8 @@ public class Robot extends TimedRobot {
         driveTrain.setDriveMotorsState(true);
 
         m_teleopCommand = m_teleopChooser.getSelected();
-        if (m_teleopCommand != null)
-            Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+//        if (m_teleopCommand != null)
+//            Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
         if(Elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());
