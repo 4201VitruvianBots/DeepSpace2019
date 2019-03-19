@@ -66,9 +66,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
         m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDrive());
-        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
-        m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
+        m_teleopChooser.addOption("Cheesy Drive", new SetCheesyDrive());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
         controls.readIniFile();
@@ -222,8 +221,8 @@ public class Robot extends TimedRobot {
         driveTrain.setDriveMotorsState(true);
 
         m_teleopCommand = m_teleopChooser.getSelected();
-        //if (m_teleopCommand != null)
-        //    Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+        if (m_teleopCommand != null)
+            Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
         if(Elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());

@@ -11,17 +11,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.robot.commands.drivetrain.SetArcadeDriveVelocity;
+import frc.robot.commands.drivetrain.SetTankDrive;
 import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -39,6 +39,16 @@ public class DriveTrain extends Subsystem {
         new TalonSRX(RobotMap.rightFrontDriveMotor),
         new TalonSRX(RobotMap.rightRearDriveMotor),
     };
+
+    WPI_TalonSRX[] wpiDriveMotors = {
+       new WPI_TalonSRX(RobotMap.leftFrontDriveMotor),
+       new WPI_TalonSRX(RobotMap.leftRearDriveMotor),
+       new WPI_TalonSRX(RobotMap.rightFrontDriveMotor),
+       new WPI_TalonSRX(RobotMap.rightRearDriveMotor)
+    };
+
+//    DifferentialDrive driveBase = new DifferentialDrive(new SpeedControllerGroup(wpiDriveMotors[0], wpiDriveMotors[1]),
+//                                                        new SpeedControllerGroup(wpiDriveMotors[2], wpiDriveMotors[3]));
 
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
     public AHRS navX = new AHRS(SerialPort.Port.kMXP);
@@ -141,6 +151,10 @@ public class DriveTrain extends Subsystem {
         setMotorPercentOutput(leftOutput, rightOutput);
     }
 
+//    public void setMotorCheesyDrive(double leftOutput, double rightOutput, boolean quickTurnButton) {
+//        driveBase.curvatureDrive(leftOutput, rightOutput, quickTurnButton);
+//    }
+
     public void setArcadeDriveVelocity(double throttle, double turn) {
         double leftPWM = throttle + turn;
         double rightPWM = throttle - turn;
@@ -212,6 +226,6 @@ public class DriveTrain extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //defaultCommand = new SetArcadeDriveVelocity();
-        setDefaultCommand(new SetArcadeDrive());
+        setDefaultCommand(new SetTankDrive());
     }
 }
