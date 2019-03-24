@@ -160,8 +160,8 @@ public class OI {
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
-        xBoxButtons[6].whenPressed(new ReviveAll());
-        xBoxButtons[7].whenPressed(new KillAll());
+        xBoxButtons[6].whenPressed(new ToggleElevatorState()); //elevator
+        xBoxButtons[7].whenPressed(new ToggleWristState()); //wrist
         for(Button xBoxPOVButton : xBoxPOVButtons)
             xBoxPOVButton.whenPressed(new SetAllMechanismSetpoints(0));
 //        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
