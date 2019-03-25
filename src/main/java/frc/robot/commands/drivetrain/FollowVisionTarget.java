@@ -16,9 +16,11 @@ import frc.robot.Robot;
  */
 
 public class FollowVisionTarget extends PIDCommand {
-    static double kP = 0.02; //Proportion for turning
+    static double kP = 0.025; //Proportion for turning
     static double kI = 0; //Proportion for turning
-    static double kD = 0.00015; //Proportion for turning
+    static double kD = 0.00015;
+    //Proportion for turning
+    static double kF = 0.2; //Proportion for turning
     double tta = 0.85; //Target TA val
 
     double lastTx = 0;
@@ -31,6 +33,7 @@ public class FollowVisionTarget extends PIDCommand {
 
     public FollowVisionTarget() {
         super(kP, kI, kD);
+        this.getPIDController().setF(kF);
         requires(Robot.driveTrain);
     }
 
@@ -62,10 +65,10 @@ public class FollowVisionTarget extends PIDCommand {
 //        double targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
         double currentTx = -Robot.vision.getTargetX();
 
-        if(Robot.vision.isValidTarget())
-            lastTx = currentTx;
+//        if(Robot.vision.isValidTarget())
+//            lastTx = currentTx;
 
-        if(Math.abs(lastTx) < 3)
+        if(Math.abs(currentTx) < 3)
             targetLocked = true;
 
         if(targetLocked)

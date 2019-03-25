@@ -18,6 +18,8 @@ import frc.robot.commands.*;
 import frc.robot.commands.climber.ToggleClimbPistons;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
+import frc.robot.commands.test.ZeroElevatorEncoder;
+import frc.robot.commands.test.ZeroWristEncoder;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -162,8 +164,10 @@ public class OI {
 
         xBoxButtons[6].whenPressed(new ToggleElevatorState()); //elevator
         xBoxButtons[7].whenPressed(new ToggleWristState()); //wrist
-        for(Button xBoxPOVButton : xBoxPOVButtons)
-            xBoxPOVButton.whenPressed(new SetAllMechanismSetpoints(0));
+        xBoxPOVButtons[0].whenPressed(new ZeroElevatorEncoder());
+        xBoxPOVButtons[0].whenPressed(new ZeroWristEncoder());
+        for(int i = 1; i < xBoxPOVButtons.length; i++)
+            xBoxPOVButtons[i].whenPressed(new SetAllMechanismSetpoints(0));
 //        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());

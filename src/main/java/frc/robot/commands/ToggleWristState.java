@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
@@ -16,9 +18,10 @@ import frc.robot.subsystems.Wrist;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleWristState extends InstantCommand {
+public class ToggleWristState extends Command {
     public ToggleWristState() {
         requires(Robot.wrist);
+        setTimeout(0.2);
     }
 
     // Called just before this Command runs the first time
@@ -27,18 +30,27 @@ public class ToggleWristState extends InstantCommand {
         Scheduler.getInstance().removeAll();
         if(Wrist.controlMode == 1)
             Wrist.controlMode = 0;
-        else
+        else {
+            Robot.wrist.setEncoderPosition(Wrist.upperLimitEncoderCounts);
             Wrist.controlMode = 1;
+        }
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+//        Robot.m_oi.setXBoxRumble(0.8);
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.m_oi.setXBoxRumble(-1);
     }
 
     // Called when another command which requires one or more of the same

@@ -87,6 +87,7 @@ public class Elevator extends Subsystem {
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
+            motor.configOpenloopRamp(0.6);
 
             // Fixes watchdog issue?
             motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
@@ -265,6 +266,8 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
+        Shuffleboard.putBoolean("Controls", "Elevator Left Encoder Health", getEncoderHealth(0));
+        Shuffleboard.putBoolean("Controls", "Elevator Encoder Health", getEncoderHealth(1));
 
 //        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 
