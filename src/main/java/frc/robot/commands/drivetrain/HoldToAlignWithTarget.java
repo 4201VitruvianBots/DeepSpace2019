@@ -36,7 +36,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
     @Override
     protected void initialize() {
         lastTx = 0;
-        Robot.driveTrain.setDriveMotorsState(false);
+        Robot.driveTrain.setDriveMotorsState(true);
         getPIDController().setF(kF);
         getPIDController().setInputRange(-180.0f, 180.0f);
         getPIDController().setContinuous(true);

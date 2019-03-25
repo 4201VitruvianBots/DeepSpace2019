@@ -5,69 +5,52 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeRelease extends Command {
-    int outtakeState;
-
-    public IntakeRelease() {
-        // Use requires() here to declare subsystem dependencies
+public class ToggleWristState extends Command {
+    public ToggleWristState() {
         requires(Robot.wrist);
-        requires(Robot.intake);
+        setTimeout(0.2);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        // Read this initially to avoid flickering
-        outtakeState = Intake.outtakeState;
+        Scheduler.getInstance().removeAll();
+        if(Wrist.controlMode == 1)
+            Wrist.controlMode = 0;
+        else {
+            Robot.wrist.setEncoderPosition(Wrist.upperLimitEncoderCounts);
+            Wrist.controlMode = 1;
+        }
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        switch (outtakeState) {
-            case 2:
-                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_OUTTAKE_SPEED);
-                break;
-            case 1:
-                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_OUTTAKE_SPEED);
-                break;
-            case 0:
-            default:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_OUTTAKE_SPEED);
-                break;
-        }
+//        Robot.m_oi.setXBoxRumble(0.8);
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        switch (outtakeState) {
-            case 2:
-            case 1:
-                Robot.intake.setCargoIntakeOutput(0);
-                break;
-            case 0:
-            default:
-                Timer.delay(0.5);
-                Robot.intake.setHatchIntakeOutput(0);
-                break;
-        }
+        Robot.m_oi.setXBoxRumble(-1);
     }
 
     // Called when another command which requires one or more of the same

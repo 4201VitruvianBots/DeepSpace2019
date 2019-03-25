@@ -70,7 +70,7 @@ public class LEDOutput extends Subsystem {
 //            LEDColour = 2;
 //        }
 //      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
-//            LEDColour = 4;      //Relatedly, TODO: Add roller-style hatch intake
+//            LEDColour = 4;
 //        }*/
 //        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
 //            LEDColour = 3;

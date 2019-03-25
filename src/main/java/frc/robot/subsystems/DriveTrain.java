@@ -62,6 +62,7 @@ public class DriveTrain extends Subsystem {
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
             motor.configOpenloopRamp(0.6);
+            motor.setNeutralMode(NeutralMode.Coast);
         }
 
         driveMotors[0].setInverted(true);

@@ -20,6 +20,8 @@ import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.climber.ToggleClimbPistons;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
+import frc.robot.commands.test.ZeroElevatorEncoder;
+import frc.robot.commands.test.ZeroWristEncoder;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 import frc.vitruvianlib.util.DoubleButton;
 
@@ -61,7 +63,7 @@ public class OI {
     public Button[] leftButtons = new Button[7];
     public Button[] rightButtons = new Button[7];
     public Button[] xBoxButtons = new Button[10];
-    public Button[] xBoxPOVButtons = new Button[4];
+    public Button[] xBoxPOVButtons = new Button[8];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
     public Button climbButton;
 
@@ -80,7 +82,7 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
         for (int i = 0; i < xBoxPOVButtons.length; i++)
-            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 45));
         //xBoxPOVButtons[0] = new POVButton(xBoxController, 0);
         //xBoxPOVButtons[1] = new POVButton(xBoxController, 90);
 
@@ -167,9 +169,13 @@ public class OI {
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
-        xBoxButtons[6].whenPressed(new ReviveAll());
-        xBoxButtons[7].whenPressed(new KillAll());
-        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
+        xBoxButtons[6].whenPressed(new ToggleElevatorState()); //elevator
+        xBoxButtons[7].whenPressed(new ToggleWristState()); //wrist
+        xBoxPOVButtons[0].whenPressed(new ZeroElevatorEncoder());
+        xBoxPOVButtons[0].whenPressed(new ZeroWristEncoder());
+        for(int i = 1; i < xBoxPOVButtons.length; i++)
+            xBoxPOVButtons[i].whenPressed(new SetAllMechanismSetpoints(0));
+//        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));

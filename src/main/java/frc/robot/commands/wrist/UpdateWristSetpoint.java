@@ -15,10 +15,6 @@ import frc.robot.subsystems.Wrist;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateWristSetpoint extends Command {
-    double output;
-
-    public static boolean override;
-
 
     public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
@@ -35,7 +31,7 @@ public class UpdateWristSetpoint extends Command {
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-        if (Wrist.controlMode == 1 && !override) {
+        if (Wrist.controlMode == 1) {
             if(Math.abs(joystickOutput) > 0.05) {
                 double setpoint = joystickOutput * 10;
 
