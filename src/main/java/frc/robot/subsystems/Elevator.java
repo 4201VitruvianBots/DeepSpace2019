@@ -46,7 +46,7 @@ public class Elevator extends Subsystem {
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
-    private double arbitraryFFUp = 1.5 / 12;
+    private double arbitraryFFUp = 1 / 12;
     private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;

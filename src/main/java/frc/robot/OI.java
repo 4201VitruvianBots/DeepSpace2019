@@ -16,13 +16,10 @@ import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.climber.SetClimbMode;
-import frc.robot.commands.climber.SetClimberOutput;
-import frc.robot.commands.climber.ToggleClimbPistons;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.ZeroElevatorEncoder;
 import frc.robot.commands.test.ZeroWristEncoder;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 import frc.vitruvianlib.util.DoubleButton;
 
@@ -98,7 +95,7 @@ public class OI {
             3 (?) - Left Button: Set DriveTrain High Gear
         */
         //leftButtons[0].whileHeld(new IntakeIntake());
-        leftButtons[1].whenPressed(new ToggleClimbPistons());
+//        leftButtons[1].whenPressed(new ToggleClimbPistons());
         leftButtons[3].whenPressed(new SetDriveShifters(true));
         leftButtons[4].whenPressed(new SetDriveShifters(false));
 

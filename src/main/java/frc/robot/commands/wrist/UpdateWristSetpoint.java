@@ -37,9 +37,7 @@ public class UpdateWristSetpoint extends Command {
 
                 // TODO: Change this logic to use limit switches when they are fixed
                 if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
-                    Robot.m_oi.setXBoxRumble(0.5);
-                else
-                    Robot.m_oi.setXBoxRumble(0);
+                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
                 Robot.wrist.setIncrementedPosition(setpoint);
             }
