@@ -114,11 +114,15 @@ public class Intake extends Subsystem {
     public void updateShuffleboard() {
         Shuffleboard.putNumber("Intake","Intake State", intakeState);
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
+
+        Shuffleboard.putBoolean("Intake","Cargo", intakeIndicator[2]);
+        Shuffleboard.putBoolean("Intake","Hatch", intakeIndicator[0]);
+        Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
     }
 
     public void updateSmartDashboard() {
         SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
-        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
+//        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
         SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }

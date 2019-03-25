@@ -32,7 +32,7 @@ public class Wrist extends Subsystem {
     static double arbitraryFF = 0;
                                                       //5026 135 4096 * 0.375 * (72/22)
     public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
-    public static int lowerLimitEncoderCounts = 0;
+    public static int lowerLimitEncoderCounts = -745; //-745 -20 degrees, 4096 * (1/18) * (72/22)
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;
 
@@ -59,6 +59,7 @@ public class Wrist extends Subsystem {
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
+        wristMotor.configClosedloopRamp(0.1, 100);
     }
 
     public int getPosition() {

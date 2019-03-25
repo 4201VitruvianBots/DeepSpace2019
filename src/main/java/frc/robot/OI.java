@@ -20,6 +20,7 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.ZeroElevatorEncoder;
 import frc.robot.commands.test.ZeroWristEncoder;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -249,16 +250,16 @@ public class OI {
         return -xBoxController.getRawAxis(5);
     }
 
-    public void enableXBoxRumbleTimed(){
+    public void enableXBoxRumbleTimed(double duration){
         Thread t = new Thread(() -> {
             setXBoxRumble(0.8);
-            Timer.delay(0.05);
+            Timer.delay(duration);
             setXBoxRumble(0);
         });
         t.start();
     }
 
-    public void setXBoxRumble(double value) {
+    private void setXBoxRumble(double value) {
         xBoxController.setRumble(GenericHID.RumbleType.kLeftRumble, value);
         xBoxController.setRumble(GenericHID.RumbleType.kRightRumble, value);
     }
