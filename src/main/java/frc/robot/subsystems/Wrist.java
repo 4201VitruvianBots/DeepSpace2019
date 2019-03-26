@@ -54,6 +54,10 @@ public class Wrist extends Subsystem {
         wristMotor.configPeakCurrentLimit(40);
         wristMotor.configPeakCurrentDuration(2000);
         wristMotor.enableCurrentLimit(true);
+//        wristMotor.configVoltageCompSaturation(12);
+//        wristMotor.enableVoltageCompensation(true);
+        wristMotor.configForwardSoftLimitEnable(false);
+        wristMotor.configReverseSoftLimitEnable(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);

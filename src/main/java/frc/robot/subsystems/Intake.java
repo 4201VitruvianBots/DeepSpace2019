@@ -95,6 +95,7 @@ public class Intake extends Subsystem {
         if(Robot.m_oi.rightButtons[0].get()) {
 
         } else if(bannerIR.get()) {
+            Timer.delay(0.5);
             setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
             isTripped = true;
         } else if(isTripped) {
@@ -115,9 +116,9 @@ public class Intake extends Subsystem {
         Shuffleboard.putNumber("Intake","Intake State", intakeState);
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
 
-        Shuffleboard.putBoolean("Intake","Cargo", intakeIndicator[2]);
-        Shuffleboard.putBoolean("Intake","Hatch", intakeIndicator[0]);
-        Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
+        Shuffleboard.putBoolean("Controls","Cargo", intakeIndicator[2]);
+        Shuffleboard.putBoolean("Controls","Hatch", intakeIndicator[0]);
+//        Shuffleboard.putBoolean("Controls","Banner IR", bannerIR.get());
     }
 
     public void updateSmartDashboard() {
