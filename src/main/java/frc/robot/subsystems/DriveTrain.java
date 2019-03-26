@@ -193,14 +193,6 @@ public class DriveTrain extends Subsystem {
         return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
     }
 
-    public double getLeftInputY(){
-        return Robot.m_oi.getLeftJoystickY();
-    }
-
-    public double getRightInputX(){
-        return Robot.m_oi.getRightJoystickX();
-    }
-
     public void setDriveShifterStatus(boolean state) {
         driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
