@@ -42,7 +42,7 @@ public class Elevator extends Subsystem {
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
     public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
-    public int lowerLimitEncoderCounts = -3911;
+    public int lowerLimitEncoderCounts = 0; //-3911;
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
@@ -292,7 +292,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
         Shuffleboard.putBoolean("Controls", "Elevator Left Encoder Health", getEncoderHealth(0));
-        Shuffleboard.putBoolean("Controls", "Elevator Encoder Health", getEncoderHealth(1));
+        Shuffleboard.putBoolean("Controls", "Elevator Right Encoder Health", getEncoderHealth(2));
 
 //        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 

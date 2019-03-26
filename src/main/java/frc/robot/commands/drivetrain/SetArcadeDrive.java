@@ -35,7 +35,7 @@ public class SetArcadeDrive extends Command {
     protected void execute() {
 
         double joystickY = Robot.m_oi.getLeftJoystickY();
-        double joystickX = Robot.m_oi.getLeftRotation() * 0.5;
+        double joystickX = Robot.m_oi.getRightJoystickX() * 0.4;
 
         double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
         throttle = throttle < 0 ? throttle * 0.7 : throttle;
