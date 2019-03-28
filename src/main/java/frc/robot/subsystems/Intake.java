@@ -95,7 +95,7 @@ public class Intake extends Subsystem {
         if(Robot.m_oi.rightButtons[0].get()) {
 
         } else if(bannerIR.get()) {
-            Timer.delay(0.5);
+//            Timer.delay(0.5);
             setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
             isTripped = true;
         } else if(isTripped) {

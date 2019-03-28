@@ -70,7 +70,7 @@ public class IntakeIntake extends Command {
             case 2:
                 if (Robot.intake.bannerIR.get()) {
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
                 } else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;

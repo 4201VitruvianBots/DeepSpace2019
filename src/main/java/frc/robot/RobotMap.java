@@ -82,9 +82,10 @@ public class RobotMap {
     public static int pdpChannelElevatorRight = 2;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 155;
+    public static double WRIST_RETRACTED_ANGLE = 170;
+    public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
-    public static double WRIST_CARGO_ANGLE = 65;
+    public static double WRIST_CARGO_ANGLE = 45;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
     public static double WRIST_HATCH_LOW_ANGLE = 45;
@@ -101,15 +102,15 @@ public class RobotMap {
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 1; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
-    public static double ELEVATOR_CARGO_LOW_POSITION = 2;
-    public static double ELEVATOR_CARGO_MID_POSITION = 35;
-    public static double ELEVATOR_CARGO_HIGH_POSITION = 59;
+    public static double ELEVATOR_CARGO_LOW_POSITION = 10;
+    public static double ELEVATOR_CARGO_MID_POSITION = 37;
+    public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
     public static double ELEVATOR_CLIMB_POSITION = 30;
 
     //
     public static double CARGO_INTAKE_SPEED = -0.7;
     public static double CARGO_OUTTAKE_SPEED = 0.7;
-    public static double CARGO_HOLD_SPEED = -0.125;
+    public static double CARGO_HOLD_SPEED = -0.2;
     public static double HATCH_INTAKE_SPEED = -0.8;
     public static double HATCH_HOLD_SPEED = 0;
     public static double HATCH_OUTTAKE_SPEED = 0.8;

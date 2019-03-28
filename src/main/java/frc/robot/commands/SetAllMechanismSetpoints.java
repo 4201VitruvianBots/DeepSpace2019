@@ -133,7 +133,10 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 break;
             case 0: // Elevator, Wrist Home Position
             default:
-                Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                if(Intake.intakeState == 2)
+                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+                else
+                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                 Robot.intake.setCargoIntakeOutput(0);
                 Robot.intakeExtend.setHarpoonExtend(false);
