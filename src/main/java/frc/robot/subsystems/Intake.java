@@ -94,16 +94,16 @@ public class Intake extends Subsystem {
     }
 
     public void updateCargoIntakeState() {
-//        if(Robot.m_oi.rightButtons[0].get()) {
-//
-//        } else if(bannerIR.get()) {
-////            Timer.delay(0.5);
-//            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-//            isTripped = true;
-//        } else if(isTripped) {
-//            setCargoIntakeOutput(0);
-//            isTripped = false;
-//        }
+        if(Robot.m_oi.rightButtons[0].get()) {
+
+        } else if(bannerIR.get()) {
+//            Timer.delay(0.5);
+            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+            isTripped = true;
+        } else if(isTripped) {
+            setCargoIntakeOutput(0);
+            isTripped = false;
+        }
     }
     public void updateOuttakeState() {
 //        if(bannerIR.get())

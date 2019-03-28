@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.climber.ToggleClimbPistons;
+import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.ZeroElevatorEncoder;
@@ -24,6 +24,7 @@ import frc.robot.commands.test.ZeroWristEncoder;
 import frc.robot.subsystems.Intake;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
+import frc.vitruvianlib.util.DoubleButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -65,6 +66,7 @@ public class OI {
     public Button[] xBoxButtons = new Button[10];
     public Button[] xBoxPOVButtons = new Button[8];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
+    public Button climbButton;
 
     public static int positionIndex = 0;
     boolean[] positionIndicator = {false, false, false, false, false, false};
@@ -87,6 +89,7 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
+        climbButton = new DoubleButton(leftJoystick, 2, rightJoystick, 2);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
@@ -95,7 +98,7 @@ public class OI {
             3 (?) - Left Button: Set DriveTrain High Gear
         */
         //leftButtons[0].whileHeld(new IntakeIntake());
-        leftButtons[1].whenPressed(new ToggleClimbPistons());
+//        leftButtons[1].whenPressed(new ToggleClimbPistons());
         leftButtons[3].whenPressed(new SetDriveShifters(true));
         leftButtons[4].whenPressed(new SetDriveShifters(false));
 
@@ -151,6 +154,8 @@ public class OI {
         xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(4));
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
+
+        climbButton.whenPressed(new SetClimbMode());
 
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
@@ -215,6 +220,9 @@ public class OI {
         return -leftJoystick.getZ();
     }
 
+    public double getLeftRotation(){
+        return leftJoystick.getZ();
+    }
     public double getRightJoystickX() {
         return rightJoystick.getX();
     }
