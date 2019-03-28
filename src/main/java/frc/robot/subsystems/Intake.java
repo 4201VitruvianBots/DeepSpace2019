@@ -13,10 +13,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.intake.IntakePassive;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 public class Intake extends Subsystem {
@@ -27,7 +29,7 @@ public class Intake extends Subsystem {
 
     public boolean[] intakeIndicator = {false, false, false};
 
-    static boolean isTripped = false;
+    public static boolean overridePassive = false;
 //    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
@@ -92,16 +94,16 @@ public class Intake extends Subsystem {
     }
 
     public void updateCargoIntakeState() {
-        if(Robot.m_oi.rightButtons[0].get()) {
-
-        } else if(bannerIR.get()) {
-            Timer.delay(0.5);
-            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-            isTripped = true;
-        } else if(isTripped) {
-            setCargoIntakeOutput(0);
-            isTripped = false;
-        }
+//        if(Robot.m_oi.rightButtons[0].get()) {
+//
+//        } else if(bannerIR.get()) {
+////            Timer.delay(0.5);
+//            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+//            isTripped = true;
+//        } else if(isTripped) {
+//            setCargoIntakeOutput(0);
+//            isTripped = false;
+//        }
     }
     public void updateOuttakeState() {
 //        if(bannerIR.get())
@@ -131,6 +133,11 @@ public class Intake extends Subsystem {
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
+//        setDefaultCommand(new ConditionalCommand(new IntakePassive()) {
+//            @Override
+//            protected boolean condition() {
+//                return !overridePassive;
+//            }
+//        });
     }
 }

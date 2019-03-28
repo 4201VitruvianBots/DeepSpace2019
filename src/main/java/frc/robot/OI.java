@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.climber.ToggleClimbPistons;
@@ -20,6 +21,7 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.ZeroElevatorEncoder;
 import frc.robot.commands.test.ZeroWristEncoder;
+import frc.robot.subsystems.Intake;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
@@ -155,9 +157,16 @@ public class OI {
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(-1));
         //xBoxLeftTrigger.whenPressed(new SetIntakeExtend(true));
-        xBoxLeftTrigger.whileHeld(new HoldHatchIntakeExtend());
+        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHatchIntakeExtend()) {
+            @Override
+            protected boolean condition() {
+                return Intake.intakeState == 2;
+            }
+        });
+//        xBoxLeftTrigger.whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(1));
-        xBoxButtons[4].whileHeld(new HoldHatchIntakeIntake());
+//        xBoxButtons[4].whileHeld(new HoldHatchIntakeIntake());
+        xBoxButtons[4].whileHeld(new IntakeIntake());
         //xBoxButtons[4].whenPressed(new SetIntakeExtend(false));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));

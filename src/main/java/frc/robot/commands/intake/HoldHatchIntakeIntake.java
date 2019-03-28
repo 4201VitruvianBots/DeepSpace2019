@@ -7,6 +7,7 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -58,6 +59,7 @@ public class HoldHatchIntakeIntake extends Command {
             case 1:
             case 0:
             default:
+                Timer.delay(0.25);
                 Robot.intake.setHatchIntakeOutput(0);
                 break;
         }

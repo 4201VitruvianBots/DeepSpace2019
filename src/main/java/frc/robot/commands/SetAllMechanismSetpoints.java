@@ -22,6 +22,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
     public SetAllMechanismSetpoints(int position) {
         requires(Robot.elevator);
         requires(Robot.wrist);
+//        requires(Robot.intake);
         this.position = position;
     }
 
@@ -105,7 +106,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
-                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+//                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
                         //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
@@ -123,7 +124,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
-                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+//                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
                     case 0:

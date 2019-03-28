@@ -34,6 +34,8 @@ public class IntakeIntake extends Command {
                 //Robot.intake.setHarpoonExtend(false);
                 break;
         }
+
+        Intake.overridePassive = true;
     }
     // Called repeatedly when this Command is scheduled to run
     @Override
@@ -69,6 +71,7 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
                 if (Robot.intake.bannerIR.get()) {
+                    Timer.delay(0.5);
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
                     Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                 } else
@@ -84,6 +87,8 @@ public class IntakeIntake extends Command {
                 Robot.intake.setHatchIntakeOutput(0);
                 break;
         }
+
+        Intake.overridePassive = false;
     }
 
     // Called when another command which requires one or more of the same
