@@ -5,47 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimberOutput extends Command {
-    double output;
+public class SetIntakeExtend extends InstantCommand {
+    boolean extend;
 
-    public SetClimberOutput(double output) {
+    public SetIntakeExtend(boolean extend) {
         // Use requires() here to declare subsystem dependencies
-        // requires(Robot.m_subsystem);
-        requires(Robot.climber);
-        this.output = output;
+        requires(Robot.intakeExtend);
+
+        this.extend = extend;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                Robot.intakeExtend.setHarpoonExtend(extend);
+                break;
+        }
     }
 
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        Robot.climber.setClimberOutput(output);
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.climber.setClimberOutput(0);
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

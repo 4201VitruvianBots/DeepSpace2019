@@ -19,8 +19,6 @@ public class UpdateElevatorSetpoint extends Command {
     double alpha = 0.125;
     static double lastVoltage = 0;
 
-    public static boolean override = false;
-
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -43,7 +41,7 @@ public class UpdateElevatorSetpoint extends Command {
              }
         }
 
-        if(Elevator.controlMode == 1 && !override) {
+        if(Elevator.controlMode == 1) {
             /*
             if (Robot.elevator.getPosition() > Robot.elevator.upperLimitEncoderCounts)
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) - 0.5;
@@ -59,9 +57,7 @@ public class UpdateElevatorSetpoint extends Command {
 
                 // TODO: Change this logic to use limit switches when they are fixed
                 if(setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
-                    Robot.m_oi.setXBoxRumble(0.5);
-                else
-                    Robot.m_oi.setXBoxRumble(0);
+                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
                 Robot.elevator.setIncrementedPosition(setpoint);
 
@@ -84,13 +80,13 @@ public class UpdateElevatorSetpoint extends Command {
                 Robot.m_oi.setXBoxRumble(0);*/
 
 
-            double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
-            lastVoltage = targetVoltage;
+//            double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
+//            lastVoltage = targetVoltage;
+//
+//            // Debugging
+//            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
 
-            // Debugging
-            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
-
-            Robot.elevator.setOpenLoopOutput(targetVoltage);
+            Robot.elevator.setOpenLoopOutput(voltage);
         }
     }
 

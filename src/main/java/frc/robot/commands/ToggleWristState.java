@@ -5,40 +5,38 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeState extends InstantCommand {
-    int state;
-    public SetIntakeState(int state) {
-        requires(Robot.intake);
-        requires(Robot.intakeExtend);
-        this.state = state;
+public class ToggleWristState extends InstantCommand {
+    public ToggleWristState() {
+        requires(Robot.wrist);
+        setTimeout(0.2);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-
-        // Safety
-        if(state == 2) {
-            //Robot.intake.setHarpoonSecure(false);
-            Robot.intake.setHatchIntakeOutput(0);
-            Robot.intakeExtend.setHarpoonExtend(false);
+        Scheduler.getInstance().removeAll();
+        if(Wrist.controlMode == 1)
+            Wrist.controlMode = 0;
+        else {
+            Robot.wrist.setEncoderPosition(Wrist.upperLimitEncoderCounts);
+            Wrist.controlMode = 1;
         }
+        Robot.m_oi.enableXBoxRumbleTimed(0.2);
+    }
 
-        if(state != 2)
-            Robot.intake.setCargoIntakeOutput(0);
-
-        Intake.intakeState = state;
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
     }
 
     // Called once after isFinished returns true

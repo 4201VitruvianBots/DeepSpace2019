@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.climber.ToggleClimbPistons;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
+import frc.robot.commands.test.ZeroElevatorEncoder;
+import frc.robot.commands.test.ZeroWristEncoder;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 
 /**
@@ -59,7 +61,7 @@ public class OI {
     public Button[] leftButtons = new Button[7];
     public Button[] rightButtons = new Button[7];
     public Button[] xBoxButtons = new Button[10];
-    public Button[] xBoxPOVButtons = new Button[4];
+    public Button[] xBoxPOVButtons = new Button[8];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
 
     public static int positionIndex = 0;
@@ -77,7 +79,7 @@ public class OI {
         for (int i = 0; i < xBoxButtons.length; i++)
             xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
         for (int i = 0; i < xBoxPOVButtons.length; i++)
-            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+            xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 45));
         //xBoxPOVButtons[0] = new POVButton(xBoxController, 0);
         //xBoxPOVButtons[1] = new POVButton(xBoxController, 90);
 
@@ -90,10 +92,10 @@ public class OI {
             2 (?) - Right Button: Set DriveTrain Low Gear
             3 (?) - Left Button: Set DriveTrain High Gear
         */
-        leftButtons[0].whileHeld(new IntakeIntake());
+        //leftButtons[0].whileHeld(new IntakeIntake());
         leftButtons[1].whenPressed(new ToggleClimbPistons());
-        leftButtons[2].whenPressed(new SetDriveShifters(true));
-        leftButtons[3].whenPressed(new SetDriveShifters(false));
+        leftButtons[3].whenPressed(new SetDriveShifters(true));
+        leftButtons[4].whenPressed(new SetDriveShifters(false));
 
         /*  Right Joystick Buttons:
             0 - Trigger: Deploy/Score Game Piece
@@ -151,16 +153,23 @@ public class OI {
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
-        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
-        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
+        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(-1));
+        //xBoxLeftTrigger.whenPressed(new SetIntakeExtend(true));
+        xBoxLeftTrigger.whileHeld(new HoldHatchIntakeExtend());
+        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(1));
+        xBoxButtons[4].whileHeld(new HoldHatchIntakeIntake());
+        //xBoxButtons[4].whenPressed(new SetIntakeExtend(false));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
-        xBoxPOVButtons[0].whenPressed(new SetIntakeState(1));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
-        xBoxButtons[6].whenPressed(new ReviveAll());
-        xBoxButtons[7].whenPressed(new KillAll());
-        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
+        xBoxButtons[6].whenPressed(new ToggleElevatorState()); //elevator
+        xBoxButtons[7].whenPressed(new ToggleWristState()); //wrist
+        xBoxPOVButtons[0].whenPressed(new ZeroElevatorEncoder());
+        xBoxPOVButtons[0].whenPressed(new ZeroWristEncoder());
+        for(int i = 1; i < xBoxPOVButtons.length; i++)
+            xBoxPOVButtons[i].whenPressed(new SetAllMechanismSetpoints(0));
+//        xBoxPOVButtons[2].whenPressed(new SetAllMechanismSetpoints(0));
 
         //leftButtons[1].whenPressed(new ResetNavXAngle());
         //leftButtons[2].whenPressed(new TestControllerRumble(leftJoystick, 3));
@@ -241,16 +250,16 @@ public class OI {
         return -xBoxController.getRawAxis(5);
     }
 
-    public void enableXBoxRumbleTimed(){
+    public void enableXBoxRumbleTimed(double duration){
         Thread t = new Thread(() -> {
             setXBoxRumble(0.8);
-            Timer.delay(0.05);
+            Timer.delay(duration);
             setXBoxRumble(0);
         });
         t.start();
     }
 
-    public void setXBoxRumble(double value) {
+    private void setXBoxRumble(double value) {
         xBoxController.setRumble(GenericHID.RumbleType.kLeftRumble, value);
         xBoxController.setRumble(GenericHID.RumbleType.kRightRumble, value);
     }

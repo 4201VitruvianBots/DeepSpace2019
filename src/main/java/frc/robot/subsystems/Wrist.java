@@ -32,7 +32,7 @@ public class Wrist extends Subsystem {
     static double arbitraryFF = 0;
                                                       //5026 135 4096 * 0.375 * (72/22)
     public static int upperLimitEncoderCounts = 5026; //4468 120 degrees, 4096 * 0.333 * (72/22)
-    public static int lowerLimitEncoderCounts = 0;
+    public static int lowerLimitEncoderCounts = -745; //-745 -20 degrees, 4096 * (1/18) * (72/22)
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;
 
@@ -50,11 +50,20 @@ public class Wrist extends Subsystem {
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(true);
         wristMotor.setSensorPhase(false);
+        wristMotor.configContinuousCurrentLimit(30);
+        wristMotor.configPeakCurrentLimit(40);
+        wristMotor.configPeakCurrentDuration(2000);
+        wristMotor.enableCurrentLimit(true);
+//        wristMotor.configVoltageCompSaturation(12);
+//        wristMotor.enableVoltageCompensation(true);
+        wristMotor.configForwardSoftLimitEnable(false);
+        wristMotor.configReverseSoftLimitEnable(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
+        wristMotor.configClosedloopRamp(0.1, 100);
     }
 
     public int getPosition() {
@@ -70,7 +79,7 @@ public class Wrist extends Subsystem {
     }
 
     // Using the pulse width measurement, check if the encoders are healthy
-    public boolean isEncoderHealthy() {
+    public boolean getEncoderHealthy() {
         return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
@@ -99,7 +108,7 @@ public class Wrist extends Subsystem {
 
     public void setDirectOutput(double output) {
         if (output == 0) {
-            if(isEncoderHealthy())
+            if(getEncoderHealthy())
                 wristMotor.set(ControlMode.Position, getPosition(), DemandType.ArbitraryFeedForward, arbitraryFF);
             else
                 wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
@@ -128,18 +137,23 @@ public class Wrist extends Subsystem {
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Angle", getAngle());
 //        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putNumber("Wrist","Control Mode", controlMode);
-        Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
+        Shuffleboard.putBoolean("Wrist","Encoder Health", getEncoderHealthy());
 //        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
 //        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
 
+
+        Shuffleboard.putBoolean("Controls","Wrist Encoder Health", getEncoderHealthy());
+    }
+
+    public void updateSmartDashboard() {
         SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
 

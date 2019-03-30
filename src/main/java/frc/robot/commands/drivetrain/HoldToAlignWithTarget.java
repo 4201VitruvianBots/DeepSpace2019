@@ -36,7 +36,7 @@ public class HoldToAlignWithTarget extends PIDCommand {
     @Override
     protected void initialize() {
         lastTx = 0;
-        Robot.driveTrain.setDriveMotorsState(false);
+        Robot.driveTrain.setDriveMotorsState(true);
         getPIDController().setF(kF);
         getPIDController().setInputRange(-180.0f, 180.0f);
         getPIDController().setContinuous(true);
@@ -74,8 +74,10 @@ public class HoldToAlignWithTarget extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
-        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
-        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+//        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+//        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+        double leftOutput = Robot.m_oi.getLeftJoystickY() - output;
+        double rightOutput = Robot.m_oi.getLeftJoystickY() + output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
             Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);

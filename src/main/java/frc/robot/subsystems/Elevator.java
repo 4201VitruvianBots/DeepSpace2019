@@ -42,7 +42,7 @@ public class Elevator extends Subsystem {
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
     public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
-    public int lowerLimitEncoderCounts = 0;
+    public int lowerLimitEncoderCounts = -3911;
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 
@@ -56,8 +56,8 @@ public class Elevator extends Subsystem {
     boolean limitDebounce = false;
 
     private TalonSRX[] elevatorMotors = {
-        new TalonSRX(RobotMap.leftElevator),
-        new TalonSRX(RobotMap.rightElevator),
+        new TalonSRX(RobotMap.leftElevatorA),
+        new TalonSRX(RobotMap.rightElevatorA),
     };
 
     private DigitalInput[] limitSwitches = {
@@ -87,6 +87,7 @@ public class Elevator extends Subsystem {
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
+            motor.configOpenloopRamp(0.6);
 
             // Fixes watchdog issue?
             motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
@@ -247,7 +248,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(1));
 //        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
@@ -263,14 +264,17 @@ public class Elevator extends Subsystem {
 //        Shuffleboard.putBoolean("Elevator", "isCalibrated", initialCalibration);
         //Shuffleboard.putBoolean("Elevator", "Silicon", !Robot.controls.whichRobot.get());
 
-
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
+        Shuffleboard.putBoolean("Controls", "Elevator Left Encoder Health", getEncoderHealth(0));
+        Shuffleboard.putBoolean("Controls", "Elevator Encoder Health", getEncoderHealth(1));
 
 //        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 
-
         Shuffleboard.putNumber("Elevator", "Control Mode", controlMode);
+    }
+
+    public void updateSmartDashboard() {
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 

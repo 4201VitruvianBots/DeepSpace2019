@@ -8,12 +8,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.elevator.SetElevatorSetpoint;
-import frc.robot.commands.wrist.SetWristSetpoint;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -38,7 +35,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 5: // Rocket Level 3 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_HIGH_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_HIGH_POSITION);
                         break;
                     case 1:
@@ -106,25 +103,27 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 1: // Intake Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INATAKE_GROUND_POSITION);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
+                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
+                        //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                        //Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_INTAKE_POSITION);
+                        //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                        //Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_INTAKE_POSITION);
                         break;
                 }
                 break;
-            case -1:
+            case -1: //Depot
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INATAKE_STATION_POSITION);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
+                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
                     case 0:
@@ -136,6 +135,8 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             default:
                 Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
+                Robot.intake.setCargoIntakeOutput(0);
+                Robot.intakeExtend.setHarpoonExtend(false);
                 break;
         }
     }

@@ -55,18 +55,26 @@ public class LEDOutput extends Subsystem {
 
     public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
         getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
-        if(Wrist.controlMode == 0){ //if wrist is in manual mode
-            LEDColour = 1;
-        }
-        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
-            LEDColour = 2;
-        }
-      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
-            LEDColour = 4;      //Relatedly, TODO: Add roller-style hatch intake
-        }*/
-        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
-            LEDColour = 3;
-        }
+
+        if(Robot.m_oi.rightButtons[1].get())
+            LEDColour = RobotMap.LED_GREEN;
+        else if(Robot.vision.isValidTarget()) {
+            LEDColour = RobotMap.LED_BLUE;
+        } else
+            LEDColour = RobotMap.LED_YELLOW;
+
+//        if(Wrist.controlMode == 0){ //if wrist is in manual mode
+//            LEDColour = 1;
+//        }
+//        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
+//            LEDColour = 2;
+//        }
+//      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
+//            LEDColour = 4;
+//        }*/
+//        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
+//            LEDColour = 3;
+//        }
     }
 
     @Override

@@ -118,7 +118,7 @@ public class Vision {
         try {
             usbCamera = CameraServer.getInstance().startAutomaticCapture();
             usbCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-            usbCamera.setResolution(320, 280);
+            usbCamera.setResolution(160, 160);
             usbCamera.setFPS(15);
             usbCamera.setExposureManual(50);
         } catch(Exception e) {
@@ -126,7 +126,7 @@ public class Vision {
         }
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
         Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
 //        Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
         Shuffleboard.putNumber("Vision", "Pipeline", getPipeline());
@@ -139,6 +139,21 @@ public class Vision {
         Shuffleboard.putNumber("Vision", "tlong", getTLong());
         Shuffleboard.putNumber("Vision", "thorz", getTHorz());
         Shuffleboard.putNumber("Vision", "tvert", getTVert());
+    }
+
+    public void updateSmartDashboard() {
+//        Shuffleboard.putBoolean("Vision","IsValidTarget", isValidTarget());
+////        Shuffleboard.putBoolean("Vision", "IsTargetGood", IsTargetGood());
+//        Shuffleboard.putNumber("Vision", "Pipeline", getPipeline());
+//        Shuffleboard.putNumber("Vision", "tx", getTargetX());
+//        Shuffleboard.putNumber("Vision", "ty", getTargetY());
+//        Shuffleboard.putNumber("Vision", "ta", getTargetArea());
+//        Shuffleboard.putNumber("Vision", "ts", getTargetSkew());
+////        Shuffleboard.putNumber("Vision", "tl", getLatency());
+//        Shuffleboard.putNumber("Vision", "tshort", getTShort());
+//        Shuffleboard.putNumber("Vision", "tlong", getTLong());
+//        Shuffleboard.putNumber("Vision", "thorz", getTHorz());
+//        Shuffleboard.putNumber("Vision", "tvert", getTVert());
 
 //        for(int i = 0; i < 3; i++) {
 //            Shuffleboard.putNumber("Vision", "Raw tx" + Integer.toString(i), getRawTx(i));

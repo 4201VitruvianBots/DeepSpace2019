@@ -7,12 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.auto.InitIntakeHold;
 import frc.robot.commands.auto.PathfinderReadLevel1;
 import frc.robot.commands.auto.routines.LeftLevel1ToRocket;
 import frc.robot.commands.auto.routines.PathfinderCalibration;
@@ -34,11 +36,14 @@ public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
     //public static NerdyElevator nerdyElevator = new NerdyElevator();
+    public static IntakeExtend intakeExtend = new IntakeExtend();
     public static Intake intake = new Intake();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
     public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
+
+    Notifier robotPeriodic = new Notifier(new robotPeriodicRunnable());
 
     boolean shuffleboardTransition = false;
 
@@ -60,8 +65,10 @@ public class Robot extends TimedRobot {
         m_autoChooser.addOption("Left Level 1 To Rocket", new LeftLevel1ToRocket());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
+        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDrive());
+        m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
+        m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
         SmartDashboard.putData("TeleopDrive", m_teleopChooser);
 
         controls.readIniFile();
@@ -73,13 +80,15 @@ public class Robot extends TimedRobot {
         //    Elevator.controlMode = 0;
 
 
-        elevator.zeroEncoder();
-        wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+        //elevator.zeroEncoder();
+        //wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
 
         vision.setPipeline(0);
 
-        // Our robot code is so complex we have to do this
+        // Attempts at stopping the loop time overrun messages
         LiveWindow.disableAllTelemetry();
+
+        robotPeriodic.startPeriodic(0.1);
     }
 
     /**
@@ -92,23 +101,41 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        driveTrain.updateSmartDashboard();
+//        driveTrain.updateSmartDashboard();
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
         intake.updateSmartDashboard();
-        climber.updateSmartDashboard();
-        m_oi.updateSmartDashboard();
-        vision.updateSmartDashboard();
+//        climber.updateSmartDashboard();
+//        m_oi.updateSmartDashboard();
+        //vision.updateSmartDashboard();
 
         // TODO: Enable this when encoders are fixed
         //elevator.zeroEncoder();
         //wrist.zeroEncoder();
-        intake.updateIntakeIndicator();
-        m_oi.updateSetpointIndicator();
-        intake.updateOuttakeState();
-        ledOutput.updateLEDState();
+//        intake.updateIntakeIndicator();
+//        m_oi.updateSetpointIndicator();
+//        intake.updateOuttakeState();
+//        ledOutput.updateLEDState();
+        intake.updateCargoIntakeState();
     }
 
+    public class robotPeriodicRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            driveTrain.updateShuffleboard();
+            elevator.updateShuffleBoard();
+            wrist.updateShuffleboard();
+            intake.updateShuffleboard();
+            vision.updateShuffleboard();
+            m_oi.updateSmartDashboard();
+
+            intake.updateIntakeIndicator();
+            m_oi.updateSetpointIndicator();
+            intake.updateOuttakeState();
+            ledOutput.updateLEDState();
+        }
+    }
     /**
      * This function is called once each time the robot enters Disabled mode.
      * You can use it to reset any subsystem information you want to clear when
@@ -150,7 +177,6 @@ public class Robot extends TimedRobot {
         if(Wrist.controlMode == 1)
             wrist.setAbsolutePosition(wrist.getAngle());
 
-        intake.setHarpoonSecure(true);
         
         m_autonomousCommand = m_autoChooser.getSelected();
 
@@ -164,9 +190,10 @@ public class Robot extends TimedRobot {
         // schedule the autonomous command (example)
         driveTrain.zeroEncoderCounts();
         if (m_autonomousCommand != null) {
-            driveTrain.setDriveMotorsState(false);
+//            driveTrain.setDriveMotorsState(false);
             m_autonomousCommand.start();
         }
+        Scheduler.getInstance().add(new InitIntakeHold());
 
         VitruvianLogger.getInstance().startLogger();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
@@ -195,8 +222,8 @@ public class Robot extends TimedRobot {
         driveTrain.setDriveMotorsState(true);
 
         m_teleopCommand = m_teleopChooser.getSelected();
-        if (m_teleopCommand != null)
-            Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+        //if (m_teleopCommand != null)
+        //    Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
         if(Elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());
