@@ -82,10 +82,11 @@ public class RobotMap {
     public static int pdpChannelElevatorRight = 2;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 170;
+    public static double WRIST_RETRACTED_ANGLE = 165;
     public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 45;
+    public static double WRIST_CARGO_SHIP_ANGLE = 0;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
     public static double WRIST_HATCH_LOW_ANGLE = 45;
@@ -94,16 +95,16 @@ public class RobotMap {
 //    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
     //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
     public static double ELEVATOR_HATCH_LOW_POSITION = 7;
-    public static double ELEVATOR_HATCH_MID_POSITION = 35;
+    public static double ELEVATOR_HATCH_MID_POSITION = 37;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 1; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
-    public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
+    public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
     public static double ELEVATOR_CARGO_LOW_POSITION = 10;
-    public static double ELEVATOR_CARGO_MID_POSITION = 37;
+    public static double ELEVATOR_CARGO_MID_POSITION = 35;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
     public static double ELEVATOR_CLIMB_POSITION = 30;
 
@@ -116,7 +117,7 @@ public class RobotMap {
     public static double HATCH_OUTTAKE_SPEED = 0.8;
     public static double HATCH_GROUND_INTAKE_SPEED = -0.8;
     public static double HATCH_GROUND_HOLD_SPEED = -0.1;
-    public static double HATCH_GROUND_OUTTAKE_SPEED = 0.8;
+    public static double HATCH_GROUND_OUTTAKE_SPEED = 1;
 
 
     // Pathfinder (Units in feet)

@@ -87,7 +87,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 2: // Cargo Ship Scoring Positions\
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_HIGH_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_SHIP_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_SHIP_POSITION);
                         break;
                     case 1:
@@ -124,7 +124,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
-//                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
                     case 0:

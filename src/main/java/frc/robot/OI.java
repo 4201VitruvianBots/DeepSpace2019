@@ -161,13 +161,13 @@ public class OI {
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(-1));
-        //xBoxLeftTrigger.whenPressed(new SetIntakeExtend(true));
-        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHatchIntakeExtend()) {
-            @Override
-            protected boolean condition() {
-                return Intake.intakeState == 2;
-            }
-        });
+        xBoxLeftTrigger.whileHeld(new HoldHatchIntakeExtend());
+//        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHatchIntakeExtend()) {
+//            @Override
+//            protected boolean condition() {
+//                return Intake.intakeState == 2;
+//            }
+//        });
 //        xBoxLeftTrigger.whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(1));
 //        xBoxButtons[4].whileHeld(new HoldHatchIntakeIntake());

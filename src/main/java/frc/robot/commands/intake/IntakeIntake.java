@@ -70,12 +70,14 @@ public class IntakeIntake extends Command {
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if (Robot.intake.bannerIR.get()) {
-                    Timer.delay(0.5);
-                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
-                } else
-                    Robot.intake.setCargoIntakeOutput(0);
+//                if (Robot.intake.bannerIR.get()) {
+//                    Timer.delay(0.25);
+//                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+////                    Timer.delay(0.1);
+////                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+//                } else {
+//                    Robot.intake.setCargoIntakeOutput(0);
+//                }
                 break;
             case 1:
                 Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);

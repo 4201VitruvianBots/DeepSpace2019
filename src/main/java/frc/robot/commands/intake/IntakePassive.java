@@ -41,14 +41,14 @@ public class IntakePassive extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-                if(Robot.intake.bannerIR.get() && !isBannerTripped) {
-                    Timer.delay(0.5);
-                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-                    isBannerTripped = true;
-                } else if(!Robot.intake.bannerIR.get() && isBannerTripped) {
-                    Robot.intake.setCargoIntakeOutput(0);
-                    isBannerTripped = false;
-                }
+//                if(Robot.intake.bannerIR.get() && !isBannerTripped) {
+//                    Timer.delay(0.5);
+//                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+//                    isBannerTripped = true;
+//                } else if(!Robot.intake.bannerIR.get() && isBannerTripped) {
+//                    Robot.intake.setCargoIntakeOutput(0);
+//                    isBannerTripped = false;
+//                }
                 break;
             case 1:
                 Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);

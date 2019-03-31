@@ -30,6 +30,7 @@ public class Intake extends Subsystem {
     public boolean[] intakeIndicator = {false, false, false};
 
     public static boolean overridePassive = false;
+    static boolean isBannerTripped = false;
 //    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
@@ -96,13 +97,13 @@ public class Intake extends Subsystem {
     public void updateCargoIntakeState() {
         if(Robot.m_oi.rightButtons[0].get()) {
 
-        } else if(bannerIR.get()) {
+        } else if(bannerIR.get() && !isBannerTripped) {
 //            Timer.delay(0.5);
             setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-            isTripped = true;
-        } else if(isTripped) {
+//            isTripped = true;
+        } else if(isBannerTripped) {
             setCargoIntakeOutput(0);
-            isTripped = false;
+            isBannerTripped = false;
         }
     }
     public void updateOuttakeState() {
@@ -120,7 +121,6 @@ public class Intake extends Subsystem {
 
         Shuffleboard.putBoolean("Controls","Cargo", intakeIndicator[2]);
         Shuffleboard.putBoolean("Controls","Hatch", intakeIndicator[0]);
-//        Shuffleboard.putBoolean("Controls","Banner IR", bannerIR.get());
     }
 
     public void updateSmartDashboard() {

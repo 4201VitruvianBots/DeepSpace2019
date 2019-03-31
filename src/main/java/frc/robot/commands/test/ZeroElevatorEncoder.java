@@ -13,6 +13,7 @@ public class ZeroElevatorEncoder extends InstantCommand {
     @Override
     protected void initialize() {
         Robot.elevator.setEncoderPosition(0);
+        Robot.elevator.setAbsoluteHeight(Robot.elevator.getHeight());
         int calibrationValue = -Robot.elevator.getPosition();
         //Robot.elevator.setEncoderPosition(calibrationValue);
         Robot.controls.writeIniFile("Elevator", "Encoder_Calibration", String.valueOf(calibrationValue));
