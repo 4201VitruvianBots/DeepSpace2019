@@ -5,34 +5,64 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
+public class HoldHatchIntakeIntake extends Command {
+    public HoldHatchIntakeIntake() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                break;
+        }
     }
 
-    // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+                break;
+        }
     }
 
-    // Called once after isFinished returns true
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
     @Override
     protected void end() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                Timer.delay(0.25);
+                Robot.intake.setHatchIntakeOutput(0);
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

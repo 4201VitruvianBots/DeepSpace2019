@@ -8,44 +8,40 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
-/**
- * An example subsystem.  You can replace me with your own Subsystem.
- */
-public class Climber extends Subsystem {
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-    public TalonSRX master = new TalonSRX(RobotMap.climbMotor);
+public class IntakeExtend extends Subsystem {
 
-    DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
+    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
 
-    public Climber() {
-        super("Climber");
+    public IntakeExtend() {
+        super("IntakeExtend");
+
     }
 
-    public void setClimberOutput(double output){
-        master.set(ControlMode.PercentOutput, output);
+    public boolean getHarpoonExtendStatus(){
+        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
     }
 
-    public void setClimbPistonState(boolean state) {
-        climbPistons.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    public void setHarpoonExtend(boolean state){
+        harpoonExtend.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
-    public boolean getClimbPistonState() {
-        return climbPistons.get() == DoubleSolenoid.Value.kForward ? true : false;
-    }
-
-    public boolean isClimbMode() {
-        return Elevator.controlMode == 0 && Wrist.controlMode == 0;
+    public void updateShuffleboard() {
+//        Shuffleboard.putNumber("Intake","Intake State", intakeState);
     }
 
     public void updateSmartDashboard() {
-        SmartDashboard.putBoolean("Climb Mode", isClimbMode());
+//        SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
+//        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
+//        SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
     }
 
     @Override

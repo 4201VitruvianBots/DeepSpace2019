@@ -8,14 +8,12 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.vitruvianlib.driverstation.Shuffleboard;
-
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
@@ -28,7 +26,7 @@ import java.io.FileWriter;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class PathfinderRead extends Command {
+public class PathfinderReadLevel1 extends Command {
     String filename;
     Trajectory leftTrajectory;
     Trajectory rightTrajectory;
@@ -42,9 +40,9 @@ public class PathfinderRead extends Command {
 
     double kP = 0.9;
     double kD = 1;
-    double max_vel = 6;
+    double max_vel = 2;
 
-    public PathfinderRead(String filename) {
+    public PathfinderReadLevel1(String filename) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveTrain);
         this.filename = filename;

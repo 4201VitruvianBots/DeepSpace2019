@@ -15,10 +15,6 @@ import frc.robot.subsystems.Wrist;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateWristSetpoint extends Command {
-    double output;
-
-    public static boolean override;
-
 
     public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
@@ -35,9 +31,16 @@ public class UpdateWristSetpoint extends Command {
     protected void execute() {
         double joystickOutput = Robot.m_oi.getXBoxRightY();
 
-        if (Wrist.controlMode == 1 && !override) {
-            if(Math.abs(joystickOutput) > 0.05)
-               Robot.wrist.setIncrementedPosition(joystickOutput * 10);
+        if (Wrist.controlMode == 1) {
+            if(Math.abs(joystickOutput) > 0.05) {
+                double setpoint = joystickOutput * 10;
+
+                // TODO: Change this logic to use limit switches when they are fixed
+                if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
+                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
+
+                Robot.wrist.setIncrementedPosition(setpoint);
+            }
         } else {
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {
@@ -45,9 +48,11 @@ public class UpdateWristSetpoint extends Command {
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-
-            Robot.wrist.setDirectOutput (joystickOutput);
-        }
+            if(Math.abs(joystickOutput) > 0.05)
+                Robot.wrist.setDirectOutput (joystickOutput);
+            else
+                Robot.wrist.setDirectOutput (0);
+            }
     }
 
     // Make this return true when this Command no longer needs to run execute()

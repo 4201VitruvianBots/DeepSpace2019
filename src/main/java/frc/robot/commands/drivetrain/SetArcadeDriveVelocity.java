@@ -23,7 +23,6 @@ public class SetArcadeDriveVelocity extends Command {
     @Override
     protected void initialize() {
         //Robot.driveTrain.setMotorGains(0.25, 0.001, 20, 1023.0/72000.0);
-        Robot.driveTrain.setMotorGains(0.25, 0, 10, 1023.0 / 72000.0);
     }
 
     // Called repeatedly when this Command is scheduled to run

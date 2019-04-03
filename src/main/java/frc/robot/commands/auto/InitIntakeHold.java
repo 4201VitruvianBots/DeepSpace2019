@@ -5,34 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
+public class InitIntakeHold extends Command {
+    public InitIntakeHold() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.intake);
+
+        setTimeout(0.5);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
     }
 
-    // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
     }
 
-    // Called once after isFinished returns true
+    @Override
+    protected boolean isFinished() {
+        return isTimedOut();
+    }
+
     @Override
     protected void end() {
+        Robot.intake.setHatchIntakeOutput(0);
     }
 
     // Called when another command which requires one or more of the same

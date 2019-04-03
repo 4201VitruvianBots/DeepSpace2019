@@ -5,29 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.LEDOutput;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+public class CycleLEDStates extends InstantCommand {
+
+    private static int stateCount = 0;   //how many times have we cycled through this
+    public CycleLEDStates() {
+        requires(Robot.ledOutput);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        LEDOutput.LEDColour = (stateCount++ % 5) - 1;   //LED State will be -1 - 4 depending on how many times we've done this
     }
 
     // Called once after isFinished returns true
@@ -41,4 +38,6 @@ public class ToggleDriveShifters extends InstantCommand {
     protected void interrupted() {
         end();
     }
+
+
 }

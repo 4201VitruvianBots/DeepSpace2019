@@ -15,15 +15,16 @@ import frc.robot.Robot;
  * An example command.  You can replace me with your own command.
  */
 public class HoldToAlignWithTarget extends PIDCommand {
-    static double kP = 0.04;   //0.1
+    static double kP = 0.015;   //0.1
     static double kI = 0;
-    static double kD = 0.15;  //10
+    static double kD = 0;  //10
     static double kF = 0;  //1023.0 / 72000.0;
     static double period = 0.02;
-    double lastLimelightAngle = 0;
-    double throttle, turn;
-    //Notifier periodicRunnable;
+
+
     boolean isFinished = false;
+
+    double lastTx = 0;
 
     public HoldToAlignWithTarget() {
         super(kP, kI, kD, period);
@@ -34,52 +35,54 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveMotorsState(false);
+        lastTx = 0;
+        Robot.driveTrain.setDriveMotorsState(true);
         getPIDController().setF(kF);
+        getPIDController().setInputRange(-180.0f, 180.0f);
         getPIDController().setContinuous(true);
         getPIDController().setAbsoluteTolerance(1);
         getPIDController().setOutputRange(-1, 1);
 
-        Robot.vision.setPipeline(1);
+        //Robot.vision.setPipeline(1);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        throttle = Robot.m_oi.getLeftJoystickY();
-
         if (Robot.vision.isValidTarget()) {
-            double limelightAngle = Robot.vision.getTargetX();
-            lastLimelightAngle = limelightAngle;
-            getPIDController().enable();
-            if(limelightAngle != lastLimelightAngle) {
-                double currentNavXAngle = Robot.driveTrain.navX.getAngle();
-                double setpoint = currentNavXAngle + lastLimelightAngle;
-                getPIDController().setSetpoint(setpoint);
+            double targetRatio = 0;
+            try {
+                targetRatio = Robot.vision.getTShort() / Robot.vision.getTLong();
+            } catch (Exception e) {
+
             }
-        } else {
+            if(targetRatio > .45 || targetRatio < 0.15)
+                lastTx = lastTx;
+            else {
+                lastTx = Robot.vision.getTargetX();
+            }
+
+            getPIDController().setSetpoint(lastTx);
+            getPIDController().enable();
+        } else
             getPIDController().disable();
-            turn = Robot.m_oi.getRightJoystickX();
-        }
-
-        //if(Robot.vision.IsTargetGood())
-         //   isFinished = true;
-
     }
 
     @Override
-    protected double returnPIDInput() {
-        return Robot.driveTrain.navX.getAngle();
+    protected double returnPIDInput() { return Robot.driveTrain.navX.getAngle();
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        turn = -output;
+//        double leftOutput = (Robot.m_oi.getLeftJoystickY() - Robot.m_oi.getRightJoystickX()) - output;
+//        double rightOutput = (Robot.m_oi.getLeftJoystickY() + Robot.m_oi.getRightJoystickX()) + output;
+        double leftOutput = Robot.m_oi.getLeftJoystickY() - output;
+        double rightOutput = Robot.m_oi.getLeftJoystickY() + output;
 
         if (Robot.driveTrain.getTalonControlMode() == ControlMode.Velocity)
-            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
+            Robot.driveTrain.setMotorVelocityOutput(leftOutput, rightOutput);
         else
-            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+            Robot.driveTrain.setMotorPercentOutput(leftOutput, rightOutput);
     }
 
     @Override
@@ -89,12 +92,9 @@ public class HoldToAlignWithTarget extends PIDCommand {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.vision.setPipeline(0);
+        //Robot.vision.setPipeline(1);
         getPIDController().disable();
-        Robot.driveTrain.leftAdjustment = 0;
-        Robot.driveTrain.rightAdjustment = 0;
         Robot.driveTrain.setDriveMotorsState(true);
-        Robot.driveTrain.setMotorArcadeDrive(0, 0);
     }
 
     // Called when another command which requires one or more of the same

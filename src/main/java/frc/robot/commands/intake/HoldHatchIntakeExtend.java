@@ -5,34 +5,62 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
+public class HoldHatchIntakeExtend extends Command {
+    public HoldHatchIntakeExtend() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+        requires(Robot.intakeExtend);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                break;
+        }
     }
 
-    // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                Robot.intakeExtend.setHarpoonExtend(true);
+                break;
+        }
     }
 
-    // Called once after isFinished returns true
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
     @Override
     protected void end() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+            case 0:
+            default:
+                Robot.intakeExtend.setHarpoonExtend(false);
+                break;
+        }
     }
 
     // Called when another command which requires one or more of the same

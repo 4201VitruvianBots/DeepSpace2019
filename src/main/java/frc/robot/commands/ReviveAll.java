@@ -5,24 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleDriveShifters extends InstantCommand {
-    public ToggleDriveShifters() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.driveTrain);
+public class ReviveAll extends InstantCommand {
+    public ReviveAll() {
+        requires(Robot.elevator);
+        requires(Robot.wrist);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveShifterStatus(!Robot.driveTrain.getDriveShifterStatus());
+        Scheduler.getInstance().removeAll();
+        Elevator.controlMode = 1;
+        Wrist.controlMode = 1;
     }
 
     // Called repeatedly when this Command is scheduled to run

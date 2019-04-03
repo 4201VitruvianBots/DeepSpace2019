@@ -12,14 +12,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.intake.IntakePassive;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
-/**
- * An example subsystem.  You can replace me with your own Subsystem.
- */
 public class Intake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -28,8 +29,10 @@ public class Intake extends Subsystem {
 
     public boolean[] intakeIndicator = {false, false, false};
 
-    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
-    DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
+    public static boolean overridePassive = false;
+    static boolean isBannerTripped = false;
+//    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+    //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
         new TalonSRX(RobotMap.cargoIntakeMotor),
@@ -53,34 +56,36 @@ public class Intake extends Subsystem {
 
     public void setCargoIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, output);
-        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public void setHatchGroundIntakeOutput(double output){
         intakeMotors[0].set(ControlMode.PercentOutput, -output);
-        intakeMotors[1].set(ControlMode.PercentOutput, -output);
     }
 
-    public boolean getHarpoonSecureStatus(){
-        return harpoonSecure.get() == DoubleSolenoid.Value.kForward ? true : false;
-    }
+//    public boolean getHarpoonSecureStatus(){
+//        return harpoonSecure.get() == DoubleSolenoid.Value.kForward ? true : false;
+//    }
 
-    public boolean getHarpoonExtendStatus(){
-        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
-    }
+//    public boolean getHarpoonExtendStatus(){
+//        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
+//    }
 
-    public void setHarpoonExtend(boolean state){
-        if (state)
-            harpoonExtend.set(DoubleSolenoid.Value.kForward);
-        else
-            harpoonExtend.set(DoubleSolenoid.Value.kReverse);
-    }
+//    public void setHarpoonExtend(boolean state){
+//        if (state)
+//            harpoonExtend.set(DoubleSolenoid.Value.kForward);
+//        else
+//            harpoonExtend.set(DoubleSolenoid.Value.kReverse);
+//    }
 
-    public void setHarpoonSecure(boolean state){
-        if (state)
-            harpoonSecure.set(DoubleSolenoid.Value.kForward);
-        else
-            harpoonSecure.set(DoubleSolenoid.Value.kReverse);
+//    public void setHarpoonSecure(boolean state){
+//        if (state)
+//            harpoonSecure.set(DoubleSolenoid.Value.kForward);
+//        else
+//            harpoonSecure.set(DoubleSolenoid.Value.kReverse);
+//    }
+
+    public void setHatchIntakeOutput(double output){
+        intakeMotors[1].set(ControlMode.PercentOutput, output);
     }
 
     public void updateIntakeIndicator() {
@@ -89,6 +94,18 @@ public class Intake extends Subsystem {
         intakeIndicator[intakeState] = true;
     }
 
+    public void updateCargoIntakeState() {
+        if(Robot.m_oi.rightButtons[0].get()) {
+
+        } else if(bannerIR.get() && !isBannerTripped) {
+//            Timer.delay(0.5);
+            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+//            isTripped = true;
+        } else if(isBannerTripped) {
+            setCargoIntakeOutput(0);
+            isBannerTripped = false;
+        }
+    }
     public void updateOuttakeState() {
 //        if(bannerIR.get())
 //            outtakeState = 2;
@@ -98,12 +115,17 @@ public class Intake extends Subsystem {
             outtakeState = intakeState;
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
         Shuffleboard.putNumber("Intake","Intake State", intakeState);
         Shuffleboard.putBoolean("Intake","Banner IR", bannerIR.get());
 
+        Shuffleboard.putBoolean("Controls","Cargo", intakeIndicator[2]);
+        Shuffleboard.putBoolean("Controls","Hatch", intakeIndicator[0]);
+    }
+
+    public void updateSmartDashboard() {
         SmartDashboard.putBoolean("Cargo", intakeIndicator[2]);
-        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
+//        SmartDashboard.putBoolean("Hatch Ground", intakeIndicator[1]);
         SmartDashboard.putBoolean("Hatch", intakeIndicator[0]);
         SmartDashboard.putBoolean("Banner IR", bannerIR.get());
     }
@@ -111,6 +133,11 @@ public class Intake extends Subsystem {
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
+//        setDefaultCommand(new ConditionalCommand(new IntakePassive()) {
+//            @Override
+//            protected boolean condition() {
+//                return !overridePassive;
+//            }
+//        });
     }
 }

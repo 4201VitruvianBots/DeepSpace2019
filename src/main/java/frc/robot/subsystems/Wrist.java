@@ -31,10 +31,11 @@ public class Wrist extends Subsystem {
     static double kF = 0;
     static double arbitraryFF = 0;
                                                       //5026 135 4096 * 0.375 * (72/22)
-    public static int upperLimitEncoderCounts = 4468; //4468 120 degrees, 4096 * 0.333 * (72/22)
-    public static int lowerLimitEncoderCounts = 0;
+                                                      //5802 1170 4096 * 0.375 * (72/22)
+    public static int upperLimitEncoderCounts = 5632; // 5802 165 degrees, 4096 * (165/360) * 3
+    public static int lowerLimitEncoderCounts = -682; // -682 -20 degrees, 4096 * (1/18) * 3
     public static int calibrationValue = 0;
-    double encoderCountsPerAngle = 37.236;
+    double encoderCountsPerAngle = 34.133;
 
     public static int controlMode = 1;
     static boolean limitDebounce = false;
@@ -50,11 +51,20 @@ public class Wrist extends Subsystem {
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(true);
         wristMotor.setSensorPhase(false);
+        wristMotor.configContinuousCurrentLimit(30);
+        wristMotor.configPeakCurrentLimit(40);
+        wristMotor.configPeakCurrentDuration(2000);
+        wristMotor.enableCurrentLimit(true);
+//        wristMotor.configVoltageCompSaturation(12);
+//        wristMotor.enableVoltageCompensation(true);
+        wristMotor.configForwardSoftLimitEnable(false);
+        wristMotor.configReverseSoftLimitEnable(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
+        wristMotor.configClosedloopRamp(0.1, 100);
     }
 
     public int getPosition() {
@@ -70,7 +80,7 @@ public class Wrist extends Subsystem {
     }
 
     // Using the pulse width measurement, check if the encoders are healthy
-    public boolean isEncoderHealthy() {
+    public boolean getEncoderHealthy() {
         return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
@@ -99,8 +109,8 @@ public class Wrist extends Subsystem {
 
     public void setDirectOutput(double output) {
         if (output == 0) {
-            if(isEncoderHealthy())
-                wristMotor.set(ControlMode.Position, getPosition());
+            if(getEncoderHealthy())
+                wristMotor.set(ControlMode.Position, getPosition(), DemandType.ArbitraryFeedForward, arbitraryFF);
             else
                 wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
         } else
@@ -128,18 +138,23 @@ public class Wrist extends Subsystem {
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    public void updateSmartDashboard() {
+    public void updateShuffleboard() {
         Shuffleboard.putNumber("Wrist","Encoder Count", getPosition());
         Shuffleboard.putNumber("Wrist","Angle", getAngle());
-        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
+//        Shuffleboard.putNumber("Wrist","Encoder Velocity", getVelocity());
         Shuffleboard.putNumber("Wrist","Control Mode", controlMode);
-        Shuffleboard.putBoolean("Wrist","Encoder Health", isEncoderHealthy());
-        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
-        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
+        Shuffleboard.putBoolean("Wrist","Encoder Health", getEncoderHealthy());
+//        Shuffleboard.putBoolean("Wrist","Lower Limit Switch", getLimitSwitchState(0));
+//        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
 
+
+        Shuffleboard.putBoolean("Controls","Wrist Encoder Health", getEncoderHealthy());
+    }
+
+    public void updateSmartDashboard() {
         SmartDashboard.putNumber("Wrist Angle", getAngle());
     }
 

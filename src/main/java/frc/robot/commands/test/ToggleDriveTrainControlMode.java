@@ -2,21 +2,19 @@ package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 
-public class ZeroElevatorEncoder extends InstantCommand {
-    public ZeroElevatorEncoder() {
-        requires(Robot.elevator);
+public class ToggleDriveTrainControlMode extends InstantCommand {
+    public ToggleDriveTrainControlMode() {
+        requires(Robot.driveTrain);
         setRunWhenDisabled(true);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.elevator.setEncoderPosition(0);
-        Robot.elevator.setAbsoluteHeight(Robot.elevator.getHeight());
-        int calibrationValue = -Robot.elevator.getPosition();
-        //Robot.elevator.setEncoderPosition(calibrationValue);
-        Robot.controls.writeIniFile("Elevator", "Encoder_Calibration", String.valueOf(calibrationValue));
+        DriveTrain.controlMode = DriveTrain.controlMode == 1 ? 0 : 1;
     }
     @Override
     protected void end() {

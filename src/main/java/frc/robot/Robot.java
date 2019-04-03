@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -16,11 +14,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.auto.InitIntakeHold;
+import frc.robot.commands.auto.PathfinderReadLevel1;
+import frc.robot.commands.auto.routines.LeftLevel1ToRocket;
+import frc.robot.commands.auto.routines.PathfinderCalibration;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,12 +36,14 @@ public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
     //public static NerdyElevator nerdyElevator = new NerdyElevator();
+    public static IntakeExtend intakeExtend = new IntakeExtend();
     public static Intake intake = new Intake();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
+    public static LEDOutput ledOutput = new LEDOutput();
     public static OI m_oi;
 
-    Notifier robotPeriodic;
+    Notifier robotPeriodic = new Notifier(new robotPeriodicRunnable());
 
     boolean shuffleboardTransition = false;
 
@@ -57,11 +60,12 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Elevator.initialCalibration = false;
         m_oi = new OI();
-        //m_autoChooser.setDefaultOption("Default Auto", new ExampleCommand());
-        // chooser.addOption("My Auto", new MyAutoCommand());
+        m_autoChooser.addOption("Pathfinder Calibration", new PathfinderCalibration());
+        m_autoChooser.addOption("Get Off Level 1", new PathfinderReadLevel1("getOffLevel1"));
+        m_autoChooser.addOption("Left Level 1 To Rocket", new LeftLevel1ToRocket());
         SmartDashboard.putData("Auto mode", m_autoChooser);
 
-        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDriveVelocity());
+        m_teleopChooser.setDefaultOption("Arcade Drive", new SetArcadeDrive());
         m_teleopChooser.addOption("Arcade Drive Velocity", new SetArcadeDriveVelocity());
         m_teleopChooser.addOption("Tank Drive", new SetTankDrive());
         m_teleopChooser.addOption("Tank Drive Velocity", new SetTankDriveVelocity());
@@ -76,14 +80,15 @@ public class Robot extends TimedRobot {
         //    Elevator.controlMode = 0;
 
 
-//        elevator.setEncoderPosition();
-//        wrist.setEncoderPosition();
+        //elevator.zeroEncoder();
+        //wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
 
-        // Our robot code is so complex we have to do this
+        vision.setPipeline(0);
+
+        // Attempts at stopping the loop time overrun messages
         LiveWindow.disableAllTelemetry();
 
-        robotPeriodic = new Notifier(new PeriodicRunnable());
-        robotPeriodic.startPeriodic(0.02);
+        robotPeriodic.startPeriodic(0.1);
     }
 
     /**
@@ -96,9 +101,41 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+//        driveTrain.updateSmartDashboard();
+        elevator.updateSmartDashboard();
+        wrist.updateSmartDashboard();
+        intake.updateSmartDashboard();
+//        climber.updateSmartDashboard();
+//        m_oi.updateSmartDashboard();
+        //vision.updateSmartDashboard();
 
+        // TODO: Enable this when encoders are fixed
+        //elevator.zeroEncoder();
+        //wrist.zeroEncoder();
+//        intake.updateIntakeIndicator();
+//        m_oi.updateSetpointIndicator();
+//        intake.updateOuttakeState();
+//        ledOutput.updateLEDState();
+        intake.updateCargoIntakeState();
     }
 
+    public class robotPeriodicRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            driveTrain.updateShuffleboard();
+            elevator.updateShuffleBoard();
+            wrist.updateShuffleboard();
+            intake.updateShuffleboard();
+            vision.updateShuffleboard();
+            m_oi.updateSmartDashboard();
+
+            intake.updateIntakeIndicator();
+            m_oi.updateSetpointIndicator();
+            intake.updateOuttakeState();
+            ledOutput.updateLEDState();
+        }
+    }
     /**
      * This function is called once each time the robot enters Disabled mode.
      * You can use it to reset any subsystem information you want to clear when
@@ -112,7 +149,7 @@ public class Robot extends TimedRobot {
         VitruvianLogger.getInstance().startLogger();
 
         // Default VP Pipeline
-        vision.setPipeline(1);
+        vision.setPipeline(0);
     }
 
     @Override
@@ -133,12 +170,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        Robot.vision.setPipeline(0);
+        driveTrain.setDriveMotorsState(true);
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
         if(Wrist.controlMode == 1)
             wrist.setAbsolutePosition(wrist.getAngle());
 
-        intake.setHarpoonSecure(true);
         
         m_autonomousCommand = m_autoChooser.getSelected();
 
@@ -150,9 +188,12 @@ public class Robot extends TimedRobot {
          */
 
         // schedule the autonomous command (example)
+        driveTrain.zeroEncoderCounts();
         if (m_autonomousCommand != null) {
+//            driveTrain.setDriveMotorsState(false);
             m_autonomousCommand.start();
         }
+        Scheduler.getInstance().add(new InitIntakeHold());
 
         VitruvianLogger.getInstance().startLogger();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
@@ -170,6 +211,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        Robot.vision.setPipeline(0);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -180,8 +222,8 @@ public class Robot extends TimedRobot {
         driveTrain.setDriveMotorsState(true);
 
         m_teleopCommand = m_teleopChooser.getSelected();
-        if (m_teleopCommand != null)
-            Robot.driveTrain.setDefaultCommand(m_teleopCommand);
+        //if (m_teleopCommand != null)
+        //    Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
         if(Elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());
@@ -204,11 +246,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        // TODO: Update logic to specify tank/arcade drivetrain
-        // If drivetrain encoders are bad, revert to default arcade drivetrain.
-        if (!driveTrain.getEncoderHealth(0) || !driveTrain.getEncoderHealth(2)) {
-            Robot.driveTrain.setDefaultCommand(new SetArcadeDrive());
-        }
     }
 
     /**
@@ -216,23 +253,5 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
-    }
-    class PeriodicRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            driveTrain.updateSmartDashboard();
-            elevator.updateSmartDashboard();
-            wrist.updateSmartDashboard();
-            intake.updateSmartDashboard();
-            m_oi.updateSmartDashboard();
-
-            // TODO: Enable this when encoders are fixed
-            elevator.zeroEncoder();
-            wrist.zeroEncoder();
-            intake.updateIntakeIndicator();
-            m_oi.updateOIIndicators();
-            intake.updateOuttakeState();
-        }
     }
 }

@@ -166,3 +166,7 @@ bin/
 PathWeaver/output/
 
 src/main/deploy/output/
+
+PathWeaver/Paths/
+
+out/production/classes/META-INF/

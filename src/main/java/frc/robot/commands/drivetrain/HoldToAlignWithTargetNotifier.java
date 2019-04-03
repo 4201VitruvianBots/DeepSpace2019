@@ -37,7 +37,7 @@ public class HoldToAlignWithTargetNotifier extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.driveTrain.setDriveMotorsState(false);
+        Robot.driveTrain.setDriveMotorsState(true);
 
         turnPID.setOutputRange(-0.5, 0.5);
         turnPID.setSetpoint(Robot.driveTrain.navX.getAngle() + Robot.vision.getTargetX());
@@ -60,8 +60,6 @@ public class HoldToAlignWithTargetNotifier extends Command {
     protected void end() {
         turnPID.disable();
         periodicRunnable.stop();
-        Robot.driveTrain.leftAdjustment = 0;
-        Robot.driveTrain.rightAdjustment = 0;
         Robot.driveTrain.setDriveMotorsState(true);
     }
 
