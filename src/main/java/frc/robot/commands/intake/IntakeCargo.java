@@ -11,7 +11,7 @@ public class IntakeCargo extends Command {
 
     public IntakeCargo() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+//        requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time

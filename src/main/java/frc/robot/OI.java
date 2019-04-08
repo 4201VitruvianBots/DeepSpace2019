@@ -172,14 +172,14 @@ public class OI {
 //        xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
 //        xBoxLeftTrigger.whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
-        xBoxButtons[4].whileHeld(new ConditionalCommand(new IntakeCargo(), new IntakeHatch()) {
-             @Override
-             protected boolean condition() {
-                 return Intake.intakeState == 2;
-             }
-        });
-//        xBoxButtons[4].whileHeld(new IntakeCargo());
-//        xBoxButtons[4].whileHeld(new IntakeHatch());
+//        xBoxButtons[4].whileHeld(new ConditionalCommand(new IntakeCargo(), new IntakeHatch()) {
+//             @Override
+//             protected boolean condition() {
+//                 return Robot.intake.intakeState == 2;
+//             }
+//        });
+        xBoxButtons[4].whileHeld(new IntakeCargo());
+        xBoxButtons[4].whileHeld(new IntakeHatch());
 //        xBoxButtons[4].whileHeld(new IntakeIntake());
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
