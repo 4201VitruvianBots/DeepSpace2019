@@ -13,8 +13,8 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleGreyClimber extends InstantCommand {
-    public ToggleGreyClimber() {
+public class SetGreyClimberPistons extends InstantCommand {
+    public SetGreyClimberPistons() {
         requires(Robot.greyClimber);
     }
 

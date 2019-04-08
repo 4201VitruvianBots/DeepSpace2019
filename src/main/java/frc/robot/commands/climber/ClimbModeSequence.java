@@ -8,7 +8,6 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.KillAll;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -17,7 +16,9 @@ public class ClimbModeSequence extends CommandGroup {
     public ClimbModeSequence() {
         addSequential(new SetClimbMode());
         addSequential(new SetWristElevatorClimbPositions());
-        addSequential(new ToggleGreyClimber());
-        addSequential(new KillAll());
+        addSequential(new SetGreyClimberPistons());
+//        addSequential(new DisableLimelightLEDs());
+//        addSequential(new SetClimbLEDIndicators());
+//        addSequential(new KillAll());
     }
 }
