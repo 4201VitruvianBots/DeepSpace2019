@@ -7,31 +7,25 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 
-public class IntakeExtend extends Subsystem {
+public class Harpoon extends Subsystem {
 
-    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+    DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
 
-    public IntakeExtend() {
-        super("IntakeExtend");
+    public Harpoon() {
+        super("harpoon");
 
     }
 
     public boolean getHarpoonExtendStatus(){
-        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
+        return harpoon.get() == DoubleSolenoid.Value.kForward ? true : false;
     }
 
     public void setHarpoonExtend(boolean state){
-        harpoonExtend.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        harpoon.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
     public void updateShuffleboard() {

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.harpoon;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -18,6 +18,7 @@ import frc.robot.subsystems.Intake;
  */
 public class HoldHatchIntakeIntake extends Command {
     Timer stopwatch = new Timer();
+
     public HoldHatchIntakeIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.intake);

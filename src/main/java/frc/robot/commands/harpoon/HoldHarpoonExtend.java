@@ -5,25 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.harpoon;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetIntakeExtend extends InstantCommand {
-    boolean extend;
-
-    public SetIntakeExtend(boolean extend) {
+public class HoldHarpoonExtend extends Command {
+    public HoldHarpoonExtend() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.intakeExtend);
-
-        this.extend = extend;
+        requires(Robot.harpoon);
     }
 
     // Called just before this Command runs the first time
@@ -35,9 +29,26 @@ public class SetIntakeExtend extends InstantCommand {
                 break;
             case 0:
             default:
-                Robot.intakeExtend.setHarpoonExtend(extend);
                 break;
         }
+    }
+
+    @Override
+    protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                Robot.harpoon.setHarpoonExtend(true);
+                break;
+        }
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 
     @Override
@@ -46,9 +57,9 @@ public class SetIntakeExtend extends InstantCommand {
             case 2:
             case 1:
                 break;
-                
             case 0:
             default:
+                Robot.harpoon.setHarpoonExtend(false);
                 break;
         }
     }

@@ -77,8 +77,9 @@ public class IntakeIntake extends Command {
                     Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
 //                    Timer.delay(0.1);
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-                } else
+                } else {
                     Robot.intake.setCargoIntakeOutput(0);
+                }
                 break;
             case 1:
 //                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);

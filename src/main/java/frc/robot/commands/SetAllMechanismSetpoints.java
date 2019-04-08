@@ -139,7 +139,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 Robot.wrist.setAbsolutePosition(Intake.intakeState == 2 ? RobotMap.WRIST_RETRACTED_CARGO_ANGLE : RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                 Robot.intake.setCargoIntakeOutput(Robot.intake.bannerIR.get() ? RobotMap.CARGO_HOLD_SPEED : 0);
-                Robot.intakeExtend.setHarpoonExtend(false);
+                Robot.harpoon.setHarpoonExtend(false);
                 break;
         }
     }

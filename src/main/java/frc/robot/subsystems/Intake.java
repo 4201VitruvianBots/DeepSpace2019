@@ -31,7 +31,7 @@ public class Intake extends Subsystem {
 
     public static boolean overridePassive = false;
     static boolean isBannerTripped = false;
-//    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+//    DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
@@ -67,14 +67,14 @@ public class Intake extends Subsystem {
 //    }
 
 //    public boolean getHarpoonExtendStatus(){
-//        return harpoonExtend.get() == DoubleSolenoid.Value.kForward ? true : false;
+//        return harpoon.get() == DoubleSolenoid.Value.kForward ? true : false;
 //    }
 
 //    public void setHarpoonExtend(boolean state){
 //        if (state)
-//            harpoonExtend.set(DoubleSolenoid.Value.kForward);
+//            harpoon.set(DoubleSolenoid.Value.kForward);
 //        else
-//            harpoonExtend.set(DoubleSolenoid.Value.kReverse);
+//            harpoon.set(DoubleSolenoid.Value.kReverse);
 //    }
 
 //    public void setHarpoonSecure(boolean state){

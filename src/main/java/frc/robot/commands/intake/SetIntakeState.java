@@ -18,7 +18,7 @@ public class SetIntakeState extends InstantCommand {
     int state;
     public SetIntakeState(int state) {
         requires(Robot.intake);
-        requires(Robot.intakeExtend);
+        requires(Robot.harpoon);
         this.state = state;
     }
 
@@ -28,7 +28,7 @@ public class SetIntakeState extends InstantCommand {
         if(state == 2) {
             //Robot.intake.setHarpoonSecure(false);
             Robot.intake.setHatchIntakeOutput(0);
-            Robot.intakeExtend.setHarpoonExtend(false);
+            Robot.harpoon.setHarpoonExtend(false);
         }
 
         if(state != 2)
