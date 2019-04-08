@@ -46,15 +46,11 @@ public class IntakeIntake extends Command {
                 Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
+//                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
                 break;
             case 0:
             default:
-                //Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
-                //Robot.intake.setHarpoonSecure(false);
-                //Timer.delay(0.2);
-                //Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -85,7 +81,7 @@ public class IntakeIntake extends Command {
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);
+//                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);
                 break;
             case 0:
             default:

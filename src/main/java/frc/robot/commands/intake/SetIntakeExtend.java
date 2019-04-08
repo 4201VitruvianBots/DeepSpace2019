@@ -45,6 +45,8 @@ public class SetIntakeExtend extends InstantCommand {
         switch (Intake.intakeState) {
             case 2:
             case 1:
+                break;
+                
             case 0:
             default:
                 break;

@@ -164,7 +164,7 @@ public class OI {
         xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHatchIntakeExtend()) {
             @Override
             protected boolean condition() {
-                return Robot.intake.intakeState == 2;
+                return Intake.intakeState == 2;
             }
         });
 //        xBoxLeftTrigger.whileHeld(new HoldHatchIntakeExtend());
