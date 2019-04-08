@@ -13,13 +13,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.climber.SetClimbMode;
 import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.harpoon.HoldHarpoonExtend;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.ZeroElevatorEncoder;
 import frc.robot.commands.test.ZeroWristEncoder;
+import frc.robot.subsystems.Intake;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 import frc.vitruvianlib.util.DoubleButton;
 
@@ -165,12 +168,18 @@ public class OI {
 //            }
 //        });
         xBoxLeftTrigger.whileHeld(new IntakeCargo());
-        xBoxLeftTrigger.whileHeld(new IntakeHatch());
+        xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
 //        xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
 //        xBoxLeftTrigger.whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
-        xBoxButtons[4].whileHeld(new IntakeCargo());
-        xBoxButtons[4].whileHeld(new IntakeHatch());
+        xBoxButtons[4].whileHeld(new ConditionalCommand(new IntakeCargo(), new IntakeHatch()) {
+             @Override
+             protected boolean condition() {
+                 return Intake.intakeState == 2;
+             }
+        });
+//        xBoxButtons[4].whileHeld(new IntakeCargo());
+//        xBoxButtons[4].whileHeld(new IntakeHatch());
 //        xBoxButtons[4].whileHeld(new IntakeIntake());
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));

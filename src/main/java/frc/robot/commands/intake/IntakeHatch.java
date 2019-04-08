@@ -24,7 +24,6 @@ public class IntakeHatch extends Command {
     protected void execute() {
         if(Intake.intakeState == 0)
             Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
-
     }
 
     @Override

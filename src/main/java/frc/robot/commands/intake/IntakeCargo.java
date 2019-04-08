@@ -24,7 +24,6 @@ public class IntakeCargo extends Command {
     protected void execute() {
         if(Intake.intakeState == 2)
             Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
-
     }
 
     @Override
@@ -32,7 +31,7 @@ public class IntakeCargo extends Command {
         if(Intake.intakeState == 2)
             return Robot.intake.bannerIR.get();
         else
-            return false;
+            return true;
     }
     // Called once after isFinished returns true
     @Override
