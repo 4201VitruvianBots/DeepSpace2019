@@ -69,7 +69,7 @@ public class DriveTrain extends Subsystem {
         driveMotors[1].setInverted(true);
         driveMotors[2].setInverted(false);
         driveMotors[3].setInverted(false);
-        driveMotors[4].setInverted(false);
+        driveMotors[4].setInverted(true);
 
         driveMotors[0].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         driveMotors[2].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);

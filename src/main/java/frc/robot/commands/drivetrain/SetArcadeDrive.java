@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.GreyClimber;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -50,7 +51,7 @@ public class SetArcadeDrive extends Command {
 //        else
         Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
 
-        if(Robot.greyClimber.getClimbPistonState()) {
+        if(GreyClimber.climbMode == 1) {
             Robot.driveTrain.setClimbMotorPercentOutput(throttle);
         }
     }

@@ -23,6 +23,8 @@ public class GreyClimber extends Subsystem {
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 
+    public static int climbMode = 0;
+
     public GreyClimber() {
         super("GreyClimber");
     }

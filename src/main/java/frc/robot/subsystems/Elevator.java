@@ -41,16 +41,16 @@ public class Elevator extends Subsystem {
     private double kA = 0; //Voltage to hold constant acceleration
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
-    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
+    public int upperLimitEncoderCounts = 42551 * 2; // Silicon, ~65.26 in.
     public int lowerLimitEncoderCounts = 0; //-3911;
     public static int calibrationValue = 0;
-    private int encoderCountsPerInch = 652;
+    private int encoderCountsPerInch = 652 * 2;
 
     private double arbitraryFFUp = 1 / 12;
     private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 1;
+    public static int controlMode = 0;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
