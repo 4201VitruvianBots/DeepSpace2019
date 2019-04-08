@@ -104,8 +104,10 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 1: // Intake Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
+//                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
+//                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
 //                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
@@ -124,7 +126,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
-                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+//                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
                     case 0:
@@ -134,12 +136,9 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 break;
             case 0: // Elevator, Wrist Home Position
             default:
-                if(Intake.intakeState == 2)
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
-                else
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+                Robot.wrist.setAbsolutePosition(Intake.intakeState == 2 ? RobotMap.WRIST_RETRACTED_CARGO_ANGLE : RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
-                Robot.intake.setCargoIntakeOutput(0);
+                Robot.intake.setCargoIntakeOutput(Robot.intake.bannerIR.get() ? RobotMap.CARGO_HOLD_SPEED : 0);
                 Robot.intakeExtend.setHarpoonExtend(false);
                 break;
         }

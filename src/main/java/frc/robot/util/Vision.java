@@ -120,7 +120,7 @@ public class Vision {
             usbCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
             usbCamera.setResolution(160, 160);
             usbCamera.setFPS(15);
-            usbCamera.setExposureManual(50);
+            usbCamera.setExposureManual(3);
         } catch(Exception e) {
 
         }

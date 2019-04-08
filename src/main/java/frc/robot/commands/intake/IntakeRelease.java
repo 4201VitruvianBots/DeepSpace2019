@@ -19,6 +19,8 @@ import frc.robot.subsystems.Intake;
 public class IntakeRelease extends Command {
     int outtakeState;
 
+    Timer stopwatch = new Timer();
+
     public IntakeRelease() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.wrist);
@@ -66,7 +68,13 @@ public class IntakeRelease extends Command {
                 break;
             case 0:
             default:
-                Timer.delay(0.5);
+
+                stopwatch.reset();
+                stopwatch.start();
+                while (stopwatch.get() < 0.5) {
+
+                }
+                stopwatch.stop();
                 Robot.intake.setHatchIntakeOutput(0);
                 break;
         }

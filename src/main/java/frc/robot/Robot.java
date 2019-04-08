@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
 //        m_oi.updateSetpointIndicator();
 //        intake.updateOuttakeState();
 //        ledOutput.updateLEDState();
-        intake.updateCargoIntakeState();
+//        intake.updateCargoIntakeState();
     }
 
     public class robotPeriodicRunnable implements Runnable {

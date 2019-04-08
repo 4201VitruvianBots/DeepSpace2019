@@ -56,6 +56,7 @@ public class HoldHatchIntakeExtend extends Command {
         switch (Intake.intakeState) {
             case 2:
             case 1:
+                break;
             case 0:
             default:
                 Robot.intakeExtend.setHarpoonExtend(false);
