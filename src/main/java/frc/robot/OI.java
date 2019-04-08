@@ -86,7 +86,7 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
-        climbButton = new DoubleButton(leftJoystick, 2, rightJoystick, 2);
+//        climbButton = new DoubleButton(leftJoystick, 2, rightJoystick, 2);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
@@ -152,7 +152,7 @@ public class OI {
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
-        climbButton.whenPressed(new ClimbModeSequence());
+        rightButtons[2].whenPressed(new ClimbModeSequence());
 
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
