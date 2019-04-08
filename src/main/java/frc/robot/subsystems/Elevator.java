@@ -272,7 +272,13 @@ public class Elevator extends Subsystem {
         }
     }
 
-
+    public void limitBreakElevatorMotors() {
+        for(TalonSRX motor:elevatorMotors) {
+            motor.configContinuousCurrentLimit(38);
+        }
+        arbitraryFFUp = 0;
+        arbitraryFFDown = 0;
+    }
     public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(2));
