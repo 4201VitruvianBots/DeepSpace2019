@@ -15,6 +15,7 @@ import frc.robot.commands.KillAll;
  */
 public class ClimbModeSequence extends CommandGroup {
     public ClimbModeSequence() {
+        addSequential(new SetClimbMode());
         addSequential(new SetWristElevatorClimbPositions());
         addSequential(new ToggleGreyClimber());
         addSequential(new KillAll());
