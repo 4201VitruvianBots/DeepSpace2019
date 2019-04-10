@@ -26,10 +26,10 @@ public class LEDReaction extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.ledOutput.getShifterState){    //if we're in low(er) gear
+        if(Robot.ledOutput.intakeMode){    //if we're in cargo intake mode
             Robot.ledOutput.setPinOutput(true,0);   //first bit on
         }
-        else{   //if we're in "high" gear
+        else{   //if we're in hatch intake mode
             Robot.ledOutput.setPinOutput(false,0);  //first bit on
         }
        Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 8 > 3), 1);  //checks what each digit of the state # is

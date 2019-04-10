@@ -49,7 +49,7 @@ public class Vision {
     }
 
     public boolean isValidTarget() {
-        return (limelightTable.getEntry("tv").getDouble(0) == 1) ? true : false;
+        return (limelightTable.getEntry("tv").getDouble(0) == 1);
     }
 
     public double getTargetX() {
