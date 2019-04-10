@@ -33,13 +33,15 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
         double joystickY = (Math.abs(Robot.m_oi.getLeftJoystickY()) > 0.05) ? Robot.m_oi.getLeftJoystickY() : 0;
         double joystickX = (Math.abs(Robot.m_oi.getRightJoystickX()) > 0.05) ? Robot.m_oi.getRightJoystickX() : 0;
 
-        double throttle = 0.5 * (joystickY + Math.pow(joystickY, 3));
+//        double throttle = 0.5 * (joystickY + Math.pow(joystickY, 3));
+//        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
+//        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
+        double throttle = joystickY;
         throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
-        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
+        double turn = 0.5 * joystickX;
 
         if(Elevator.controlMode == 1)
             throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
