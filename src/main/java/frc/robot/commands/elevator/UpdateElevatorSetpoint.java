@@ -78,7 +78,7 @@ public class UpdateElevatorSetpoint extends Command {
                 	mutex = false;
                 	stopwatch.stop();
 
-                    Robot.elevator.setAbsolutePosition(Robot.elevator.getHieght());
+                    Robot.elevator.setAbsoluteHeight(Robot.elevator.getHeight());
         		}
             } else if(mutex) {
             	mutex = false;
