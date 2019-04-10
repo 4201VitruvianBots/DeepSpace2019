@@ -7,6 +7,7 @@
 
 package frc.robot.commands.elevator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
@@ -16,8 +17,8 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateElevatorSetpoint extends Command {
-    double alpha = 0.125;
-    static double lastVoltage = 0;
+	Timer stopwatch = new Timer();
+	boolean mutex = false;
 
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
@@ -60,8 +61,30 @@ public class UpdateElevatorSetpoint extends Command {
                     Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
                 Robot.elevator.setIncrementedPosition(setpoint);
-
             }
+            
+            boolean trip = false;
+            for(int i = 0; i < 2; i++)
+            	if(Robot.elevator.getMotorCurrent(i) > 25)
+            		trip = true;
+            
+            if(trip) {
+        		if(!mutex) {
+        			mutex = true;
+        			stopwatch.reset();
+        			stopwatch.start();
+        		}
+        		if(stopwatch.get() > 1) {
+                	mutex = false;
+                	stopwatch.stop();
+
+                    Robot.elevator.setAbsolutePosition(Robot.elevator.getHieght());
+        		}
+            } else if(mutex) {
+            	mutex = false;
+            	stopwatch.stop();
+            }
+            
         } else {
             double voltage = 0;
             if (Math.abs(joystickOutput) > 0.05)
