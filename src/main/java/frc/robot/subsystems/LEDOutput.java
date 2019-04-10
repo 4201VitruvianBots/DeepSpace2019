@@ -28,6 +28,7 @@ public class LEDOutput extends Subsystem {
      */
     public static int LEDColour = 0;
     public boolean getShifterState = false;
+    public static boolean climbState = false;
 
     private DigitalOutput[] digitalOutput = {  //array that creates digitalOutput0-4, I think.
             new DigitalOutput(RobotMap.ledCh0),  //actual pin numbers defined in RobotMap
@@ -56,10 +57,18 @@ public class LEDOutput extends Subsystem {
     public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
         getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
 
-        if(Robot.m_oi.rightButtons[1].get())
-            LEDColour = RobotMap.LED_GREEN;
+        if(climbState)
+            LEDColour = RobotMap.LED_RED;
+        else if(Robot.m_oi.rightButtons[1].get())
+            if(Intake.intakeState == 0)
+                LEDColour = RobotMap.LED_GREEN_SOLID;
+            else if(Intake.intakeState == 2)
+                LEDColour = RobotMap.LED_GREEN_CHASE;
         else if(Robot.vision.isValidTarget()) {
-            LEDColour = RobotMap.LED_BLUE;
+            if(Intake.intakeState == 0)
+                LEDColour = RobotMap.LED_BLUE_SOLID;
+            else if(Intake.intakeState == 2)
+                LEDColour = RobotMap.LED_BLUE_CHASE;
         } else
             LEDColour = RobotMap.LED_YELLOW;
 
