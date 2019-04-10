@@ -42,7 +42,7 @@ public class Elevator extends Subsystem {
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
     public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
-    public int lowerLimitEncoderCounts = -3911;
+    public int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
 

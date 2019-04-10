@@ -41,7 +41,7 @@ public class SetArcadeDrive extends Command {
 //        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
         double throttle = joystickY;
         throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
-        double turn = 0.5 * joystickX;
+        double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
 
         if(Elevator.controlMode == 1)
             throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
