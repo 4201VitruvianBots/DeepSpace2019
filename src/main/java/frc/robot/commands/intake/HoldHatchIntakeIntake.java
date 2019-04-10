@@ -7,6 +7,7 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -16,6 +17,8 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class HoldHatchIntakeIntake extends Command {
+    Timer stopwatch = new Timer();
+
     public HoldHatchIntakeIntake() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.intake);
@@ -58,6 +61,12 @@ public class HoldHatchIntakeIntake extends Command {
             case 1:
             case 0:
             default:
+                stopwatch.reset();
+                stopwatch.start();
+                while (stopwatch.get() < 0.25) {
+
+                }
+                stopwatch.stop();
                 Robot.intake.setHatchIntakeOutput(0);
                 break;
         }

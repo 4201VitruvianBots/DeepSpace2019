@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
     //public static NerdyElevator nerdyElevator = new NerdyElevator();
-    public static IntakeExtend intakeExtend = new IntakeExtend();
+    public static Harpoon harpoon = new Harpoon();
     public static Intake intake = new Intake();
     public static Vision vision = new Vision();
     public static Wrist wrist = new Wrist();
@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
 //        m_oi.updateSetpointIndicator();
 //        intake.updateOuttakeState();
 //        ledOutput.updateLEDState();
-        intake.updateCargoIntakeState();
+//        intake.updateCargoIntakeState();
     }
 
     public class robotPeriodicRunnable implements Runnable {

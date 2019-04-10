@@ -18,21 +18,17 @@ public class SetIntakeState extends InstantCommand {
     int state;
     public SetIntakeState(int state) {
         requires(Robot.intake);
-        requires(Robot.intakeExtend);
+        requires(Robot.harpoon);
         this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        //if( (Intake.intakeState == 2 && !Robot.intake.bannerIR.get()) ||
-        //    (Intake.intakeState == 1 && !true)) // TODO: Add sensor for hatch intake
-
-        // Safety
         if(state == 2) {
             //Robot.intake.setHarpoonSecure(false);
             Robot.intake.setHatchIntakeOutput(0);
-            Robot.intakeExtend.setHarpoonExtend(false);
+            Robot.harpoon.setHarpoonExtend(false);
         }
 
         if(state != 2)

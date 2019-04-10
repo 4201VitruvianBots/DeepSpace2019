@@ -16,7 +16,7 @@ import frc.robot.Robot;
  */
 
 public class FollowVisionTarget extends PIDCommand {
-    static double kP = 0.025; //Proportion for turning
+    static double kP = 0.02; //Proportion for turning
     static double kI = 0; //Proportion for turning
     static double kD = 0.00015;
     //Proportion for turning

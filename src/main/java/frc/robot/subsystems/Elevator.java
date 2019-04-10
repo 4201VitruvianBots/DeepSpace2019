@@ -81,7 +81,7 @@ public class Elevator extends Subsystem {
             motor.config_kP(0, kP, 30);
             motor.config_kI(0, kI, 30);
             motor.config_kD(0, kD, 30);
-            motor.configMotionCruiseVelocity(6000); //7500 is possibly bad
+            motor.configMotionCruiseVelocity(9001); //7500 is possibly bad
             motor.configMotionAcceleration(13500);
             motor.configContinuousCurrentLimit(30);
             motor.configPeakCurrentLimit(40);
@@ -267,7 +267,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putNumber("Controls","Elevator Height", getHeight());
         Shuffleboard.putNumber("Controls","Elevator Control Mode", controlMode);
         Shuffleboard.putBoolean("Controls", "Elevator Left Encoder Health", getEncoderHealth(0));
-        Shuffleboard.putBoolean("Controls", "Elevator Encoder Health", getEncoderHealth(1));
+        Shuffleboard.putBoolean("Controls", "Elevator Right Encoder Health", getEncoderHealth(1));
 
 //        SmartDashboard.putBoolean("isElevatorCalibrated", initialCalibration);
 

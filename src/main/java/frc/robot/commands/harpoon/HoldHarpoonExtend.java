@@ -5,50 +5,43 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.harpoon;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class IntakeRelease extends Command {
-    int outtakeState;
-
-    Timer stopwatch = new Timer();
-
-    public IntakeRelease() {
+public class HoldHarpoonExtend extends Command {
+    public HoldHarpoonExtend() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.wrist);
-        requires(Robot.intake);
+        requires(Robot.harpoon);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        // Read this initially to avoid flickering
-        outtakeState = Intake.outtakeState;
-
-        Intake.overridePassive = true;
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
-        switch (outtakeState) {
+        switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_OUTTAKE_SPEED);
-                break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_OUTTAKE_SPEED);
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_OUTTAKE_SPEED);
+                break;
+        }
+    }
+
+    @Override
+    protected void execute() {
+        switch (Intake.intakeState) {
+            case 2:
+            case 1:
+                break;
+            case 0:
+            default:
+                Robot.harpoon.setHarpoonExtend(true);
                 break;
         }
     }
@@ -58,28 +51,17 @@ public class IntakeRelease extends Command {
         return false;
     }
 
-    // Called once after isFinished returns true
     @Override
     protected void end() {
-        switch (outtakeState) {
+        switch (Intake.intakeState) {
             case 2:
             case 1:
-                Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 0:
             default:
-
-                stopwatch.reset();
-                stopwatch.start();
-                while (stopwatch.get() < 0.5) {
-
-                }
-                stopwatch.stop();
-                Robot.intake.setHatchIntakeOutput(0);
+                Robot.harpoon.setHarpoonExtend(false);
                 break;
         }
-
-        Intake.overridePassive = false;
     }
 
     // Called when another command which requires one or more of the same

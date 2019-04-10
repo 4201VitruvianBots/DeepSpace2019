@@ -17,6 +17,7 @@ import frc.robot.subsystems.Intake;
  * An example command.  You can replace me with your own command.
  */
 public class IntakeIntake extends Command {
+    Timer stopwatch = new Timer();
 
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
@@ -34,6 +35,8 @@ public class IntakeIntake extends Command {
                 //Robot.intake.setHarpoonExtend(false);
                 break;
         }
+
+        Intake.overridePassive = true;
     }
     // Called repeatedly when this Command is scheduled to run
     @Override
@@ -43,15 +46,11 @@ public class IntakeIntake extends Command {
                 Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
+//                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
                 break;
             case 0:
             default:
-                //Robot.intake.setHarpoonExtend(true);
                 Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
-                //Robot.intake.setHarpoonSecure(false);
-                //Timer.delay(0.2);
-                //Robot.intake.setHarpoonSecure(true);
                 break;
         }
     }
@@ -69,21 +68,35 @@ public class IntakeIntake extends Command {
         switch (Intake.intakeState) {
             case 2:
                 if (Robot.intake.bannerIR.get()) {
+                    stopwatch.reset();
+                    stopwatch.start();
+                    while (stopwatch.get() < 0.5) {
+
+                    }
+                    stopwatch.stop();
+                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+//                    Timer.delay(0.1);
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
-                    Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
-                } else
+                } else {
                     Robot.intake.setCargoIntakeOutput(0);
+                }
                 break;
             case 1:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);
+//                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_GROUND_HOLD_SPEED);
                 break;
             case 0:
             default:
-                //Robot.intake.setHarpoonSecure(true);
-                Timer.delay(0.25);
+                stopwatch.reset();
+                stopwatch.start();
+                while (stopwatch.get() < 0.25) {
+
+                }
+                stopwatch.stop();
                 Robot.intake.setHatchIntakeOutput(0);
                 break;
         }
+
+        Intake.overridePassive = false;
     }
 
     // Called when another command which requires one or more of the same
