@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -13,20 +13,18 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetGreyClimberPistons extends InstantCommand {
-    public SetGreyClimberPistons() {
-        requires(Robot.greyClimber);
+public class SetElevatorLimitBreak extends InstantCommand {
+    boolean enable;
+    public SetElevatorLimitBreak(boolean enable) {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.elevator);
+        this.enable = enable;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.greyClimber.setClimbPistonState(!Robot.greyClimber.getClimbPistonState() ? true : false);
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        Robot.elevator.setElevatorLimitBreak(enable);
     }
 
     // Called once after isFinished returns true

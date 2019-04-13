@@ -107,7 +107,7 @@ public class RobotMap {
     public static double ELEVATOR_CARGO_LOW_POSITION = 10;
     public static double ELEVATOR_CARGO_MID_POSITION = 37;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
-    public static double ELEVATOR_CLIMB_POSITION = 30;
+    public static double ELEVATOR_CLIMB_POSITION = 25;
 
     //
     public static double CARGO_INTAKE_SPEED = -0.7;

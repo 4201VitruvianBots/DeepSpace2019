@@ -5,26 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.elevator;
+package frc.robot.commands.climber;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Elevator;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class LimitBreakElevator extends InstantCommand {
-    public LimitBreakElevator() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.elevator);
+public class SetClimbPistons extends InstantCommand {
+    boolean state;
+
+    public SetClimbPistons(boolean state) {
+        requires(Robot.climber);
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.elevator.limitBreakElevatorMotors();
+        Robot.climber.setClimbPistonState(state);
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
     }
 
     // Called once after isFinished returns true

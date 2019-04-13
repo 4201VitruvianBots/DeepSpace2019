@@ -8,23 +8,24 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import frc.robot.RobotMap;
+import frc.robot.commands.ReviveAll;
+import frc.robot.commands.elevator.SetElevatorLimitBreak;
 import frc.robot.commands.elevator.SetElevatorSetpoint;
 import frc.robot.commands.wrist.SetWristSetpoint;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetWristElevatorClimbPositions extends CommandGroup {
-    public SetWristElevatorClimbPositions(boolean climb) {
-        addParallel(new ConditionalCommand(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE),
-                                           new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE)) {
-            @Override
-            protected boolean condition() {
-                return climb;
-            }
-        });
-        addParallel(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
+public class DisableClimbSequence extends CommandGroup {
+    public DisableClimbSequence() {
+        addSequential(new SetClimbMode(1));
+        addSequential(new SetClimbLEDIndicators(false));
+        addSequential(new SetElevatorLimitBreak(false));
+        addSequential(new ReviveAll());
+        addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
+        addSequential(new SetClimbPistons(false));
+        addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+        addSequential(new SetClimbLEDIndicators(false));
     }
 }

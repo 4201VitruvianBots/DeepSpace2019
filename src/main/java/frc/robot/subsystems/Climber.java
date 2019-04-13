@@ -17,7 +17,7 @@ import frc.robot.RobotMap;
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
-public class GreyClimber extends Subsystem {
+public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -25,8 +25,8 @@ public class GreyClimber extends Subsystem {
 
     public static int climbMode = 0;
 
-    public GreyClimber() {
-        super("GreyClimber");
+    public Climber() {
+        super("Climber");
     }
 
     public void setClimbPistonState(boolean state) {

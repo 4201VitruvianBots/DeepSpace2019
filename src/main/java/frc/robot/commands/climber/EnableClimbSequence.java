@@ -13,13 +13,13 @@ import frc.robot.commands.KillAll;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ClimbModeSequence extends CommandGroup {
-    public ClimbModeSequence() {
-        addSequential(new SetClimbMode());
-        addSequential(new SetWristElevatorClimbPositions());
-        addSequential(new SetGreyClimberPistons());
+public class EnableClimbSequence extends CommandGroup {
+    public EnableClimbSequence() {
+        addSequential(new SetClimbMode(0));
+        addSequential(new SetWristElevatorClimbPositions(true));
+        addSequential(new SetClimbPistons(true));
         addSequential(new KillAll());
-        addSequential(new DisableLimelightLEDs());
-        addSequential(new SetClimbLEDIndicators());
+        addSequential(new SetLimelightLEDMode(1));
+        addSequential(new SetClimbLEDIndicators(true));
     }
 }

@@ -41,10 +41,10 @@ public class Elevator extends Subsystem {
     private double kA = 0; //Voltage to hold constant acceleration
     private double maxVelocity = 5;
     private double maxAcceleration = 5;
-    public int upperLimitEncoderCounts = 42551 * 2; // Silicon, ~65.26 in.
-    public int lowerLimitEncoderCounts = 0; //-3911;
+    public int upperLimitEncoderCounts = 68068; // Silicon, ~65.26 in.
+    public int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
-    private int encoderCountsPerInch = 652 * 2;
+    private int encoderCountsPerInch = 1043;
 
     private double arbitraryFFUp = 1 / 12;
     private double arbitraryFFDown = 0 / 12;
@@ -272,12 +272,20 @@ public class Elevator extends Subsystem {
         }
     }
 
-    public void limitBreakElevatorMotors() {
-        for(TalonSRX motor:elevatorMotors) {
-            motor.configContinuousCurrentLimit(38);
+    public void setElevatorLimitBreak(boolean enable) {
+        if(enable) {
+            for (TalonSRX motor : elevatorMotors) {
+                motor.configContinuousCurrentLimit(38);
+            }
+            arbitraryFFUp = 0;
+            arbitraryFFDown = 0;
+        } else {
+            for (TalonSRX motor : elevatorMotors) {
+                motor.configContinuousCurrentLimit(30);
+            }
+            arbitraryFFUp = 1 / 12;
+            arbitraryFFDown = 0;
         }
-        arbitraryFFUp = 0;
-        arbitraryFFDown = 0;
     }
     public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));

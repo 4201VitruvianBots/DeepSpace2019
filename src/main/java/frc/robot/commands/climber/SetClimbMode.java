@@ -9,20 +9,22 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.GreyClimber;
+import frc.robot.subsystems.Climber;
 
 /**
  * An example command.  You can replace me with your own command.
  */
 public class SetClimbMode extends InstantCommand {
-    public SetClimbMode() {
-        requires(Robot.greyClimber);
+    int mode;
+    public SetClimbMode(int mode) {
+        requires(Robot.climber);
+        this.mode = mode;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        GreyClimber.climbMode = 1;
+        Climber.climbMode = mode;
     }
 
     // Called repeatedly when this Command is scheduled to run

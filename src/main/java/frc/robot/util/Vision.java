@@ -40,6 +40,16 @@ public class Vision {
         limelightTable.getEntry("pipeline").setDouble(pipeline);
     }
 
+    public void setLEDMode(int mode) {
+      /*  Pipeline Definitions:
+          0: Use the LED Mode set in the current pipeline
+          1: Force off
+          2: Force blink
+          3: Force on
+       */
+        limelightTable.getEntry("ledMode").setDouble(mode);
+    }
+
     public int getCameraMode() {
         return (int) limelightTable.getEntry("camMode").getDouble(0);
     }
