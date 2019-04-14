@@ -22,6 +22,8 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
+import static frc.robot.subsystems.Controls.getPdpCurrent;
+
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
@@ -104,8 +106,8 @@ public class Elevator extends Subsystem {
         elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
-        elevatorLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
-        elevatorLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
+        elevatorLog.addLogField("elevatorPdpLeftCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelElevatorLeft));
+        elevatorLog.addLogField("elevatorPdpRightCurrent",  () -> getPdpCurrent(RobotMap.pdpChannelElevatorRight));
         elevatorLog.addLogField("elevatorTalonLeftACurrent", () -> getMotorCurrent(0));
         elevatorLog.addLogField("elevatorTalonLeftBCurrent", () -> getMotorCurrent(1));
         elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(2));

@@ -17,7 +17,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
+
+import static frc.robot.subsystems.Controls.getPdpCurrent;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -53,8 +57,8 @@ public class Wrist extends Subsystem {
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(true);
         wristMotor.setSensorPhase(false);
-        wristMotor.configContinuousCurrentLimit(30);
-        wristMotor.configPeakCurrentLimit(40);
+        wristMotor.configContinuousCurrentLimit(20);
+        wristMotor.configPeakCurrentLimit(30);
         wristMotor.configPeakCurrentDuration(2000);
         wristMotor.enableCurrentLimit(true);
 //        wristMotor.configVoltageCompSaturation(12);
@@ -67,6 +71,11 @@ public class Wrist extends Subsystem {
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
         wristMotor.configClosedloopRamp(0.1, 100);
+
+        VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
+        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelWrist));
+        wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
+        VitruvianLogger.getInstance().addLog(wristLog);
     }
 
     public int getPosition() {

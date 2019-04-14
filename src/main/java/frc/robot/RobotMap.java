@@ -82,6 +82,7 @@ public class RobotMap {
     public static int pdpChannelDriveTrainRightReverse = 0;
     public static int pdpChannelElevatorLeft = 13;
     public static int pdpChannelElevatorRight = 2;
+    public static int pdpChannelWrist = 12;
 
     // Setpoints (Units in inches or degrees)
     public static double WRIST_RETRACTED_ANGLE = 170;

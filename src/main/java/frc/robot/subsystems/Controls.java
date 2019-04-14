@@ -82,12 +82,8 @@ public class Controls extends Subsystem {
 //        Shuffleboard.putData("Controls", new VictorySpin(10));
     }
 
-    public static double getElevatorLeftCurrent() {
-        return pdp.getCurrent(RobotMap.pdpChannelElevatorLeft);
-    }
-
-    public static double getElevatorRightCurrent() {
-        return pdp.getCurrent(RobotMap.pdpChannelElevatorRight);
+    public static double getPdpCurrent(int pdpChannel) {
+        return pdp.getCurrent(pdpChannel);
     }
 
     public void setCompressorState(boolean enable) {
