@@ -9,6 +9,7 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.KillAll;
+import frc.robot.commands.drivetrain.SetDriveNeutralMode;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -21,6 +22,7 @@ public class EnableClimbSequence extends CommandGroup {
         addSequential(new SetCompressorState(false));
         addSequential(new KillAll());
         addSequential(new SetLimelightLEDMode(1));
+        addSequential(new SetDriveNeutralMode(false));
         addSequential(new SetClimbLEDIndicators(true));
     }
 }

@@ -7,6 +7,7 @@
 
 package frc.robot.commands.elevator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
@@ -16,8 +17,8 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateElevatorSetpoint extends Command {
-    double alpha = 0.125;
-    static double lastVoltage = 0;
+    Timer stopwatch = new Timer();
+    boolean mutex = false;
 
     public UpdateElevatorSetpoint() {
         // Use requires() here to declare subsystem dependencies
@@ -60,21 +61,42 @@ public class UpdateElevatorSetpoint extends Command {
                 Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
             Robot.elevator.setIncrementedPosition(setpoint);
+            
+            boolean trip = false;
+            for(int i = 0; i < 2; i++)
+            	if(Robot.elevator.getMotorCurrent(i) > 25)
+            		trip = true;
+            
+            if(trip) {
+        		if(!mutex) {
+        			mutex = true;
+        			stopwatch.reset();
+        			stopwatch.start();
+        		}
+        		if(stopwatch.get() > 1) {
+                	mutex = false;
+                	stopwatch.stop();
+
+                    Robot.elevator.setAbsoluteHeight(Robot.elevator.getHeight());
+        		}
+            } else if(mutex) {
+            	mutex = false;
+            	stopwatch.stop();
+            }
+            
         } else {
             double voltage = 12 * joystickOutput;
+            //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
+            //    Robot.elevator.setCurrentPositionHold();
+            //else if(Robot.m_oi.xBoxPOVButtons[0].get())
+            //    voltage = 2;
+
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
                 voltage = 0;
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-
-
-//            double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
-//            lastVoltage = targetVoltage;
-//
-//            // Debugging
-//            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
 
             Robot.elevator.setOpenLoopOutput(voltage);
         }

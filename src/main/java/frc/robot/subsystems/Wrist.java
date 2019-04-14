@@ -86,6 +86,9 @@ public class Wrist extends Subsystem {
         return wristMotor.getSelectedSensorVelocity();
     }
 
+    public double getOutputCurrent() {
+        return  wristMotor.getOutputCurrent();
+    }
     public ControlMode getTalonControlMode() {
         return wristMotor.getControlMode();
     }
@@ -160,7 +163,6 @@ public class Wrist extends Subsystem {
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
-
 
         Shuffleboard.putBoolean("Controls","Wrist Encoder Health", getEncoderHealthy());
     }

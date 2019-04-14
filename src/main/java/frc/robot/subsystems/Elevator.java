@@ -276,13 +276,17 @@ public class Elevator extends Subsystem {
     public void setElevatorLimitBreak(boolean enable) {
         if(enable) {
             for (TalonSRX motor : elevatorMotors) {
+//                motor.enableCurrentLimit(false);
                 motor.configContinuousCurrentLimit(38);
+                motor.configPeakCurrentLimit(42);
             }
             arbitraryFFUp = 0;
             arbitraryFFDown = 0;
         } else {
             for (TalonSRX motor : elevatorMotors) {
+//                motor.enableCurrentLimit(true);
                 motor.configContinuousCurrentLimit(30);
+                motor.configPeakCurrentLimit(40);
             }
             arbitraryFFUp = 1 / 12;
             arbitraryFFDown = 0;

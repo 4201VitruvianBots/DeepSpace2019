@@ -10,6 +10,7 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap;
 import frc.robot.commands.ReviveAll;
+import frc.robot.commands.drivetrain.SetDriveNeutralMode;
 import frc.robot.commands.elevator.SetElevatorLimitBreak;
 import frc.robot.commands.elevator.SetElevatorSetpoint;
 import frc.robot.commands.wrist.SetWristSetpoint;
@@ -22,6 +23,7 @@ public class DisableClimbSequence extends CommandGroup {
         addSequential(new SetClimbMode(0));
         addSequential(new SetClimbLEDIndicators(false));
         addSequential(new SetElevatorLimitBreak(false));
+        addSequential(new SetDriveNeutralMode(true));
 //        addSequential(new ReviveAll());
 //        addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
         addSequential(new SetClimbPistons(false));

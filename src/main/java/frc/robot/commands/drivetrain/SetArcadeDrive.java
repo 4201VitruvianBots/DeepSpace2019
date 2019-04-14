@@ -44,9 +44,9 @@ public class SetArcadeDrive extends Command {
 
         if (Climber.climbMode == 1) {
             double operatorThrottle = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
-            Robot.driveTrain.setClimbMotorPercentOutput(throttle + operatorThrottle);
+            Robot.driveTrain.setClimbMotorPercentOutput(Math.min(throttle + operatorThrottle, 0.5));
             throttle = Math.max(Math.min(throttle, 0.25), -0.25);
-            turn = Math.max(Math.min(turn, 0.2), -0.2);
+            turn = Math.max(Math.min(turn, 0.4), -0.4);
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
         } else
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);

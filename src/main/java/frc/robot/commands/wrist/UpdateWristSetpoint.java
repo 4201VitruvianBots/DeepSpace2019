@@ -7,6 +7,7 @@
 
 package frc.robot.commands.wrist;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Climber;
@@ -16,6 +17,8 @@ import frc.robot.subsystems.Wrist;
  * An example command.  You can replace me with your own command.
  */
 public class UpdateWristSetpoint extends Command {
+    Timer stopwatch = new Timer();
+    boolean mutex = false;
 
     public UpdateWristSetpoint() {
         // Use requires() here to declare subsystem dependencies
@@ -31,16 +34,33 @@ public class UpdateWristSetpoint extends Command {
     @Override
     protected void execute() {
         double joystickInput = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
-        double joystickOutput = Climber.climbMode == 1 ? 0 : joystickInput;
+        double joystickOutput = 0.5 * (joystickInput + Math.pow(joystickInput, 3));
 
         if (Wrist.controlMode == 1) {
             double setpoint = joystickOutput * 10;
 
             // TODO: Change this logic to use limit switches when they are fixed
-            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
-                Robot.m_oi.enableXBoxRumbleTimed(0.2);
+//            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= RobotMap.get  && Robot.wrist.getAngle() > 119.9)
+//                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
             Robot.wrist.setIncrementedPosition(setpoint);
+
+            if(Robot.wrist.getOutputCurrent() > 15) {
+        		if(!mutex) {
+        			mutex = true;
+        			stopwatch.reset();
+        			stopwatch.start();
+        		}
+        		if(stopwatch.get() > 1) {
+                	mutex = false;
+                	stopwatch.stop();
+
+                    Robot.wrist.setAbsolutePosition(Robot.wrist.getAngle());
+        		}
+            } else if(mutex) {
+            	mutex = false;
+            	stopwatch.stop();
+            }
         } else {
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.wrist.getLimitSwitchState(0) || Robot.wrist.getLimitSwitchState(1)) {
@@ -48,7 +68,7 @@ public class UpdateWristSetpoint extends Command {
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-            Robot.wrist.setDirectOutput(joystickOutput);
+            Robot.wrist.setDirectOutput (joystickOutput);
         }
     }
 
