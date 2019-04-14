@@ -32,20 +32,19 @@ public class UpdateWristSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickOutput = Robot.m_oi.getXBoxRightY();
+        double joystickInput = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
+        double joystickOutput = 0.5 * (joystickInput + Math.pow(joystickInput, 3));
 
         if (Wrist.controlMode == 1) {
-            if(Math.abs(joystickOutput) > 0.05) {
-                double setpoint = joystickOutput * 10;
+            double setpoint = joystickOutput * 10;
 
-                // TODO: Change this logic to use limit switches when they are fixed
-                if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
-                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
+            // TODO: Change this logic to use limit switches when they are fixed
+            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
+                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.wrist.setIncrementedPosition(setpoint);
-            }
-            
-            if(Robot.wrist.getOutputCurrent() > 25) {
+            Robot.wrist.setIncrementedPosition(setpoint);
+
+            if(Robot.wrist.getOutputCurrent() > 15) {
         		if(!mutex) {
         			mutex = true;
         			stopwatch.reset();
@@ -68,11 +67,8 @@ public class UpdateWristSetpoint extends Command {
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-            if(Math.abs(joystickOutput) > 0.05)
-                Robot.wrist.setDirectOutput (joystickOutput);
-            else
-                Robot.wrist.setDirectOutput (0);
-            }
+            Robot.wrist.setDirectOutput (joystickOutput);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

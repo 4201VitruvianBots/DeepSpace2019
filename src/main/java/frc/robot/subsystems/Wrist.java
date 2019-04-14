@@ -53,8 +53,8 @@ public class Wrist extends Subsystem {
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(true);
         wristMotor.setSensorPhase(false);
-        wristMotor.configContinuousCurrentLimit(30);
-        wristMotor.configPeakCurrentLimit(40);
+        wristMotor.configContinuousCurrentLimit(20);
+        wristMotor.configPeakCurrentLimit(30);
         wristMotor.configPeakCurrentDuration(2000);
         wristMotor.enableCurrentLimit(true);
 //        wristMotor.configVoltageCompSaturation(12);
@@ -155,7 +155,6 @@ public class Wrist extends Subsystem {
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
-
 
         Shuffleboard.putBoolean("Controls","Wrist Encoder Health", getEncoderHealthy());
     }

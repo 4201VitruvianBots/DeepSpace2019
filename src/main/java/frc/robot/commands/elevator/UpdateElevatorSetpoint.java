@@ -33,7 +33,8 @@ public class UpdateElevatorSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickOutput = Robot.m_oi.getXBoxLeftY();
+        double joystickInput = Math.abs(Robot.m_oi.getXBoxLeftY()) > 0.05 ? Robot.m_oi.getXBoxLeftY() : 0;
+        double joystickOutput = 0.5 * (joystickInput + Math.pow(joystickInput, 3));
 
         if(!Elevator.initialCalibration) {
              if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
@@ -53,15 +54,13 @@ public class UpdateElevatorSetpoint extends Command {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
             */
-            if(Math.abs(joystickOutput) > 0.05) {
-                double setpoint = joystickOutput * 6;
+            double setpoint = joystickOutput * 6;
 
-                // TODO: Change this logic to use limit switches when they are fixed
-                if(setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
-                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
+            // TODO: Change this logic to use limit switches when they are fixed
+            if(setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
+                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.elevator.setIncrementedPosition(setpoint);
-            }
+            Robot.elevator.setIncrementedPosition(setpoint);
             
             boolean trip = false;
             for(int i = 0; i < 2; i++)
@@ -87,27 +86,18 @@ public class UpdateElevatorSetpoint extends Command {
             
         } else {
             double voltage = 0;
-            if (Math.abs(joystickOutput) > 0.05)
-                voltage = 12 * joystickOutput;
-            else {
-                //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
-                //    Robot.elevator.setCurrentPositionHold();
-                //else if(Robot.m_oi.xBoxPOVButtons[0].get())
-                //    voltage = 2;
-            }
+            voltage = 12 * joystickOutput;
+            //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
+            //    Robot.elevator.setCurrentPositionHold();
+            //else if(Robot.m_oi.xBoxPOVButtons[0].get())
+            //    voltage = 2;
+
             // TODO: Uncomment once limit switches are implemented
             /*if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
                 voltage = 0;
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-
-
-//            double targetVoltage = alpha * voltage + lastVoltage * (1 - alpha);
-//            lastVoltage = targetVoltage;
-//
-//            // Debugging
-//            Shuffleboard.putNumber("Elevator", "Open-Loop Target Voltage", targetVoltage);
 
             Robot.elevator.setOpenLoopOutput(voltage);
         }
