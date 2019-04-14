@@ -51,16 +51,10 @@ public class LEDOutput extends Subsystem {
         if(climbState)
             LEDColour = RobotMap.LED_RED;
         else if(Robot.m_oi.rightButtons[1].get())
-            if(Intake.intakeState == 0)
-                LEDColour = RobotMap.LED_GREEN_SOLID;
-            else if(Intake.intakeState == 2)
-                LEDColour = RobotMap.LED_GREEN_CHASE;
-        else if(Robot.vision.isValidTarget()) {
-            if(Intake.intakeState == 0)
-                LEDColour = RobotMap.LED_BLUE_SOLID;
-            else if(Intake.intakeState == 2)
-                LEDColour = RobotMap.LED_BLUE_CHASE;
-        } else
+            LEDColour = RobotMap.LED_GREEN;
+        else if(Robot.vision.isValidTarget())
+            LEDColour = RobotMap.LED_BLUE;
+        else
             LEDColour = RobotMap.LED_YELLOW;
 
 //        if(Wrist.controlMode == 0){ //if wrist is in manual mode

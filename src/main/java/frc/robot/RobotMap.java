@@ -68,12 +68,10 @@ public class RobotMap {
     public static int ledCh2 = 21;  //                                          Arduino port 10
     public static int ledCh3 = 20;  //                                          Arduino port 9
 
-    public static int LED_BLUE_SOLID = 1;
-    public static int LED_BLUE_CHASE = 1;
+    public static int LED_BLUE = 1;
     public static int LED_RED = 2;
     public static int LED_YELLOW = 3;
-    public static int LED_GREEN_SOLID = 4;
-    public static int LED_GREEN_CHASE = 4;
+    public static int LED_GREEN = 4;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
