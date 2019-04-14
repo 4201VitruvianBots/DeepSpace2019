@@ -32,32 +32,25 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        double joystickY = (Math.abs(Robot.m_oi.getLeftJoystickY()) > 0.05) ? Robot.m_oi.getLeftJoystickY() : 0;
+        double joystickX = (Math.abs(Robot.m_oi.getRightJoystickX()) > 0.05) ? Robot.m_oi.getRightJoystickX() : 0;
 
 //        double throttle = 0.5 * (joystickY + Math.pow(joystickY, 3));
 //        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
 //        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
         double throttle = joystickY;
-        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
+        throttle = throttle < 0 ? Math.max(-0.7, throttle) : throttle;
         double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
 
-        double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
-        throttle = throttle < 0 ? throttle * 0.7 : throttle;
-        //double turn = (Math.abs(joystickX) > 0.05) ? joystickX : Math.abs(joystickZ) > 0.05 ? joystickZ : 0;
-        double turn = (Math.abs(joystickX) > 0.05) ? joystickX : 0;
-
-        if(Elevator.controlMode == 1)
-            throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
-
-//        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
-//            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
-//        else
-        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
-
-        if(Climber.climbMode == 1) {
-            Robot.driveTrain.setClimbMotorPercentOutput(throttle);
-        }
+        if (Climber.climbMode == 1) {
+            double operatorThrottle = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
+            Robot.driveTrain.setClimbMotorPercentOutput(throttle + operatorThrottle);
+            throttle = Math.max(Math.min(throttle, 0.25), -0.25);
+            turn = Math.max(Math.min(turn, 0.2), -0.2);
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+        } else
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
-
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {

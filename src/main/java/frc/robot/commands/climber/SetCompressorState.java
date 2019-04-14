@@ -14,17 +14,17 @@ import frc.robot.subsystems.Climber;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimbMode extends InstantCommand {
-    int mode;
-    public SetClimbMode(int mode) {
-        requires(Robot.climber);
-        this.mode = mode;
+public class SetCompressorState extends InstantCommand {
+    boolean enabled;
+    public SetCompressorState(boolean enabled) {
+        requires(Robot.controls);
+        this.enabled = enabled;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Climber.climbMode = mode;
+        Robot.controls.setCompressorState(enabled);
     }
 
     // Called repeatedly when this Command is scheduled to run
