@@ -1,23 +1,30 @@
-package frc.robot.util;
+package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.SaveMe;
+import frc.robot.commands.climber.DisableClimbSequence;
+import frc.robot.commands.climber.EnableClimbSequence;
+import frc.robot.commands.climber.SetLimelightLEDMode;
 import frc.robot.commands.test.*;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 import org.ini4j.Wini;
 
 import java.io.File;
 
-public class Controls {
+public class Controls extends Subsystem {
 
     public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.pdp);
+
+    Compressor compressor = new Compressor();
 
     public DigitalInput whichRobot = new DigitalInput(RobotMap.robotSwitch);
 
     public Controls() {
-
+        super("Controls");
     }
 
     public void readIniFile() {
@@ -60,15 +67,19 @@ public class Controls {
     }
 
     public void initTestSettings() {
-        Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
+//        Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
         Shuffleboard.putData("Controls", new ToggleDriveTrainControlMode());
         Shuffleboard.putData("Controls", new ToggleElevatorControlMode());
         Shuffleboard.putData("Controls", new ToggleWristControlMode());
         Shuffleboard.putData("Controls", new ZeroElevatorEncoder());
         Shuffleboard.putData("Controls", new ZeroWristEncoder());
-        Shuffleboard.putData("Controls", new SaveMe());
+//        Shuffleboard.putData("Controls", new SaveMe());
+        Shuffleboard.putData("Controls", new EnableClimbSequence());
+        Shuffleboard.putData("Controls", new DisableClimbSequence());
 
-        Shuffleboard.putData("Controls", new VictorySpin(10));
+        Shuffleboard.putData("Controls", new SetLimelightLEDMode(0));
+
+//        Shuffleboard.putData("Controls", new VictorySpin(10));
     }
 
     public static double getElevatorLeftCurrent() {
@@ -77,5 +88,16 @@ public class Controls {
 
     public static double getElevatorRightCurrent() {
         return pdp.getCurrent(RobotMap.pdpChannelElevatorRight);
+    }
+
+    public void setCompressorState(boolean enable) {
+        if(enable)
+            compressor.start();
+        else
+            compressor.stop();
+    }
+    @Override
+    protected void initDefaultCommand() {
+
     }
 }

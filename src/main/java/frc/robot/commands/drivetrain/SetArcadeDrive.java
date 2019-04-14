@@ -33,8 +33,12 @@ public class SetArcadeDrive extends Command {
     @Override
     protected void execute() {
 
-        double joystickY = Robot.m_oi.getLeftJoystickY();
-        double joystickX = Robot.m_oi.getRightJoystickX() * 0.4;
+//        double throttle = 0.5 * (joystickY + Math.pow(joystickY, 3));
+//        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
+//        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
+        double throttle = joystickY;
+        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
+        double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
 
         double throttle = (Math.abs(joystickY) > 0.05) ? joystickY : 0;
         throttle = throttle < 0 ? throttle * 0.7 : throttle;

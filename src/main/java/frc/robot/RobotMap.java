@@ -110,7 +110,7 @@ public class RobotMap {
     public static double ELEVATOR_CLIMB_POSITION = 25;
 
     //
-    public static double CARGO_INTAKE_SPEED = -0.7;
+    public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp
     public static double CARGO_OUTTAKE_SPEED = 0.7;
     public static double CARGO_HOLD_SPEED = -0.2;
     public static double HATCH_INTAKE_SPEED = -0.8;

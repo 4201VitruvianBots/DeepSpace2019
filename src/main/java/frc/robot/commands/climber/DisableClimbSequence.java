@@ -19,13 +19,14 @@ import frc.robot.commands.wrist.SetWristSetpoint;
  */
 public class DisableClimbSequence extends CommandGroup {
     public DisableClimbSequence() {
-        addSequential(new SetClimbMode(1));
+        addSequential(new SetClimbMode(0));
         addSequential(new SetClimbLEDIndicators(false));
         addSequential(new SetElevatorLimitBreak(false));
-        addSequential(new ReviveAll());
-        addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
+//        addSequential(new ReviveAll());
+//        addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
         addSequential(new SetClimbPistons(false));
-        addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
+        addSequential(new SetCompressorState(true));
+//        addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
         addSequential(new SetClimbLEDIndicators(false));
     }
 }

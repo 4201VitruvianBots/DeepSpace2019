@@ -23,6 +23,8 @@ public class Vision {
     private NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     static UsbCamera usbCamera;
 
+
+
     public Vision() {
     }
 

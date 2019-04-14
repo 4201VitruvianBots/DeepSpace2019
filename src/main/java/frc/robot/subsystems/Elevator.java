@@ -16,10 +16,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.UpdateElevatorSetpoint;
-import frc.robot.util.Controls;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
@@ -105,18 +103,19 @@ public class Elevator extends Subsystem {
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
         elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 
-//        VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
-//        elevatorLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
-//        elevatorLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
-//        elevatorLog.addLogField("elevatorTalonLeftCurrent", () -> getMotorCurrent(0));
-//        elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(1));
-////        elevatorLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
-////        elevatorLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
-////        elevatorLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
-////        elevatorLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
-//        elevatorLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
-//        elevatorLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
-//        VitruvianLogger.getInstance().addLog(elevatorLog);
+        VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
+        elevatorLog.addLogField("elevatorPdpLeftCurrent", Controls::getElevatorLeftCurrent);
+        elevatorLog.addLogField("elevatorPdpRightCurrent",  Controls::getElevatorRightCurrent);
+        elevatorLog.addLogField("elevatorTalonLeftACurrent", () -> getMotorCurrent(0));
+        elevatorLog.addLogField("elevatorTalonLeftBCurrent", () -> getMotorCurrent(1));
+        elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(2));
+//        elevatorLog.addLogField("elevatorTalonLeftVoltage", () -> getMotorVoltage(0));
+//        elevatorLog.addLogField("elevatorTalonRightVoltage", () -> getMotorVoltage(1));
+//        elevatorLog.addLogField("elevatorTalonLeftOutput", () -> getMotorOutput(0));
+//        elevatorLog.addLogField("elevatorTalonRightOutput", () -> getMotorOutput(1));
+        elevatorLog.addLogField("elevatorTalonLeftEncoderCount", () -> elevatorMotors[0].getSelectedSensorPosition());
+        elevatorLog.addLogField("elevatorTalonRightEncoderCount", () -> elevatorMotors[1].getSelectedSensorPosition());
+        VitruvianLogger.getInstance().addLog(elevatorLog);
     }
 
     public boolean getLimitSwitchState(int limitSwitchIndex){

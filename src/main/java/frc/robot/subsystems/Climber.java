@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -37,8 +38,8 @@ public class Climber extends Subsystem {
         return climbPistons.get() == DoubleSolenoid.Value.kForward;
     }
 
-    public void updateSmartDashboard() {
-        SmartDashboard.putBoolean("Climb Mode", getClimbPistonState());
+    public void updateShuffleboard() {
+        Shuffleboard.putBoolean("Controls","Climb Mode", climbMode == 1);
     }
 
     @Override

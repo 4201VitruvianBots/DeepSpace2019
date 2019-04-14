@@ -13,6 +13,8 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 
+import static frc.robot.subsystems.Intake.enableBannerSensor;
+
 /**
  * An example command.  You can replace me with your own command.
  */
@@ -59,7 +61,7 @@ public class IntakeIntake extends Command {
     @Override
     protected boolean isFinished() {
         if(Intake.intakeState == 2)
-            return Robot.intake.bannerIR.get();
+            return Robot.intake.bannerIR.get() && Intake.enableBannerSensor;
         else
             return false;
     }
@@ -68,7 +70,7 @@ public class IntakeIntake extends Command {
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if (Robot.intake.bannerIR.get()) {
+                if (Robot.intake.bannerIR.get() && Intake.enableBannerSensor) {
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
                     Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
                 } else

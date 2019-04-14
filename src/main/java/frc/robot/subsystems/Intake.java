@@ -27,6 +27,8 @@ public class Intake extends Subsystem {
 
     public boolean[] intakeIndicator = {false, false, false};
 
+    public static boolean enableBannerSensor = false;
+
     static boolean isTripped = false;
 //    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
@@ -45,6 +47,10 @@ public class Intake extends Subsystem {
         for(TalonSRX intakeMotor:intakeMotors) {
             intakeMotor.configFactoryDefault();
             intakeMotor.setNeutralMode(NeutralMode.Coast);
+            intakeMotor.configContinuousCurrentLimit(30);
+            intakeMotor.configPeakCurrentLimit(40);
+            intakeMotor.configPeakCurrentDuration(2000);
+            intakeMotor.enableCurrentLimit(true);
         }
         intakeMotors[0].setInverted(true);
         intakeMotors[1].setInverted(false);
@@ -94,7 +100,7 @@ public class Intake extends Subsystem {
     public void updateCargoIntakeState() {
         if(Robot.m_oi.rightButtons[0].get()) {
 
-        } else if(bannerIR.get()) {
+        } else if(bannerIR.get() && Intake.enableBannerSensor) {
 //            Timer.delay(0.5);
             setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
             isTripped = true;
@@ -118,6 +124,7 @@ public class Intake extends Subsystem {
 
         Shuffleboard.putBoolean("Controls","Cargo", intakeIndicator[2]);
         Shuffleboard.putBoolean("Controls","Hatch", intakeIndicator[0]);
+        Shuffleboard.putBoolean("Controls","Banner Enabled", enableBannerSensor);
 //        Shuffleboard.putBoolean("Controls","Banner IR", bannerIR.get());
     }
 

@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
             wrist.updateShuffleboard();
             intake.updateShuffleboard();
             vision.updateShuffleboard();
+            climber.updateShuffleboard();
             m_oi.updateSmartDashboard();
 
             intake.updateIntakeIndicator();
