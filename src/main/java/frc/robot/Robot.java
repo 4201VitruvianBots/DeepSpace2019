@@ -19,6 +19,7 @@ import frc.robot.commands.auto.PathfinderReadLevel1;
 import frc.robot.commands.auto.routines.LeftLevel1ToRocket;
 import frc.robot.commands.auto.routines.PathfinderCalibration;
 import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.test.HatchIntakeCurrentTest;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -72,6 +73,8 @@ public class Robot extends TimedRobot {
 
         controls.readIniFile();
         controls.initTestSettings();
+
+        SmartDashboard.putData(new HatchIntakeCurrentTest(300));
 
         vision.initUSBCamera();
 

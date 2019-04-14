@@ -73,8 +73,8 @@ public class RobotMap {
     public static int LED_GREEN = 4;
 
     // PDP Channels
-    public static int pdpChannelDriveTrainLeftForward = 14;
-    public static int pdpChannelDriveTrainLeftReverse = 15;
+    public static int pdpChannelDriveTrainLeftForward = 15;
+    public static int pdpChannelDriveTrainLeftReverse = 14;
     public static int pdpChannelDriveTrainRightForward = 1;
     public static int pdpChannelDriveTrainRightReverse = 0;
     public static int pdpChannelElevatorLeft = 13;

@@ -5,42 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class InitIntakeHold extends Command {
-    public InitIntakeHold() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.intake);
+public class HatchIntakeCurrentTest extends Command {
+    int initialState = 0;
 
-        setTimeout(0.5);
+    public HatchIntakeCurrentTest(double duration) {
+        requires(Robot.driveTrain);
+        setTimeout(duration);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        initialState = DriveTrain.controlMode;
+        DriveTrain.controlMode = 0;
     }
 
+    // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+            Robot.driveTrain.setMotorPercentOutput(1, 1);
     }
 
     @Override
-    protected boolean isFinished() {
+    protected boolean isFinished(){
         return isTimedOut();
     }
-
+    // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.intake.setHatchIntakeOutput(0);
+        Robot.driveTrain.setMotorPercentOutput(0, 0);
+        DriveTrain.controlMode = initialState;
     }
 
     // Called when another command which requires one or more of the same
