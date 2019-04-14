@@ -5,31 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climber;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimbMode extends InstantCommand {
-    int mode;
-    public SetClimbMode(int mode) {
-        requires(Robot.climber);
-        this.mode = mode;
+public class SetElevatorLimitBreak extends InstantCommand {
+    boolean enable;
+    public SetElevatorLimitBreak(boolean enable) {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.elevator);
+        this.enable = enable;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Climber.climbMode = mode;
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    protected void execute() {
+        Robot.elevator.setElevatorLimitBreak(enable);
     }
 
     // Called once after isFinished returns true

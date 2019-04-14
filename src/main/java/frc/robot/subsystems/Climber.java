@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -20,16 +21,13 @@ import frc.robot.RobotMap;
 public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    public TalonSRX master = new TalonSRX(RobotMap.climbMotor);
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 
+    public static int climbMode = 0;
+
     public Climber() {
         super("Climber");
-    }
-
-    public void setClimberOutput(double output){
-        master.set(ControlMode.PercentOutput, output);
     }
 
     public void setClimbPistonState(boolean state) {
@@ -37,15 +35,11 @@ public class Climber extends Subsystem {
     }
 
     public boolean getClimbPistonState() {
-        return climbPistons.get() == DoubleSolenoid.Value.kForward ? true : false;
+        return climbPistons.get() == DoubleSolenoid.Value.kForward;
     }
 
-    public boolean isClimbMode() {
-        return Elevator.controlMode == 0 && Wrist.controlMode == 0;
-    }
-
-    public void updateSmartDashboard() {
-        SmartDashboard.putBoolean("Climb Mode", isClimbMode());
+    public void updateShuffleboard() {
+        Shuffleboard.putBoolean("Controls","Climb Mode", climbMode == 1);
     }
 
     @Override

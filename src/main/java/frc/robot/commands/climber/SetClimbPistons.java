@@ -9,22 +9,22 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climber;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimbMode extends InstantCommand {
-    int mode;
-    public SetClimbMode(int mode) {
+public class SetClimbPistons extends InstantCommand {
+    boolean state;
+
+    public SetClimbPistons(boolean state) {
         requires(Robot.climber);
-        this.mode = mode;
+        this.state = state;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Climber.climbMode = mode;
+        Robot.climber.setClimbPistonState(state);
     }
 
     // Called repeatedly when this Command is scheduled to run

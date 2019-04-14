@@ -10,6 +10,7 @@ package frc.robot.commands.wrist;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -39,8 +40,8 @@ public class UpdateWristSetpoint extends Command {
             double setpoint = joystickOutput * 10;
 
             // TODO: Change this logic to use limit switches when they are fixed
-            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= 120  && Robot.wrist.getAngle() > 119.9)
-                Robot.m_oi.enableXBoxRumbleTimed(0.2);
+//            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= RobotMap.get  && Robot.wrist.getAngle() > 119.9)
+//                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
             Robot.wrist.setIncrementedPosition(setpoint);
 

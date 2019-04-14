@@ -68,10 +68,12 @@ public class RobotMap {
     public static int ledCh2 = 21;  //                                          Arduino port 10
     public static int ledCh3 = 20;  //                                          Arduino port 9
 
-    public static int LED_BLUE = 1;
+    public static int LED_BLUE_SOLID = 1;
+    public static int LED_BLUE_CHASE = 1;
     public static int LED_RED = 2;
     public static int LED_YELLOW = 3;
-    public static int LED_GREEN = 4;
+    public static int LED_GREEN_SOLID = 4;
+    public static int LED_GREEN_CHASE = 4;
 
     // PDP Channels
     public static int pdpChannelDriveTrainLeftForward = 14;
@@ -80,9 +82,10 @@ public class RobotMap {
     public static int pdpChannelDriveTrainRightReverse = 0;
     public static int pdpChannelElevatorLeft = 13;
     public static int pdpChannelElevatorRight = 2;
+    public static int pdpChannelWrist = 12;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 135; //165;
+    public static double WRIST_RETRACTED_ANGLE = 165; //165;
     public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 45;
@@ -94,19 +97,19 @@ public class RobotMap {
     public static double ELEVATOR_HOME_POSITION = 0;
 //    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
     //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 7;
-    public static double ELEVATOR_HATCH_MID_POSITION = 37;
     public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
+    public static double ELEVATOR_HATCH_MID_POSITION = 37;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 7;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 2; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
-    public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
-    public static double ELEVATOR_CARGO_LOW_POSITION = 10;
-    public static double ELEVATOR_CARGO_MID_POSITION = 35;
+    public static double ELEVATOR_CLIMB_POSITION = 25;
     public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
-    public static double ELEVATOR_CLIMB_POSITION = 30;
+    public static double ELEVATOR_CARGO_MID_POSITION = 35;
+    public static double ELEVATOR_CARGO_LOW_POSITION = 10;
+    public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
 
     //
     public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp

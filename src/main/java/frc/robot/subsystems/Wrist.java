@@ -17,7 +17,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
+import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
+
+import static frc.robot.subsystems.Controls.getPdpCurrent;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -37,9 +41,9 @@ public class Wrist extends Subsystem {
     public static int upperLimitEncoderCounts = 5026; // 5026 135 degrees, 4096 * (135/360) * (72/22)
     public static int lowerLimitEncoderCounts = -744; // -744 -20 degrees, 4096 * (-20/360) * (72/22)
     public static int calibrationValue = 0;
-    double encoderCountsPerAngle = 37.236;  // 34.133
+    double encoderCountsPerAngle = 34.133;            // 1 degree, 4096 * (1/360) * 3
 
-    public static int controlMode = 1;
+    public static int controlMode = 0;
     static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 
@@ -67,6 +71,11 @@ public class Wrist extends Subsystem {
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
         wristMotor.configClosedloopRamp(0.1, 100);
+
+        VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
+        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelWrist));
+        wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
+        VitruvianLogger.getInstance().addLog(wristLog);
     }
 
     public int getPosition() {
@@ -77,6 +86,9 @@ public class Wrist extends Subsystem {
         return wristMotor.getSelectedSensorVelocity();
     }
 
+    public double getOutputCurrent() {
+        return  wristMotor.getOutputCurrent();
+    }
     public ControlMode getTalonControlMode() {
         return wristMotor.getControlMode();
     }
@@ -107,10 +119,6 @@ public class Wrist extends Subsystem {
 
     public double getAngle() {
         return getPosition() / encoderCountsPerAngle;
-    }
-    
-    public double getOutputCurrent() {
-    	return wristMotor.getOutputCurrent();
     }
 
     public void setDirectOutput(double output) {

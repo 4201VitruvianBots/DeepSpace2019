@@ -31,6 +31,7 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
  * project.
  */
 public class Robot extends TimedRobot {
+//    public static Climber climber = new Climber();
     public static Climber climber = new Climber();
     public static Controls controls = new Controls();
     public static DriveTrain driveTrain = new DriveTrain();
@@ -128,6 +129,7 @@ public class Robot extends TimedRobot {
             wrist.updateShuffleboard();
             intake.updateShuffleboard();
             vision.updateShuffleboard();
+            climber.updateShuffleboard();
             m_oi.updateSmartDashboard();
 
             intake.updateIntakeIndicator();

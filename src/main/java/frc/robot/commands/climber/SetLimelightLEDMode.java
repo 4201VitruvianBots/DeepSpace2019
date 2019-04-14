@@ -8,23 +8,21 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.Robot;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ToggleClimbPistons extends InstantCommand {
-    public ToggleClimbPistons() {
-        requires(Robot.climber);
+public class SetLimelightLEDMode extends InstantCommand {
+    int mode;
+    public SetLimelightLEDMode(int mode) {
+        this.mode = mode;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.climber.setClimbPistonState(!Robot.climber.getClimbPistonState());
+        Robot.vision.setLEDMode(mode);
     }
 
     // Called repeatedly when this Command is scheduled to run

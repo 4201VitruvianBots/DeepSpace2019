@@ -8,6 +8,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.SetElevatorSetpoint;
 import frc.robot.commands.wrist.SetWristSetpoint;
@@ -16,8 +17,14 @@ import frc.robot.commands.wrist.SetWristSetpoint;
  * An example command.  You can replace me with your own command.
  */
 public class SetWristElevatorClimbPositions extends CommandGroup {
-    public SetWristElevatorClimbPositions() {
-        addParallel(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE));
+    public SetWristElevatorClimbPositions(boolean climb) {
+        addParallel(new ConditionalCommand(new SetWristSetpoint(RobotMap.WRIST_EXTENDED_ANGLE),
+                                           new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE)) {
+            @Override
+            protected boolean condition() {
+                return climb;
+            }
+        });
         addParallel(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
     }
 }

@@ -16,15 +16,14 @@ import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.commands.climber.SetClimbMode;
+import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.harpoon.HoldHarpoonExtend;
 import frc.robot.commands.intake.*;
-import frc.robot.commands.test.ZeroElevatorEncoder;
-import frc.robot.commands.test.ZeroWristEncoder;
-import frc.robot.subsystems.Intake;
+import frc.robot.commands.test.*;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
-import frc.vitruvianlib.util.DoubleButton;
+import frc.vitruvianlib.util.MultiButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -66,7 +65,7 @@ public class OI {
     public Button[] xBoxButtons = new Button[10];
     public Button[] xBoxPOVButtons = new Button[8];
     public Button xBoxLeftTrigger, xBoxRightTrigger;
-    public Button climbButton;
+    public MultiButton enableClimbButton, disableClimbButton;
 
     public static int positionIndex = 0;
     boolean[] positionIndicator = {false, false, false, false, false, false};
@@ -89,7 +88,8 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
-        climbButton = new DoubleButton(leftJoystick, 2, rightJoystick, 2);
+        enableClimbButton = new MultiButton(leftButtons[2],xBoxRightTrigger);
+        disableClimbButton = new MultiButton(rightButtons[2],xBoxButtons[5]);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
@@ -155,8 +155,6 @@ public class OI {
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
 
-        climbButton.whenPressed(new SetClimbMode());
-
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
@@ -199,6 +197,8 @@ public class OI {
 
         //xBoxButtons[0].whileHeld(new IntakeControl(true));
         //xBoxButtons[1].whileHeld(new IntakeControl(false));
+        enableClimbButton.whenPressed(new EnableClimbSequence());
+        disableClimbButton.whenPressed(new DisableClimbSequence());
     }
 
     public void updateSetpointIndicator(){

@@ -5,26 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climber;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetClimbMode extends InstantCommand {
-    int mode;
-    public SetClimbMode(int mode) {
-        requires(Robot.climber);
+public class SetDriveNeutralMode extends InstantCommand {
+    boolean mode;
+    public SetDriveNeutralMode(boolean mode) {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.driveTrain);
         this.mode = mode;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Climber.climbMode = mode;
+        Robot.driveTrain.setDriveMotorsState(mode);
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -85,8 +85,7 @@ public class UpdateElevatorSetpoint extends Command {
             }
             
         } else {
-            double voltage = 0;
-            voltage = 12 * joystickOutput;
+            double voltage = 12 * joystickOutput;
             //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
             //    Robot.elevator.setCurrentPositionHold();
             //else if(Robot.m_oi.xBoxPOVButtons[0].get())

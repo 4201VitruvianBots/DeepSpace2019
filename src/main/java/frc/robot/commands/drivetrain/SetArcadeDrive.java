@@ -7,10 +7,9 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 
 /**
@@ -40,18 +39,20 @@ public class SetArcadeDrive extends Command {
 //        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
 //        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
         double throttle = joystickY;
-        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
+        throttle = throttle < 0 ? Math.max(-0.7, throttle) : throttle;
         double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
 
+        if (Climber.climbMode == 1) {
+            double operatorThrottle = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
+            Robot.driveTrain.setClimbMotorPercentOutput(Math.min(throttle + operatorThrottle, 0.5));
+            throttle = Math.max(Math.min(throttle, 0.25), -0.25);
+            turn = Math.max(Math.min(turn, 0.4), -0.4);
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
+        } else
+            Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
         if(Elevator.controlMode == 1)
             throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
-
-//        if (Robot.driveTrain.getEncoderHealth(1) && Robot.driveTrain.getEncoderHealth(1) && DriveTrain.controlMode == 1)
-//            Robot.driveTrain.setArcadeDriveVelocity(throttle, turn);
-//        else
-        Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
     }
-
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {

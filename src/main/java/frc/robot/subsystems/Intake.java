@@ -30,8 +30,10 @@ public class Intake extends Subsystem {
     public boolean[] intakeIndicator = {false, false, false};
 
     public static boolean overridePassive = false;
-    static boolean isBannerTripped = false;
-//    DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+    public static boolean enableBannerSensor = false;
+    private boolean isBannerTripped = false;
+
+//    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
     private TalonSRX[] intakeMotors = {
@@ -48,6 +50,10 @@ public class Intake extends Subsystem {
         for(TalonSRX intakeMotor:intakeMotors) {
             intakeMotor.configFactoryDefault();
             intakeMotor.setNeutralMode(NeutralMode.Coast);
+            intakeMotor.configContinuousCurrentLimit(30);
+            intakeMotor.configPeakCurrentLimit(40);
+            intakeMotor.configPeakCurrentDuration(2000);
+            intakeMotor.enableCurrentLimit(true);
         }
         intakeMotors[0].setInverted(true);
         intakeMotors[1].setInverted(false);
@@ -95,15 +101,17 @@ public class Intake extends Subsystem {
     }
 
     public void updateCargoIntakeState() {
-        if(Robot.m_oi.rightButtons[0].get()) {
+        if(enableBannerSensor) {
+            if (Robot.m_oi.rightButtons[0].get()) {
 
-        } else if(bannerIR.get() && !isBannerTripped) {
+            } else if (bannerIR.get() && !isBannerTripped) {
 //            Timer.delay(0.5);
-            setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
 //            isTripped = true;
-        } else if(isBannerTripped) {
-            setCargoIntakeOutput(0);
-            isBannerTripped = false;
+            } else if (isBannerTripped) {
+                setCargoIntakeOutput(0);
+                isBannerTripped = false;
+            }
         }
     }
     public void updateOuttakeState() {
@@ -121,6 +129,8 @@ public class Intake extends Subsystem {
 
         Shuffleboard.putBoolean("Controls","Cargo", intakeIndicator[2]);
         Shuffleboard.putBoolean("Controls","Hatch", intakeIndicator[0]);
+        Shuffleboard.putBoolean("Controls","Banner Enabled", enableBannerSensor);
+//        Shuffleboard.putBoolean("Controls","Banner IR", bannerIR.get());
     }
 
     public void updateSmartDashboard() {

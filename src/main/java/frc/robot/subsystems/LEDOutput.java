@@ -27,7 +27,8 @@ public class LEDOutput extends Subsystem {
        0 (default): LEDs default state
      */
     public static int LEDColour = 0;
-    public boolean intakeMode = false;
+//    public boolean getShifterState = false;
+    public static boolean climbState = false;
 
     private DigitalOutput[] digitalOutput = {  //array that creates digitalOutput0-4, I think.
             new DigitalOutput(RobotMap.ledCh0),  //actual pin numbers defined in RobotMap
@@ -45,13 +46,35 @@ public class LEDOutput extends Subsystem {
     }
 
     public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
-        intakeMode = (Intake.intakeState<2);    //returns true for cargo intake mode, false for hatch.
-        if(Robot.m_oi.rightButtons[1].get() && Robot.vision.isValidTarget())
-            LEDColour = RobotMap.LED_GREEN;
+//        getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
+
+        if(climbState)
+            LEDColour = RobotMap.LED_RED;
+        else if(Robot.m_oi.rightButtons[1].get())
+            if(Intake.intakeState == 0)
+                LEDColour = RobotMap.LED_GREEN_SOLID;
+            else if(Intake.intakeState == 2)
+                LEDColour = RobotMap.LED_GREEN_CHASE;
         else if(Robot.vision.isValidTarget()) {
-            LEDColour = RobotMap.LED_BLUE;
+            if(Intake.intakeState == 0)
+                LEDColour = RobotMap.LED_BLUE_SOLID;
+            else if(Intake.intakeState == 2)
+                LEDColour = RobotMap.LED_BLUE_CHASE;
         } else
             LEDColour = RobotMap.LED_YELLOW;
+
+//        if(Wrist.controlMode == 0){ //if wrist is in manual mode
+//            LEDColour = 1;
+//        }
+//        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
+//            LEDColour = 2;
+//        }
+//      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
+//            LEDColour = 4;
+//        }*/
+//        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
+//            LEDColour = 3;
+//        }
     }
 
     @Override
