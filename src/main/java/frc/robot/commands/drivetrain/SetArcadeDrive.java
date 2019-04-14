@@ -48,10 +48,11 @@ public class SetArcadeDrive extends Command {
             throttle = Math.max(Math.min(throttle, 0.25), -0.25);
             turn = Math.max(Math.min(turn, 0.4), -0.4);
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
-        } else
+        } else {
+            if (Elevator.controlMode == 1)
+                throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5) : throttle;
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
-        if(Elevator.controlMode == 1)
-            throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
+        }
     }
     // Make this return true when this Command no longer needs to run execute()
     @Override
