@@ -85,7 +85,7 @@ public class RobotMap {
     public static int pdpChannelWrist = 12;
 
     // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 170;
+    public static double WRIST_RETRACTED_ANGLE = 155;
     public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CARGO_ANGLE = 45;
