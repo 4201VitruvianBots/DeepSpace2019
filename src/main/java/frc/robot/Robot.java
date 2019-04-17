@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
 
 
         //elevator.zeroEncoder();
-        //wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+        //wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
 
         vision.setPipeline(0);
 
@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
         if(Elevator.controlMode == 1)
             elevator.setAbsoluteHeight(elevator.getHeight());
         if(Wrist.controlMode == 1)
-            wrist.setAbsolutePosition(wrist.getAngle());
+            wrist.setAbsoluteAngle(wrist.getAngle());
 
         
         m_autonomousCommand = m_autoChooser.getSelected();
@@ -230,7 +230,7 @@ public class Robot extends TimedRobot {
         if(Elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());
         if(Wrist.controlMode == 1)
-            wrist.setAbsolutePosition(wrist.getAngle());
+            wrist.setAbsoluteAngle(wrist.getAngle());
 
         VitruvianLogger.getInstance().startLogger();
 

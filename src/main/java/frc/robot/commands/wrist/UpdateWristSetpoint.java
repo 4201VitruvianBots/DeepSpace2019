@@ -44,7 +44,7 @@ public class UpdateWristSetpoint extends Command {
 //            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= RobotMap.get  && Robot.wrist.getAngle() > 119.9)
 //                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.wrist.setIncrementedPosition(setpoint);
+                Robot.wrist.setIncrementedAngle(setpoint);
             }
 
             if(Robot.wrist.getOutputCurrent() > 15) {
@@ -57,7 +57,7 @@ public class UpdateWristSetpoint extends Command {
                 	mutex = false;
                 	stopwatch.stop();
 
-                    Robot.wrist.setAbsolutePosition(Robot.wrist.getAngle());
+                    Robot.wrist.setAbsoluteAngle(Robot.wrist.getAngle());
         		}
             } else if(mutex) {
             	mutex = false;

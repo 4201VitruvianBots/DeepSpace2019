@@ -8,7 +8,6 @@
 package frc.robot.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Wrist;
 
@@ -28,7 +27,7 @@ public class SetWristSetpointWait extends Command {
     @Override
     protected void initialize() {
         if(Wrist.controlMode == 1)
-            Robot.wrist.setAbsolutePosition(setpoint);
+            Robot.wrist.setAbsoluteAngle(setpoint);
     }
 
     @Override

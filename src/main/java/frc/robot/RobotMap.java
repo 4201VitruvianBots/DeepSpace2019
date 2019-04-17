@@ -96,20 +96,20 @@ public class RobotMap {
     public static double ELEVATOR_HOME_POSITION = 0;
 //    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
     //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
-    public static double ELEVATOR_HATCH_MID_POSITION = 37;
     public static double ELEVATOR_HATCH_LOW_POSITION = 7;
+    public static double ELEVATOR_HATCH_MID_POSITION = 37;
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 2; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
-    public static double ELEVATOR_CARGO_AUTO_INTAKE_POSITION = 7;
-    public static double ELEVATOR_CLIMB_POSITION = 25;
-    public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
-    public static double ELEVATOR_CARGO_MID_POSITION = 35;
+    public static double ELEVATOR_CARGO_INTAKE_AUTO_POSITION = 7;
     public static double ELEVATOR_CARGO_LOW_POSITION = 10;
+    public static double ELEVATOR_CARGO_MID_POSITION = 35;
+    public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
+    public static double ELEVATOR_CLIMB_POSITION = 25;
 
     //
     public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp
