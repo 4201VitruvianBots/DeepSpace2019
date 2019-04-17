@@ -58,7 +58,8 @@ public class Elevator extends Subsystem {
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.leftElevatorA),
         new TalonSRX(RobotMap.leftElevatorB),
-//        new TalonSRX(RobotMap.rightElevatorA),
+        new TalonSRX(RobotMap.rightElevatorA),
+        new TalonSRX(RobotMap.rightElevatorB),
     };
 
     private DigitalInput[] limitSwitches = {
@@ -73,7 +74,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].setInverted(false);   // Set true for silicon?
         elevatorMotors[1].setInverted(false);   // Set true for silicon?
         elevatorMotors[2].setInverted(true);
-//        elevatorMotors[3].setInverted(true);
+        elevatorMotors[3].setInverted(true);
 
         elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
         elevatorMotors[2].setSensorPhase(false);
@@ -86,7 +87,6 @@ public class Elevator extends Subsystem {
             motor.config_kD(0, kD, 30);
             motor.configMotionCruiseVelocity(9001); //7500 is possibly bad
             motor.configMotionAcceleration(13500);
-            motor.configMotionSCurveStrength(4);
             motor.configContinuousCurrentLimit(30);
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
@@ -103,7 +103,7 @@ public class Elevator extends Subsystem {
             //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
         elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-//        elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+        elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
         elevatorLog.addLogField("elevatorPdpLeftCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelElevatorLeft));
@@ -167,11 +167,11 @@ public class Elevator extends Subsystem {
             return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[2].getSelectedSensorPosition())/ 2);
         else if(getEncoderHealth(0)) {
             elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
+            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
             return elevatorMotors[0].getSelectedSensorPosition();
         } else if(getEncoderHealth(2)) {
             elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
+            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
             return elevatorMotors[2].getSelectedSensorPosition();
         } else //TODO: Make this return an obviously bad value, e.g. 999999999
             return 0;
@@ -236,7 +236,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].set(ControlMode.Position, getPosition());
     }
 
-    public void setIncrementedHeight(double height) {
+    public void setIncrementedPosition(double height) {
         double currentPosition = getPosition();
         double encoderCounts = (height * encoderCountsPerInch) + currentPosition;
 

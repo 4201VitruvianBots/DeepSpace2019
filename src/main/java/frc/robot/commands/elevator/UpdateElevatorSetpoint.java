@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
+import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -61,7 +62,7 @@ public class UpdateElevatorSetpoint extends Command {
 //                if (setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
 //                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.elevator.setIncrementedHeight(setpoint);
+                Robot.elevator.setIncrementedPosition(setpoint);
             }
 
             boolean trip = false;

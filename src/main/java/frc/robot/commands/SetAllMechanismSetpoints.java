@@ -37,16 +37,16 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 5: // Rocket Level 3 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_CARGO_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_HIGH_POSITION);
                         break;
                     case 1:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_HATCH_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_HATCH_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_GROUND_HIGH_POSITION);
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_HIGH_POSITION);
                         break;
                 }
@@ -54,16 +54,16 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 4: // Rocket Level 2 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_CARGO_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_MID_POSITION);
                         break;
                     case 1:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_HATCH_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_HATCH_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_GROUND_MID_POSITION);
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_MID_POSITION);
                         break;
                 }
@@ -71,16 +71,16 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 3: // Rocket Level 1 Scoring Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_CARGO_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_LOW_POSITION);
                         break;
                     case 1:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_HATCH_LOW_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_HATCH_LOW_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_GROUND_LOW_POSITION);
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_LOW_POSITION);
                         break;
                 }
@@ -88,16 +88,16 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 2: // Cargo Ship Scoring Positions\
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_CARGO_SHIP_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_SHIP_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_SHIP_POSITION);
                         break;
                     case 1:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_HATCH_LOW_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_HATCH_LOW_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_SHIP_POSITION);
                         break;
                     case 0:
                     default:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_LOW_POSITION);
                         break;
                 }
@@ -105,19 +105,19 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 1: // Intake Positions
                 switch (Intake.intakeState) {
                     case 2:
-//                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
+//                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
 //                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_EXTENDED_ANGLE);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
                         Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
 //                        Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
-                        //Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_EXTENDED_ANGLE);
+                        //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
                         //Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                         break;
                     case 0:
                     default:
-                        //Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
+                        //Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
                         //Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HATCH_INTAKE_POSITION);
                         break;
                 }
@@ -125,8 +125,8 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case -1: //Depot
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_EXTENDED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(DriverStation.getInstance().isAutonomous() ? RobotMap.ELEVATOR_CARGO_INTAKE_AUTO_POSITION : RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(DriverStation.getInstance().isAutonomous() ? RobotMap.ELEVATOR_CARGO_AUTO_INTAKE_POSITION: RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
                         Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
@@ -137,7 +137,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 break;
             case 0: // Elevator, Wrist Home Position
             default:
-                Robot.wrist.setAbsoluteAngle(Intake.intakeState == 2 ? RobotMap.WRIST_RETRACTED_CARGO_ANGLE : RobotMap.WRIST_RETRACTED_ANGLE);
+                Robot.wrist.setAbsolutePosition(Intake.intakeState == 2 ? RobotMap.WRIST_RETRACTED_CARGO_ANGLE : RobotMap.WRIST_RETRACTED_ANGLE);
                 Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                 Robot.intake.setCargoIntakeOutput(Robot.intake.bannerIR.get() ? RobotMap.CARGO_HOLD_SPEED : 0);
                 Robot.harpoon.setHarpoonExtend(false);

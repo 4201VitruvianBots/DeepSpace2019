@@ -26,7 +26,7 @@ public class SetWristSetpoint extends InstantCommand {
     @Override
     protected void initialize() {
         if(Wrist.controlMode == 1)
-            Robot.wrist.setAbsoluteAngle(setpoint);
+            Robot.wrist.setAbsolutePosition(setpoint);
     }
 
     // Called once after isFinished returns true

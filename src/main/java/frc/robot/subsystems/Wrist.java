@@ -131,7 +131,7 @@ public class Wrist extends Subsystem {
             wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
     
-    public void setIncrementedAngle(double angle) {
+    public void setIncrementedPosition(double angle) {
         double currentPosition = getPosition();
         double encoderCounts = angle * encoderCountsPerAngle + currentPosition;
 
@@ -142,7 +142,7 @@ public class Wrist extends Subsystem {
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    public void setAbsoluteAngle(double angle) {
+    public void setAbsolutePosition(double angle) {
         double encoderCounts = angle * encoderCountsPerAngle;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;

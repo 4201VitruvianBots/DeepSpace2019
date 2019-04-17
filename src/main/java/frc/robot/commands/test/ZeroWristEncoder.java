@@ -1,5 +1,6 @@
 package frc.robot.commands.test;
 
+import edu.wpi.first.wpilibj.InterruptableSensorBase;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Wrist;
@@ -14,7 +15,7 @@ public class ZeroWristEncoder extends InstantCommand {
     @Override
     protected void initialize() {
         Robot.wrist.setEncoderPosition(Wrist.upperLimitEncoderCounts);
-        Robot.wrist.setAbsoluteAngle(Robot.wrist.getAngle());
+        Robot.wrist.setAbsolutePosition(Robot.wrist.getAngle());
         int calibrationValue = -Robot.wrist.getPosition();
 //        Robot.wrist.setEncoderPosition(calibrationValue);
         Robot.controls.writeIniFile("Wrist", "Encoder_Calibration", String.valueOf(calibrationValue));
