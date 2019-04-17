@@ -10,6 +10,7 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
@@ -54,14 +55,16 @@ public class UpdateElevatorSetpoint extends Command {
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) + (1 * Robot.m_oi.getXBoxLeftY());
             }
             */
-            double setpoint = joystickOutput * 6;
+            if (joystickInput != 0) {
+                double setpoint = joystickOutput * 6;
 
-            // TODO: Change this logic to use limit switches when they are fixed
-            if(setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
-                Robot.m_oi.enableXBoxRumbleTimed(0.2);
+                // TODO: Change this logic to use limit switches when they are fixed
+//                if (setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
+//                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-            Robot.elevator.setIncrementedPosition(setpoint);
-            
+                Robot.elevator.setIncrementedPosition(setpoint);
+            }
+
             boolean trip = false;
             for(int i = 0; i < 2; i++)
             	if(Robot.elevator.getMotorCurrent(i) > 25)
@@ -86,6 +89,8 @@ public class UpdateElevatorSetpoint extends Command {
             
         } else {
             double voltage = 12 * joystickOutput;
+            if(Climber.climbMode == 2)
+                voltage = Math.min(voltage, 9);
             //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
             //    Robot.elevator.setCurrentPositionHold();
             //else if(Robot.m_oi.xBoxPOVButtons[0].get())

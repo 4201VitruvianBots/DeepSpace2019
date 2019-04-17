@@ -234,6 +234,8 @@ public class Robot extends TimedRobot {
 
         VitruvianLogger.getInstance().startLogger();
 
+        climber.setClimbPistonState(false);
+
         // Only reset shuffleboard's recording if starting from disabledInit
         if(!shuffleboardTransition) {
             edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();

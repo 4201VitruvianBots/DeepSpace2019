@@ -38,12 +38,12 @@ public class Wrist extends Subsystem {
                                                       //5802 1170 4096 * 0.375 * (72/22)
                                                       //5632; // 5802 165 degrees, 4096 * (165/360) * 3
                                                       //-682; // -682 -20 degrees, 4096 * (1/18) * 3
-    public static int upperLimitEncoderCounts = 5026; // 5026 135 degrees, 4096 * (135/360) * (72/22)
-    public static int lowerLimitEncoderCounts = -744; // -744 -20 degrees, 4096 * (-20/360) * (72/22)
+    public static int upperLimitEncoderCounts = 5772; // 5400 155 degrees, 4096 * (155/360) * (72/22)
+    public static int lowerLimitEncoderCounts = -372; // -372 -10 degrees, 4096 * (-10/360) * (72/22)
     public static int calibrationValue = 0;
-    double encoderCountsPerAngle = 34.133;            // 1 degree, 4096 * (1/360) * 3
+    double encoderCountsPerAngle = 37.236;            // 1 degree, 4096 * (1/360) * (72/22)
 
-    public static int controlMode = 0;
+    public static int controlMode = 1;
     static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 

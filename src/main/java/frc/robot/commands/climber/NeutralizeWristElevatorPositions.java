@@ -9,6 +9,7 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.SetElevatorSetpoint;
 import frc.robot.commands.elevator.SetElevatorSetpointWait;
@@ -18,15 +19,9 @@ import frc.robot.commands.wrist.SetWristSetpointWait;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class SetWristElevatorClimbPositions extends CommandGroup {
-    public SetWristElevatorClimbPositions(boolean climb) {
-        addParallel(new ConditionalCommand(new SetWristSetpointWait(RobotMap.WRIST_CLIMB_ANGLE),
-                                           new SetWristSetpointWait(RobotMap.WRIST_RETRACTED_ANGLE)) {
-            @Override
-            protected boolean condition() {
-                return climb;
-            }
-        });
-        addParallel(new SetElevatorSetpointWait(RobotMap.ELEVATOR_CLIMB_POSITION));
+public class NeutralizeWristElevatorPositions extends CommandGroup {
+    public NeutralizeWristElevatorPositions() {
+        addParallel(new SetWristSetpoint(Robot.wrist.getAngle()));
+        addParallel(new SetElevatorSetpoint(Robot.elevator.getHeight()));
     }
 }

@@ -30,7 +30,7 @@ import static frc.robot.subsystems.Controls.getPdpCurrent;
 public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private Timer elevatorTimer;
+
     private double elevatorPreviousTime;
     private double elevatorPreviousError;
     private double kP = 0.5;
@@ -50,7 +50,7 @@ public class Elevator extends Subsystem {
     private double arbitraryFFDown = 0 / 12;
 
     public static double elevatorSetPoint = 0;
-    public static int controlMode = 0;
+    public static int controlMode = 1;
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
@@ -277,8 +277,9 @@ public class Elevator extends Subsystem {
         if(enable) {
             for (TalonSRX motor : elevatorMotors) {
 //                motor.enableCurrentLimit(false);
-                motor.configContinuousCurrentLimit(38);
-                motor.configPeakCurrentLimit(42);
+                motor.configContinuousCurrentLimit(25);
+                motor.configPeakCurrentLimit(0);
+                motor.configPeakCurrentDuration(0);
             }
             arbitraryFFUp = 0;
             arbitraryFFDown = 0;
@@ -287,6 +288,7 @@ public class Elevator extends Subsystem {
 //                motor.enableCurrentLimit(true);
                 motor.configContinuousCurrentLimit(30);
                 motor.configPeakCurrentLimit(40);
+                motor.configPeakCurrentDuration(2000);
             }
             arbitraryFFUp = 1 / 12;
             arbitraryFFDown = 0;

@@ -26,6 +26,7 @@ public class Vision {
 
 
     public Vision() {
+
     }
 
     public int getPipeline() {

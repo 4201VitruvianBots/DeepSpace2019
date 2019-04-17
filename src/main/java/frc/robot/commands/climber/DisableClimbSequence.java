@@ -24,8 +24,9 @@ public class DisableClimbSequence extends CommandGroup {
         addSequential(new SetClimbLEDIndicators(false));
         addSequential(new SetElevatorLimitBreak(false));
         addSequential(new SetDriveNeutralMode(true));
-//        addSequential(new ReviveAll());
+        addSequential(new ReviveAll());
 //        addSequential(new SetElevatorSetpoint(RobotMap.ELEVATOR_CLIMB_POSITION));
+        addSequential(new NeutralizeWristElevatorPositions());
         addSequential(new SetClimbPistons(false));
         addSequential(new SetCompressorState(true));
 //        addSequential(new SetWristSetpoint(RobotMap.WRIST_RETRACTED_ANGLE));
