@@ -29,7 +29,6 @@ public class Controls extends Subsystem {
 
     public void readIniFile() {
         try {
-
             File iniFile = new File("/home/lvuser/4201Robot/DeepSpace2019.ini");
             if(!iniFile.exists()) {
                 iniFile.mkdirs();

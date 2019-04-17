@@ -30,7 +30,7 @@ public class Intake extends Subsystem {
     public boolean[] intakeIndicator = {false, false, false};
 
     public static boolean overridePassive = false;
-    public static boolean enableBannerSensor = false;
+    public static boolean enableBannerSensor = true;
     private boolean isBannerTripped = false;
 
 //    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);

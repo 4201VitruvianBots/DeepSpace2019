@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -22,7 +21,6 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.harpoon.HoldHarpoonExtend;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.*;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
 import frc.vitruvianlib.util.MultiButton;
 
@@ -160,26 +158,17 @@ public class OI {
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
-//        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
-//            @Override
-//            protected boolean condition() {
-//                return Robot.intake.intakeState == 2;
-//            }
-//        });
+        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
+            @Override
+            protected boolean condition() {
+                return Robot.intake.intakeState == 2;
+            }
+        });
         xBoxLeftTrigger.whileHeld(new IntakeCargo());
         xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
-//        xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
-//        xBoxLeftTrigger.whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
-//        xBoxButtons[4].whileHeld(new ConditionalCommand(new IntakeCargo(), new IntakeHatch()) {
-//             @Override
-//             protected boolean condition() {
-//                 return Robot.intake.intakeState == 2;
-//             }
-//        });
-        xBoxButtons[4].whileHeld(new IntakeCargo());
-        xBoxButtons[4].whileHeld(new IntakeHatch());
-//        xBoxButtons[4].whileHeld(new IntakeIntake());
+
+        xBoxButtons[4].whileHeld(new IntakeIntake());
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
