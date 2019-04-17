@@ -88,6 +88,7 @@ public class RobotMap {
     public static double WRIST_RETRACTED_ANGLE = 155;
     public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
     public static double WRIST_EXTENDED_ANGLE = 0;
+    public static double WRIST_CLIMB_ANGLE = -10;
     public static double WRIST_CARGO_ANGLE = 45;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
@@ -104,6 +105,7 @@ public class RobotMap {
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 1; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
+    public static double ELEVATOR_CARGO_AUTO_INTAKE_POSITION = 7;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 25;
     public static double ELEVATOR_CARGO_LOW_POSITION = 10;
     public static double ELEVATOR_CARGO_MID_POSITION = 37;

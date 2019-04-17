@@ -20,7 +20,7 @@ import frc.robot.commands.wrist.SetWristSetpointWait;
  */
 public class SetWristElevatorClimbPositions extends CommandGroup {
     public SetWristElevatorClimbPositions(boolean climb) {
-        addParallel(new ConditionalCommand(new SetWristSetpointWait(RobotMap.WRIST_EXTENDED_ANGLE),
+        addParallel(new ConditionalCommand(new SetWristSetpointWait(RobotMap.WRIST_CLIMB_ANGLE),
                                            new SetWristSetpointWait(RobotMap.WRIST_RETRACTED_ANGLE)) {
             @Override
             protected boolean condition() {

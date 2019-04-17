@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.OI;
 import frc.robot.Robot;
@@ -103,8 +104,8 @@ public class SetAllMechanismSetpoints extends InstantCommand {
             case 1: // Intake Positions
                 switch (Intake.intakeState) {
                     case 2:
-                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_CARGO_INTAKE_STATION_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_STATION_POSITION);
+                        Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
+                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_HOME_POSITION);
                         Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:
@@ -122,7 +123,7 @@ public class SetAllMechanismSetpoints extends InstantCommand {
                 switch (Intake.intakeState) {
                     case 2:
                         Robot.wrist.setAbsolutePosition(RobotMap.WRIST_EXTENDED_ANGLE);
-                        Robot.elevator.setAbsoluteHeight(RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
+                        Robot.elevator.setAbsoluteHeight(DriverStation.getInstance().isAutonomous() ? RobotMap.ELEVATOR_CARGO_AUTO_INTAKE_POSITION: RobotMap.ELEVATOR_CARGO_INTAKE_DEPOT_POSITION);
                         Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
                         break;
                     case 1:

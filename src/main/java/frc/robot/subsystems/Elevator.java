@@ -277,7 +277,7 @@ public class Elevator extends Subsystem {
         if(enable) {
             for (TalonSRX motor : elevatorMotors) {
 //                motor.enableCurrentLimit(false);
-                motor.configContinuousCurrentLimit(30);
+                motor.configContinuousCurrentLimit(25);
                 motor.configPeakCurrentLimit(0);
                 motor.configPeakCurrentDuration(0);
             }
