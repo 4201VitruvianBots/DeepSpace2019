@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
-import frc.robot.commands.harpoon.HoldHarpoonExtend;
+import frc.robot.commands.harpoon.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.test.*;
 import frc.vitruvianlib.driverstation.XBoxTrigger;
