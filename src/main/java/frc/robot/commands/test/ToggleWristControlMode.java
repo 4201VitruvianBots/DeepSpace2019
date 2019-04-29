@@ -14,7 +14,7 @@ public class ToggleWristControlMode extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Wrist.controlMode = Wrist.controlMode == 1 ? 0 : 1;
+        Robot.wrist.controlMode = Robot.wrist.controlMode == 1 ? 0 : 1;
     }
     @Override
     protected void end() {

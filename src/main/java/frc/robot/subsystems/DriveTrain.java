@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.vitruvianlib.driverstation.Shuffleboard;
@@ -37,7 +38,7 @@ public class DriveTrain extends Subsystem {
     DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
     public AHRS navX = new AHRS(SerialPort.Port.kMXP);
 
-    public static int controlMode = 0;
+    public int controlMode = 0;
 
     public DriveTrain() {
         super("DriveTrain");
@@ -132,6 +133,9 @@ public class DriveTrain extends Subsystem {
             leftPWM = -1.0;
         }
 
+//        if(Robot.climber.climbMode == 1)
+//            setMotorCurrentOutput(20 *leftPWM, 20 * rightPWM);
+//        else
         setMotorPercentOutput(leftPWM, rightPWM);
     }
 
@@ -182,6 +186,24 @@ public class DriveTrain extends Subsystem {
 
     public void setClimbMotorPercentOutput(double output) {
         driveMotors[4].set(ControlMode.PercentOutput, output);
+    }
+
+    public void setMotorCurrentOutput(double leftCurrent, double rightCurrent) {
+        driveMotors[0].set(ControlMode.Current, leftCurrent);
+        driveMotors[2].set(ControlMode.Current, rightCurrent);
+        if(Robot.climber.climbMode == 1) {
+            driveMotors[1].set(ControlMode.Current, leftCurrent);
+            driveMotors[3].set(ControlMode.Current, rightCurrent);
+        }
+    }
+
+    public void setClimbMotorCurrentOutput(double current) {
+        driveMotors[4].set(ControlMode.Current, current);
+    }
+
+    public void resetMotorFollowing(){
+        driveMotors[1].set(ControlMode.Follower, driveMotors[0].getDeviceID());
+        driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
     }
 
     public boolean getDriveShifterStatus() {

@@ -24,7 +24,8 @@ public class Climber extends Subsystem {
 
     DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
 
-    public static int climbMode = 0;
+    public int climbMode = 0;
+    public static boolean initClimb = false;
 
     public Climber() {
         super("Climber");

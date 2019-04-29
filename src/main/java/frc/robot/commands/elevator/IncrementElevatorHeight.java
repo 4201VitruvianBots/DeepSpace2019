@@ -26,7 +26,7 @@ public class IncrementElevatorHeight extends InstantCommand {
     @Override
     protected void initialize() {
         double setpoint = Robot.elevator.getHeight() + increment;
-        if(Elevator.controlMode == 1)
+        if(Robot.elevator.controlMode == 1)
             Robot.elevator.setAbsoluteHeight(setpoint);
     }
 

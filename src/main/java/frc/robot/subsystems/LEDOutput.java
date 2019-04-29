@@ -57,7 +57,7 @@ public class LEDOutput extends Subsystem {
         else
             LEDColour = RobotMap.LED_YELLOW;
 
-//        if(Wrist.controlMode == 0){ //if wrist is in manual mode
+//        if(Robot.wrist.controlMode == 0){ //if wrist is in manual mode
 //            LEDColour = 1;
 //        }
 //        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode

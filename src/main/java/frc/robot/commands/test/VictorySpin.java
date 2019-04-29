@@ -33,8 +33,8 @@ public class VictorySpin extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        initialState = DriveTrain.controlMode;
-        DriveTrain.controlMode = 0;
+        initialState = Robot.driveTrain.controlMode;
+        Robot.driveTrain.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -54,7 +54,7 @@ public class VictorySpin extends Command {
     @Override
     protected void end() {
         Robot.driveTrain.setMotorPercentOutput(0, 0);
-        DriveTrain.controlMode = initialState;
+        Robot.driveTrain.controlMode = initialState;
     }
 
     // Called when another command which requires one or more of the same

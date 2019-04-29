@@ -40,16 +40,19 @@ public class SetArcadeDrive extends Command {
 //        double turn = 0.25 *(joystickX + Math.pow(joystickX, 3));
         double throttle = joystickY;
         throttle = throttle < 0 ? Math.max(-0.7, throttle) : throttle;
+        if(Robot.elevator.controlMode == 1)
+            throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
         double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
 
-        if (Climber.climbMode == 1) {
+        if (Robot.climber.climbMode == 1) {
             double operatorThrottle = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
             Robot.driveTrain.setClimbMotorPercentOutput(Math.min(throttle + operatorThrottle, 0.5));
+//            Robot.driveTrain.setClimbMotorCurrentOutput(30 * Math.min(throttle + operatorThrottle, 0.5));
             throttle = Math.max(Math.min(throttle, 0.25), -0.25);
             turn = Math.max(Math.min(turn, 0.4), -0.4);
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
         } else {
-            if (Elevator.controlMode == 1)
+            if (Robot.elevator.controlMode == 1)
                 throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5) : throttle;
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
         }

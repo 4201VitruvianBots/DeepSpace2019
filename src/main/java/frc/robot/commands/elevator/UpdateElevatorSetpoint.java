@@ -10,9 +10,7 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
-import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -40,11 +38,11 @@ public class UpdateElevatorSetpoint extends Command {
         if(!Elevator.initialCalibration) {
              if(Robot.elevator.getLimitSwitchState(0) || Robot.elevator.getLimitSwitchState(1)) {
                  Elevator.initialCalibration = true;
-                 //Elevator.controlMode = 1;
+                 //Robot.elevator.controlMode = 1;
              }
         }
 
-        if(Elevator.controlMode == 1) {
+        if(Robot.elevator.controlMode == 1) {
             /*
             if (Robot.elevator.getPosition() > Robot.elevator.upperLimitEncoderCounts)
                 Elevator.elevatorSetPoint = Robot.elevator.encoderCountsToInches(Robot.elevator.upperLimitEncoderCounts) - 0.5;
@@ -62,7 +60,7 @@ public class UpdateElevatorSetpoint extends Command {
 //                if (setpoint == 0 && Robot.elevator.getHeight() < 0.1 || setpoint == 64 && Robot.elevator.getHeight() > 63.9)
 //                    Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.elevator.setIncrementedPosition(setpoint);
+                Robot.elevator.setIncrementedHeight(setpoint);
             }
 
             boolean trip = false;
@@ -88,9 +86,14 @@ public class UpdateElevatorSetpoint extends Command {
             }
             
         } else {
-            double voltage = 12 * joystickOutput;
-            if(Climber.climbMode == 2)
-                voltage = Math.min(voltage, 9);
+            if(Robot.climber.climbMode == 2) {
+                double current = 25 * joystickOutput;
+                current = Robot.elevator.getHeight() < 10 ? Math.max(current, -15) : current;
+                Robot.elevator.setCurrentOutput(current);
+            } else {
+                double voltage = 12 * joystickOutput;
+                Robot.elevator.setOpenLoopOutput(voltage);
+            }
             //if(Robot.elevator.getEncoderHealth(0) || Robot.elevator.getEncoderHealth(1))
             //    Robot.elevator.setCurrentPositionHold();
             //else if(Robot.m_oi.xBoxPOVButtons[0].get())
@@ -103,7 +106,6 @@ public class UpdateElevatorSetpoint extends Command {
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
 
-            Robot.elevator.setOpenLoopOutput(voltage);
         }
     }
 

@@ -131,9 +131,9 @@ public class Vision {
         try {
             usbCamera = CameraServer.getInstance().startAutomaticCapture();
             usbCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-            usbCamera.setResolution(160, 160);
+            usbCamera.setResolution(60, 60);
             usbCamera.setFPS(15);
-            usbCamera.setExposureManual(3);
+            usbCamera.setExposureManual(6);
         } catch(Exception e) {
 
         }

@@ -14,7 +14,7 @@ public class ToggleDriveTrainControlMode extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        DriveTrain.controlMode = DriveTrain.controlMode == 1 ? 0 : 1;
+        Robot.driveTrain.controlMode = Robot.driveTrain.controlMode == 1 ? 0 : 1;
     }
     @Override
     protected void end() {

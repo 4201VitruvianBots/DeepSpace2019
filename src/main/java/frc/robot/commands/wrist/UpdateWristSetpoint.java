@@ -10,8 +10,6 @@ package frc.robot.commands.wrist;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Wrist;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -36,7 +34,7 @@ public class UpdateWristSetpoint extends Command {
         double joystickInput = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
         double joystickOutput = 0.5 * (joystickInput + Math.pow(joystickInput, 3));
 
-        if (Wrist.controlMode == 1) {
+        if (Robot.wrist.controlMode == 1) {
             if (joystickInput != 0) {
                 double setpoint = joystickOutput * 10;
 
@@ -44,7 +42,7 @@ public class UpdateWristSetpoint extends Command {
 //            if(setpoint <= 0 && Robot.wrist.getAngle() < 0.1 || setpoint >= RobotMap.get  && Robot.wrist.getAngle() > 119.9)
 //                Robot.m_oi.enableXBoxRumbleTimed(0.2);
 
-                Robot.wrist.setIncrementedPosition(setpoint);
+                Robot.wrist.setIncrementedAngle(setpoint);
             }
 
             if(Robot.wrist.getOutputCurrent() > 15) {
@@ -57,7 +55,7 @@ public class UpdateWristSetpoint extends Command {
                 	mutex = false;
                 	stopwatch.stop();
 
-                    Robot.wrist.setAbsolutePosition(Robot.wrist.getAngle());
+                    Robot.wrist.setAbsoluteAngle(Robot.wrist.getAngle());
         		}
             } else if(mutex) {
             	mutex = false;
@@ -70,7 +68,7 @@ public class UpdateWristSetpoint extends Command {
                 Robot.m_oi.setXBoxRumble(0.8);
             } else
                 Robot.m_oi.setXBoxRumble(0);*/
-            if(Climber.climbMode == 0)
+            if(Robot.climber.climbMode == 0)
                 Robot.wrist.setDirectOutput(joystickOutput);
         }
     }

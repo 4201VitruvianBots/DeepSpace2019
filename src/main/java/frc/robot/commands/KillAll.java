@@ -30,8 +30,8 @@ public class KillAll extends InstantCommand {
     @Override
     protected void initialize() {
         Scheduler.getInstance().removeAll();
-        Elevator.controlMode = 0;
-        Wrist.controlMode = 0;
+        Robot.elevator.controlMode = 0;
+        Robot.wrist.controlMode = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run

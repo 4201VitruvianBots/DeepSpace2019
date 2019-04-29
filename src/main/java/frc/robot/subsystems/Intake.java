@@ -51,12 +51,12 @@ public class Intake extends Subsystem {
             intakeMotor.configFactoryDefault();
             intakeMotor.setNeutralMode(NeutralMode.Coast);
             intakeMotor.configContinuousCurrentLimit(30);
-            intakeMotor.configPeakCurrentLimit(40);
-            intakeMotor.configPeakCurrentDuration(2000);
+//            intakeMotor.configPeakCurrentLimit(40);
+//            intakeMotor.configPeakCurrentDuration(2000);
             intakeMotor.enableCurrentLimit(true);
         }
-        intakeMotors[0].setInverted(true);
-        intakeMotors[1].setInverted(false);
+        intakeMotors[0].setInverted(false);
+        intakeMotors[1].setInverted(true);
         //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
     }
 

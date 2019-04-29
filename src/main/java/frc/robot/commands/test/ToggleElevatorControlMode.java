@@ -14,7 +14,7 @@ public class ToggleElevatorControlMode extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Elevator.controlMode = Elevator.controlMode == 1 ? 0 : 1;
+        Robot.elevator.controlMode = Robot.elevator.controlMode == 1 ? 0 : 1;
     }
     @Override
     protected void end() {

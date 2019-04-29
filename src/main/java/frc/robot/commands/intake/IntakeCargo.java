@@ -44,7 +44,7 @@ public class IntakeCargo extends Command {
 
                 }
                 stopwatch.stop();
-                Robot.wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+                Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
 //                    Timer.delay(0.1);
                 Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
             } else {

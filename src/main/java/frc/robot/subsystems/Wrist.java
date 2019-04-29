@@ -43,7 +43,7 @@ public class Wrist extends Subsystem {
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;            // 1 degree, 4096 * (1/360) * (72/22)
 
-    public static int controlMode = 1;
+    public int controlMode = 1;
     static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 
@@ -131,7 +131,7 @@ public class Wrist extends Subsystem {
             wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
     
-    public void setIncrementedPosition(double angle) {
+    public void setIncrementedAngle(double angle) {
         double currentPosition = getPosition();
         double encoderCounts = angle * encoderCountsPerAngle + currentPosition;
 
@@ -142,7 +142,7 @@ public class Wrist extends Subsystem {
         wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
     }
 
-    public void setAbsolutePosition(double angle) {
+    public void setAbsoluteAngle(double angle) {
         double encoderCounts = angle * encoderCountsPerAngle;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;

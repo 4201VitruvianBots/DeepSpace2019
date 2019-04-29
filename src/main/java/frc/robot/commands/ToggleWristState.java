@@ -25,11 +25,11 @@ public class ToggleWristState extends InstantCommand {
     @Override
     protected void initialize() {
         Scheduler.getInstance().removeAll();
-        if(Wrist.controlMode == 1)
-            Wrist.controlMode = 0;
+        if(Robot.wrist.controlMode == 1)
+            Robot.wrist.controlMode = 0;
         else {
             Robot.wrist.setEncoderPosition(Wrist.upperLimitEncoderCounts);
-            Wrist.controlMode = 1;
+            Robot.wrist.controlMode = 1;
         }
         Robot.m_oi.enableXBoxRumbleTimed(0.2);
     }

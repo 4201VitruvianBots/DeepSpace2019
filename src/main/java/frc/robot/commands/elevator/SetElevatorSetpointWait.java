@@ -27,7 +27,7 @@ public class SetElevatorSetpointWait extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        if(Elevator.controlMode == 1)
+        if(Robot.elevator.controlMode == 1)
             Robot.elevator.setAbsoluteHeight(setpoint);
     }
 

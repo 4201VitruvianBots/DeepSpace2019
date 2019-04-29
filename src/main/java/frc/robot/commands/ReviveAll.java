@@ -26,8 +26,8 @@ public class ReviveAll extends InstantCommand {
     @Override
     protected void initialize() {
         Scheduler.getInstance().removeAll();
-        Elevator.controlMode = 1;
-        Wrist.controlMode = 1;
+        Robot.elevator.controlMode = 1;
+        Robot.wrist.controlMode = 1;
     }
 
     // Called repeatedly when this Command is scheduled to run

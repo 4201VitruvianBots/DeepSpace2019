@@ -77,12 +77,12 @@ public class Robot extends TimedRobot {
 
         vision.initUSBCamera();
 
-        //if(Elevator.controlMode == 1 && !Elevator.initialCalibration)
-        //    Elevator.controlMode = 0;
+        //if(Robot.elevator.controlMode == 1 && !Elevator.initialCalibration)
+        //    Robot.elevator.controlMode = 0;
 
 
         //elevator.zeroEncoder();
-        //wrist.setAbsolutePosition(RobotMap.WRIST_RETRACTED_ANGLE);
+        //wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_ANGLE);
 
         vision.setPipeline(0);
 
@@ -152,6 +152,8 @@ public class Robot extends TimedRobot {
 
         // Default VP Pipeline
         vision.setPipeline(0);
+
+//        elevator.setCurrentLimits(0);
     }
 
     @Override
@@ -174,10 +176,10 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         Robot.vision.setPipeline(0);
         driveTrain.setDriveMotorsState(true);
-        if(Elevator.controlMode == 1)
-            elevator.setAbsoluteHeight(elevator.getHeight());
-        if(Wrist.controlMode == 1)
-            wrist.setAbsolutePosition(wrist.getAngle());
+//        if(Robot.elevator.controlMode == 1)
+//            elevator.setAbsoluteHeight(elevator.getHeight());
+//        if(Robot.wrist.controlMode == 1)
+//            wrist.setAbsoluteAngle(wrist.getAngle());
 
         
         m_autonomousCommand = m_autoChooser.getSelected();
@@ -227,13 +229,14 @@ public class Robot extends TimedRobot {
         //if (m_teleopCommand != null)
         //    Robot.driveTrain.setDefaultCommand(m_teleopCommand);
 
-        if(Elevator.controlMode == 1)
+        if(Robot.elevator.controlMode == 1)
            elevator.setAbsoluteHeight(elevator.getHeight());
-        if(Wrist.controlMode == 1)
-            wrist.setAbsolutePosition(wrist.getAngle());
+        if(Robot.wrist.controlMode == 1)
+            wrist.setAbsoluteAngle(wrist.getAngle());
 
         VitruvianLogger.getInstance().startLogger();
 
+        Climber.initClimb = false;
         climber.setClimbPistonState(false);
 
         // Only reset shuffleboard's recording if starting from disabledInit

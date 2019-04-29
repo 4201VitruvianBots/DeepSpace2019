@@ -157,18 +157,15 @@ public class OI {
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
-        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
         xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
             @Override
             protected boolean condition() {
                 return Robot.intake.intakeState == 2;
             }
         });
-        xBoxLeftTrigger.whileHeld(new IntakeCargo());
-        xBoxLeftTrigger.whileHeld(new HoldHarpoonExtend());
-        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
-
+        xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
         xBoxButtons[4].whileHeld(new IntakeIntake());
+        xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
 
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));

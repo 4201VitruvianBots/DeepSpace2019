@@ -33,7 +33,7 @@ public class ManualElevatorGround extends Command {
     @Override
     protected void end() {
         if(Robot.elevator.getLimitSwitchState(0)) {
-            Elevator.controlMode = 1;
+            Robot.elevator.controlMode = 1;
         }
     }
 

@@ -34,7 +34,7 @@ public class ManualWristUp extends Command {
     @Override
     protected void end() {
         if(Robot.wrist.getLimitSwitchState(1)) {
-            Wrist.controlMode = 1;
+            Robot.wrist.controlMode = 1;
         }
     }
 

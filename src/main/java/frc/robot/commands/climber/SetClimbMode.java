@@ -24,7 +24,12 @@ public class SetClimbMode extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Climber.climbMode = mode;
+        if(Robot.climber.climbMode == 0 && mode == 1)
+            Climber.initClimb = true;
+        else if(Robot.climber.climbMode == 1 && mode == 0)
+            Climber.initClimb = false;
+
+        Robot.climber.climbMode = mode;
     }
 
     // Called repeatedly when this Command is scheduled to run

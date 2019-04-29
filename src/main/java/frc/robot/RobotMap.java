@@ -27,12 +27,12 @@ public class RobotMap {
     public static int PCMOne = 11;
         public static int driveTrainShifterForward = 0;
         public static int driveTrainShifterReverse = 1;
-        public static int hatchIntakeExtendForward = 2;
-        public static int hatchIntakeExtendReverse = 3;
-        public static int hatchIntakeSecureForward = 4;
-        public static int hatchIntakeSecureReverse = 5;
-        public static int climbPistonForward = 6;
-        public static int climbPistonReverse = 7;
+        public static int hatchIntakeExtendForward = 4;
+        public static int hatchIntakeExtendReverse = 5;
+//        public static int hatchIntakeSecureForward = 4;
+//        public static int hatchIntakeSecureReverse = 5;
+        public static int climbPistonForward = 2;
+        public static int climbPistonReverse = 3;
 
     // Drivetrain
     public static int leftFrontDriveMotor = 20;
@@ -88,6 +88,7 @@ public class RobotMap {
     public static double WRIST_EXTENDED_ANGLE = 0;
     public static double WRIST_CLIMB_ANGLE = -10;
     public static double WRIST_CARGO_ANGLE = 45;
+    public static double WRIST_CARGO_SHIP_INTAKE_ANGLE = 30;
     public static double WRIST_CARGO_SHIP_ANGLE = 0;
     public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
     public static double WRIST_CARGO_HIGH_ANGLE = 40;
@@ -96,32 +97,31 @@ public class RobotMap {
     public static double ELEVATOR_HOME_POSITION = 0;
 //    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
     //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
+    public static double ELEVATOR_HATCH_LOW_POSITION = 7.75;
     public static double ELEVATOR_HATCH_MID_POSITION = 37;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 7;
+    public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
     public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
     public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
     public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
     public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 2; // 2
     public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
-    public static double ELEVATOR_CARGO_AUTO_INTAKE_POSITION = 7;
-    public static double ELEVATOR_CLIMB_POSITION = 25;
-    public static double ELEVATOR_CARGO_HIGH_POSITION = 62;
-    public static double ELEVATOR_CARGO_MID_POSITION = 35;
+    public static double ELEVATOR_CARGO_AUTO_INTAKE_POSITION = 3.5;
     public static double ELEVATOR_CARGO_LOW_POSITION = 10;
+    public static double ELEVATOR_CARGO_MID_POSITION = 36;
+    public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
     public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
+    public static double ELEVATOR_CLIMB_POSITION = 28;
 
     //
     public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp
     public static double CARGO_OUTTAKE_SPEED = 0.7;
     public static double CARGO_HOLD_SPEED = -0.2;
-    public static double HATCH_INTAKE_SPEED = -0.8;
+    public static double HATCH_INTAKE_SPEED = -1;
     public static double HATCH_HOLD_SPEED = 0;
-    public static double HATCH_OUTTAKE_SPEED = 0.8;
+    public static double HATCH_OUTTAKE_SPEED = 1;
     public static double HATCH_GROUND_INTAKE_SPEED = -0.8;
     public static double HATCH_GROUND_HOLD_SPEED = -0.1;
     public static double HATCH_GROUND_OUTTAKE_SPEED = 1;
-
 
     // Pathfinder (Units in feet)
     public static double wheel_diameter = 0.5104167;

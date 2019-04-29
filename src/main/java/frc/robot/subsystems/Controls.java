@@ -67,7 +67,7 @@ public class Controls extends Subsystem {
 
     public void initTestSettings() {
 //        Shuffleboard.putNumber("Elevator", "Test Voltage", 0);
-        Shuffleboard.putData("Controls", new ToggleDriveTrainControlMode());
+//        Shuffleboard.putData("Controls", new ToggleDriveTrainControlMode());
         Shuffleboard.putData("Controls", new ToggleElevatorControlMode());
         Shuffleboard.putData("Controls", new ToggleWristControlMode());
         Shuffleboard.putData("Controls", new ZeroElevatorEncoder());
