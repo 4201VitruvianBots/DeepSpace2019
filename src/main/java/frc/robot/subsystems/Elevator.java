@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PDP;
 import frc.robot.commands.elevator.UpdateElevatorSetpoint;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -113,8 +114,8 @@ public class Elevator extends Subsystem {
 //        elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 
         VitruvianLog elevatorLog = new VitruvianLog("Elevator", 0.5);
-        elevatorLog.addLogField("elevatorPdpLeftCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelElevatorLeft));
-        elevatorLog.addLogField("elevatorPdpRightCurrent",  () -> getPdpCurrent(RobotMap.pdpChannelElevatorRight));
+        elevatorLog.addLogField("elevatorPdpLeftCurrent", () ->  getPdpCurrent(PDP.ELEVATOR_LEFT_A));
+        elevatorLog.addLogField("elevatorPdpRightCurrent",  () -> getPdpCurrent(PDP.ELEVATOR_RIGHT_A));
         elevatorLog.addLogField("elevatorTalonLeftACurrent", () -> getMotorCurrent(0));
         elevatorLog.addLogField("elevatorTalonLeftBCurrent", () -> getMotorCurrent(1));
         elevatorLog.addLogField("elevatorTalonRightCurrent", () -> getMotorCurrent(2));

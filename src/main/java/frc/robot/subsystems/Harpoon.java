@@ -10,10 +10,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PCM_ONE;
 
 public class Harpoon extends Subsystem {
 
-    DoubleSolenoid harpoon = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
+    DoubleSolenoid harpoon = new DoubleSolenoid(PCM_ONE.ADDRESS, PCM_ONE.HATCH_EXTEND.FORWARD, PCM_ONE.HATCH_EXTEND.REVERSE);
 
     public Harpoon() {
         super("harpoon");

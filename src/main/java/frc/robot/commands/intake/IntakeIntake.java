@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.INTAKE_SPEED;
+import frc.robot.RobotMap.WRIST_SETPOINTS;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -43,14 +45,14 @@ public class IntakeIntake extends Command {
     protected void execute() {
         switch (Intake.intakeState) {
             case 2:
-                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+                Robot.intake.setCargoIntakeOutput(INTAKE_SPEED.CARGO_INTAKE);
                 break;
             case 1:
 //                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+                Robot.intake.setHatchIntakeOutput(INTAKE_SPEED.HATCH_INTAKE);
                 break;
         }
     }
@@ -74,9 +76,9 @@ public class IntakeIntake extends Command {
 
                     }
                     stopwatch.stop();
-                    Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+                    Robot.wrist.setAbsoluteAngle(WRIST_SETPOINTS.CARGO_RETRACTED);
 //                    Timer.delay(0.1);
-                    Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                    Robot.intake.setCargoIntakeOutput(INTAKE_SPEED.CARGO_HOLD);
                 } else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;

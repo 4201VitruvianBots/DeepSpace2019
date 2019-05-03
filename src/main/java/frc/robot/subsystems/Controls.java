@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PDP;
 import frc.robot.commands.SaveMe;
 import frc.robot.commands.climber.DisableClimbSequence;
 import frc.robot.commands.climber.EnableClimbSequence;
@@ -17,7 +18,7 @@ import java.io.File;
 
 public class Controls extends Subsystem {
 
-    public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.pdp);
+    public static PowerDistributionPanel pdp = new PowerDistributionPanel(PDP.CAN_ADDRESS);
 
     Compressor compressor = new Compressor();
 

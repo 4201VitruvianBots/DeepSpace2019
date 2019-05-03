@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PCM_ONE;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
@@ -35,7 +36,7 @@ public class DriveTrain extends Subsystem {
         new TalonSRX(RobotMap.climbDriveMotor)
     };
 
-    DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
+    DoubleSolenoid driveTrainShifters = new DoubleSolenoid(PCM_ONE.ADDRESS, PCM_ONE.DRIVETRAIN_SIFTER.FORWARD, PCM_ONE.DRIVETRAIN_SIFTER.REVERSE);
     public AHRS navX = new AHRS(SerialPort.Port.kMXP);
 
     public int controlMode = 0;

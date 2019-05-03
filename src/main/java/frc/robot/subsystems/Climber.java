@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PCM_ONE;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
@@ -22,7 +23,7 @@ public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
+    DoubleSolenoid climbPistons = new DoubleSolenoid(PCM_ONE.ADDRESS, PCM_ONE.CLIMB_PISTONS.FORWARD, PCM_ONE.CLIMB_PISTONS.REVERSE);
 
     public int climbMode = 0;
     public static boolean initClimb = false;
@@ -40,7 +41,7 @@ public class Climber extends Subsystem {
     }
 
     public void updateShuffleboard() {
-        Shuffleboard.putBoolean("Controls","Climb Mode", climbMode == 1);
+        Shuffleboard.putBoolean("Controls", "Climb Mode", climbMode == 1);
     }
 
     @Override
