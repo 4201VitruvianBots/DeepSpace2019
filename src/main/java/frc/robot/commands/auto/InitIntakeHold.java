@@ -30,7 +30,7 @@ public class InitIntakeHold extends Command {
 
     @Override
     protected void execute() {
-        Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+        Robot.intake.setHatchIntakeOutput(RobotMap.INTAKE_SPEED.HATCH_INTAKE);
     }
 
     @Override

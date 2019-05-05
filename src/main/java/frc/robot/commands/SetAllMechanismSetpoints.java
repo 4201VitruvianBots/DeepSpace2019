@@ -10,10 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.RobotMap.ELEVATOR_SETPOINTS;
-import frc.robot.RobotMap.INTAKE_SPEED;
-import frc.robot.RobotMap.WRIST_SETPOINTS;
+import frc.robot.RobotMap.*;
 import frc.robot.subsystems.Intake;
 
 /**

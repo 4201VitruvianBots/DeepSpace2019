@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PDP;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
@@ -73,7 +74,7 @@ public class Wrist extends Subsystem {
         wristMotor.configClosedloopRamp(0.1, 100);
 
         VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
-        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelWrist));
+        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(PDP.WRIST));
         wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
         VitruvianLogger.getInstance().addLog(wristLog);
     }

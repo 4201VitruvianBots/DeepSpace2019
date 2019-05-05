@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.intake.IntakePassive;
+import frc.robot.RobotMap.INTAKE_SPEED;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 public class Intake extends Subsystem {
@@ -106,7 +106,7 @@ public class Intake extends Subsystem {
 
             } else if (bannerIR.get() && !isBannerTripped) {
 //            Timer.delay(0.5);
-                setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                setCargoIntakeOutput(INTAKE_SPEED.CARGO_HOLD);
 //            isTripped = true;
             } else if (isBannerTripped) {
                 setCargoIntakeOutput(0);
