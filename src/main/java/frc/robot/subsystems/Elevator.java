@@ -57,11 +57,13 @@ public class Elevator extends Subsystem {
 
     public static boolean initialCalibration = false;
     boolean limitDebounce = false;
+    
+    private int encoderHealthState = -1;
 
     private TalonSRX[] elevatorMotors = {
-        new TalonSRX(RobotMap.rightElevatorA),
         new TalonSRX(RobotMap.leftElevatorA),
         new TalonSRX(RobotMap.leftElevatorB),
+        new TalonSRX(RobotMap.rightElevatorA),
 //        new TalonSRX(RobotMap.rightElevatorB),
     };
 
@@ -74,13 +76,13 @@ public class Elevator extends Subsystem {
     public Elevator() {
         super("Elevator");
 
-        elevatorMotors[1].setInverted(false);   // Set true for silicon?
-        elevatorMotors[2].setInverted(true);   // Set true for silicon?
-        elevatorMotors[0].setInverted(false);
+        elevatorMotors[0].setInverted(false);   // Set true for silicon?
+        elevatorMotors[1].setInverted(true);   // Set true for silicon?
+        elevatorMotors[2].setInverted(false);
 //        elevatorMotors[3].setInverted(true);
 
-        elevatorMotors[1].setSensorPhase(false); // For whatever reason, Silicon is inverted
-        elevatorMotors[0].setSensorPhase(true);
+        elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
+        elevatorMotors[2].setSensorPhase(true);
 
         for (TalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
@@ -171,18 +173,12 @@ public class Elevator extends Subsystem {
     }
 
     public int getPosition() {
-        if(getEncoderHealth(0) && getEncoderHealth(2))
+        if (encoderHealthState == -1)
             return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[2].getSelectedSensorPosition())/ 2);
-        else if(getEncoderHealth(0)) {
-            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-            return elevatorMotors[0].getSelectedSensorPosition();
-        } else if(getEncoderHealth(2)) {
-            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[1].getDeviceID());
-            return elevatorMotors[2].getSelectedSensorPosition();
-        } else //TODO: Make this return an obviously bad value, e.g. 999999999
-            return 0;
+        else if (encoderHealthState == 3)
+        	return 0;
+        else
+            return elevatorMotors[encoderHealthState].getSelectedSensorPosition();
     }
 
     public double getHeight() {
@@ -190,17 +186,15 @@ public class Elevator extends Subsystem {
     }
 
     public int getVelocity(){
-        if(getEncoderHealth(0) && getEncoderHealth(2))
+        if (encoderHealthState == -1)
             return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[2].getSelectedSensorVelocity()) / 2);
-        else if(getEncoderHealth(0))
-            return elevatorMotors[0].getSelectedSensorVelocity();
-        else if(getEncoderHealth(2))
-            return elevatorMotors[2].getSelectedSensorVelocity();
-        else //TODO: Make this return an obviously bad value, e.g. 999999999
-            return 0;
+        else if (encoderHealthState == 3)
+        	return 0;
+        else
+            return elevatorMotors[encoderHealthState].getSelectedSensorVelocity();
     }
 
-    public double encoderCountsToInches(double encoderCounts){
+    private double encoderCountsToInches(double encoderCounts){
         return encoderCounts/encoderCountsPerInch;
     }
 
@@ -266,18 +260,11 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        if (getEncoderHealth(0) && getEncoderHealth(2)) {
+        if (encoderHealthState == -1) {
             elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-        } else if (getEncoderHealth(0)) {
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-//            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-        } else if (getEncoderHealth(2)) {
-            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[0].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-//            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-        }
+//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+        } else if (encoderHealthState != 3)
+            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double inches) {
@@ -288,18 +275,11 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        if(getEncoderHealth(0) && getEncoderHealth(2)) {
+        if (encoderHealthState == -1) {
             elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-        } else if(getEncoderHealth(0)) {
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-//            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-        } else if(getEncoderHealth(2)) {
-            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[0].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-//            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-        }
+//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+        } else if (encoderHealthState  != 3)
+            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setCurrentLimits(int config) {
@@ -316,6 +296,7 @@ public class Elevator extends Subsystem {
                 break;
         }
     }
+    
     public void setElevatorLimitBreak(boolean enable) {
         if(enable) {
             for (TalonSRX motor : elevatorMotors) {
@@ -339,6 +320,29 @@ public class Elevator extends Subsystem {
             arbitraryFFDown = 0;
         }
     }
+    
+    public void checkEncoderHealth() {
+    	if (getEncoderHealth(0) && getEncoderHealth(2) && encoderHealthState != -1) {
+    		encoderHealthState = -1;
+            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+    	} else if (getEncoderHealth(0) && !getEncoderHealth(2) && encoderHealthState != 0) {
+    		encoderHealthState = 0;
+            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[0].getDeviceID()); 
+    	} else if (!getEncoderHealth(0) && getEncoderHealth(2) && encoderHealthState != 2) {
+    		encoderHealthState = 2;
+            elevatorMotors[0].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+    	} else if (!getEncoderHealth(0) && !getEncoderHealth(2) && encoderHealthState != 3) {
+    		encoderHealthState = 3;
+            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//          elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+    	}
+    }
+    
     public void updateShuffleBoard() {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(2));
