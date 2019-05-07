@@ -41,14 +41,14 @@ public class Elevator extends Subsystem {
     private double kS = 0; //Voltage to break static friction
     private double kV = 0; //Voltage to hold constant velocity
     private double kA = 0; //Voltage to hold constant acceleration
-    private double maxVelocity = 5;
-    private double maxAcceleration = 5;
+    private double maxVelocity = 60;
+    private double maxAcceleration = 600;
 //    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
-    public int upperLimitEncoderCounts = 19886; // Carbon, ~30.5 in.
+    public int upperLimitEncoderCounts = 19886; // Carbon, ~30.5 in.	
     public int lowerLimitEncoderCounts = 0;
     public static int calibrationValue = 0;
     private int encoderCountsPerInch = 652;
-
+    
     private double arbitraryFFUp = 1 / 12;
     private double arbitraryFFDown = 0 / 12;
 
@@ -92,13 +92,14 @@ public class Elevator extends Subsystem {
             motor.config_kD(0, kD, 30);
 //            motor.configMotionCruiseVelocity(18000); //7500 is possibly bad
 //            motor.configMotionAcceleration(18000);
-            motor.configMotionCruiseVelocity(9000); //7500 is possibly bad
-            motor.configMotionAcceleration(9000);
+            motor.configMotionCruiseVelocity(getMaxVelPer100msEncoderUnits()); //7500 is possibly bad
+            motor.configMotionAcceleration(getMaxAccelPer100msEncoderUnits());
             motor.enableCurrentLimit(true);
             motor.configContinuousCurrentLimit(30);
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
-            motor.configOpenloopRamp(0.6);
+            motor.configOpenloopRamp(0.1);
+            motor.configClosedloopRamp(0.1);
 
             // Fixes watchdog issue?
             motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
@@ -144,6 +145,14 @@ public class Elevator extends Subsystem {
 
     public double getMotorOutput(int motorIndex) {
         return elevatorMotors[motorIndex].getMotorOutputPercent();
+    }
+    
+    private double getMaxVelPer100msEncoderUnits() {
+    	return maxVelocity * encoderCountsPerInch * 10;
+    }
+    
+    private double getMaxAccelPer100msEncoderUnits() {
+    	return maxAcceleration * encoderCountsPerInch * 10;
     }
 
     public void zeroEncoder() {

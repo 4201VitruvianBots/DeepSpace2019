@@ -56,7 +56,8 @@ public class DriveTrain extends Subsystem {
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
-            motor.configOpenloopRamp(0.6);
+            motor.configOpenloopRamp(0.1);
+            motor.configClosedloopRamp(0.1);
             motor.setNeutralMode(NeutralMode.Coast);
             motor.configForwardSoftLimitEnable(false);
             motor.configReverseSoftLimitEnable(false);

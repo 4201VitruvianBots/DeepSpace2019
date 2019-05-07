@@ -62,17 +62,18 @@ public class Wrist extends Subsystem {
         wristMotor.configPeakCurrentLimit(30);
         wristMotor.configPeakCurrentDuration(2000);
         wristMotor.enableCurrentLimit(true);
-//        wristMotor.configVoltageCompSaturation(12);
-//        wristMotor.enableVoltageCompensation(true);
+        wristMotor.configVoltageCompSaturation(12);
+        wristMotor.enableVoltageCompensation(true);
         wristMotor.configForwardSoftLimitEnable(false);
         wristMotor.configReverseSoftLimitEnable(false);
+        wristMotor.configOpenloopRamp(0.1);
+        wristMotor.configClosedloopRamp(0.1);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
-        wristMotor.configClosedloopRamp(0.1, 100);
-
+        
         VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
         wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(PDP.WRIST));
         wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
