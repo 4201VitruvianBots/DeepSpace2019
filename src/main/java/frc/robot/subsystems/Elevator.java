@@ -92,12 +92,13 @@ public class Elevator extends Subsystem {
             motor.config_kD(0, kD, 30);
 //            motor.configMotionCruiseVelocity(18000); //7500 is possibly bad
 //            motor.configMotionAcceleration(18000);
-            motor.configMotionCruiseVelocity(getMaxVelPer100msEncoderUnits()); //7500 is possibly bad
-            motor.configMotionAcceleration(getMaxAccelPer100msEncoderUnits());
+            motor.configMotionCruiseVelocity(27000); //7500 is possibly bad
+            motor.configMotionAcceleration(27000);
             motor.enableCurrentLimit(true);
             motor.configContinuousCurrentLimit(30);
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
+            motor.configMotionSCurveStrength(4);
             motor.configOpenloopRamp(0.1);
             motor.configClosedloopRamp(0.1);
 
