@@ -47,9 +47,7 @@ public class LEDOutput extends Subsystem {
         digitalOutput[pin].set(state);  //uses the digitalOutput to actually write the new state
     }
 
-    public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
-//        getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
-
+    public void updateLEDState() {
         if(climbState)
             LEDColour = LED_COLORS.RED;
         else if(Robot.m_oi.rightButtons[1].get())
@@ -58,24 +56,17 @@ public class LEDOutput extends Subsystem {
             LEDColour = LED_COLORS.BLUE;
         else
             LEDColour = LED_COLORS.YELLOW;
-
-//        if(Robot.wrist.controlMode == 0){ //if wrist is in manual mode
-//            LEDColour = 1;
-//        }
-//        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
-//            LEDColour = 2;
-//        }
-//      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
-//            LEDColour = 4;
-//        }*/
-//        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
-//            LEDColour = 3;
-//        }
+        
+        setPinOutput(Intake.intakeState == 2 ? true : false,0);	// Set first bit for chasing pattern if in cargo intake mode
+		setPinOutput((LEDColour % 8 > 3), 1);			  		// checks what each digit of the state # is
+		setPinOutput((LEDColour % 4 > 1), 2);  					// in binary, with pin 1 as a 4s place, 2 as
+		setPinOutput((LEDColour % 2 > 0), 3);  					// 2s, and 3 as 1s. Pin on for 1 & off for 0.
+																// If # is > 7, the binary # overflows.
     }
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new LEDReaction());
+        setDefaultCommand(new UpdateLEDState());
     }
 }
 
