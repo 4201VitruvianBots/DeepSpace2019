@@ -36,13 +36,15 @@ public class Controls extends Subsystem {
                 iniFile.createNewFile();
 
                 Wini robotIni = new Wini(iniFile);
-                robotIni.put("Elevator", "Encoder_Calibration", 0);
+                for (int i = 0; i < 4; i++)
+                	robotIni.put("Elevator", "Encoder_Calibration_" + String.valueOf(i), 0);
                 robotIni.put("Wrist", "Encoder_Calibration", 0);
                 robotIni.store(iniFile);
             } else {
                 Wini robotIni = new Wini(iniFile);
-                int elevatorCalibration = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
-                int wristCalibration = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
+                for (int i = 0; i < 4; i++)
+                	Robot.elevator.zeroOffset[i] = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration_" + String.valueOf(i)));
+                Robot.wrist.zeroOffset = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
                 Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
                 Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
 //                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));

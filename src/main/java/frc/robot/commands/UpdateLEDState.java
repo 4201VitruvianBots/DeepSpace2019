@@ -39,10 +39,10 @@ public class UpdateLEDState extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.ledOutput.setPinOutput(false,0);  //should turn everything off if another LED command is used
-        Robot.ledOutput.setPinOutput(false,1);
-        Robot.ledOutput.setPinOutput(false,2);
-        Robot.ledOutput.setPinOutput(false,3);
+        Robot.ledOutput.setPinOutput(false, 0);  //should turn everything off if another LED command is used
+        Robot.ledOutput.setPinOutput(false, 1);
+        Robot.ledOutput.setPinOutput(false, 2);
+        Robot.ledOutput.setPinOutput(false, 3);
     }
 
     // Called when another command which requires one or more of the same

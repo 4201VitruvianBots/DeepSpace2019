@@ -12,11 +12,7 @@ public class ZeroWristEncoder extends InstantCommand {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.wrist.setEncoderPosition(0);
-        Robot.wrist.setAbsoluteAngle(Robot.wrist.getAngle());
-        int calibrationValue = -Robot.wrist.getPosition();
-//        Robot.wrist.setEncoderPosition(calibrationValue);
-        Robot.controls.writeIniFile("Wrist", "Encoder_Calibration", String.valueOf(calibrationValue));
+        Robot.wrist.setEncoderZeroOffset(0);
     }
     @Override
     protected void end() {

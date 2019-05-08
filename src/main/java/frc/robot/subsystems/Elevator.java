@@ -46,7 +46,7 @@ public class Elevator extends Subsystem {
 //    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
     public int upperLimitEncoderCounts = 19886; // Carbon, ~30.5 in.	
     public int lowerLimitEncoderCounts = 0;
-    public static int calibrationValue = 0;
+    public static int[] zeroOffset = { 0, 0, 0, 0};
     private int encoderCountsPerInch = 652;
     
     private double arbitraryFFUp = 1 / 12;
@@ -156,10 +156,17 @@ public class Elevator extends Subsystem {
     	return maxAcceleration * encoderCountsPerInch * 10;
     }
 
-    public void zeroEncoder() {
+    public void setEncoderZeroOffset(double hieght) {
+        for (int i = 0; i < elevatorMotors.length; i++) {
+        	zeroOffset[i] = -elevatorMotors[i].getSelectedSensotPosition + (int) Math.round(zeroAngle * encoderCountsPerInch);
+        	Robot.controls.writeIniFile("Elevator", "Encoder_Calibration_" + String.valueOf(i), String.valueOf(zeroOffset[i]));
+        }
+    }
+    
+    public void resetEncoderPosition() {
         if(getLimitSwitchState(0)) {
             for (TalonSRX motor : elevatorMotors)
-                motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
+                motor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
             limitDebounce = true;
 //        } else if(getLimitSwitchState(1)) {
 //            for (TalonSRX motor : elevatorMotors)
@@ -169,12 +176,15 @@ public class Elevator extends Subsystem {
             limitDebounce = false;
     }
 
-    public void setEncoderPosition(int position) {
-        for(TalonSRX motor:elevatorMotors)
-            motor.setSelectedSensorPosition(position, 0, 0);
+    public void setEncoderPosition(int encoderIndex, int position) {
+    	elevatorMotors[encoderIndex].setSelectedSensorPosition(position, 0, 0);
     }
 
     public int getEncoderPosition(int encoderIndex) {
+        return  getEncoderRawPosition(encoderIndex) - zeroOffset[encoderIndex];
+    }
+    
+    private int getEncoderRawPosition(int encoderIndex) {
         return  elevatorMotors[encoderIndex].getSelectedSensorPosition();
     }
 
@@ -184,11 +194,11 @@ public class Elevator extends Subsystem {
 
     public int getPosition() {
         if (encoderHealthState == -1)
-            return Math.round((elevatorMotors[0].getSelectedSensorPosition() + elevatorMotors[2].getSelectedSensorPosition())/ 2);
+            return Math.round((getEncoderPosition(0) + getEncoderPosition(2))/ 2);
         else if (encoderHealthState == 3)
         	return 0;
         else
-            return elevatorMotors[encoderHealthState].getSelectedSensorPosition();
+            return getEncoderPosition(encoderHealthState);
     }
 
     public double getHeight() {
@@ -263,18 +273,22 @@ public class Elevator extends Subsystem {
 
     public void setIncrementedHeight(double inches) {
         double currentPosition = getPosition();
-        double encoderCounts = (inches * encoderCountsPerInch) + currentPosition;
-
-        encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
-        encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
-
-        Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
+        
+        double[] encoderCounts = {0, 0, 0, 0};
+        for(int i = 0; i < elevatorMotors.length; i++) {
+	        encoderCounts[i] = (inches * encoderCountsPerInch) + currentPosition;
+	        
+	        // TODO: Improve this logic for variance in limits due to variance in encoders
+	        encoderCounts[i] = encoderCounts[i] > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts[i];
+	        encoderCounts[i] = encoderCounts[i] < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts[i];
+        }
+        
 
         if (encoderHealthState == -1) {
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts[i], DemandType.ArbitraryFeedForward, encoderCounts[i] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts[i], DemandType.ArbitraryFeedForward, encoderCounts[i] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
         } else if (encoderHealthState != 3)
-            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts[encoderHealthState], DemandType.ArbitraryFeedForward, encoderCounts[encoderHealthState] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double inches) {

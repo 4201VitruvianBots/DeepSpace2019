@@ -57,11 +57,11 @@ public class LEDOutput extends Subsystem {
         else
             LEDColour = LED_COLORS.YELLOW;
         
-        setPinOutput(Intake.intakeState == 2 ? true : false,0);	// Set first bit for chasing pattern if in cargo intake mode
-		setPinOutput((LEDColour % 8 > 3), 1);			  		// checks what each digit of the state # is
-		setPinOutput((LEDColour % 4 > 1), 2);  					// in binary, with pin 1 as a 4s place, 2 as
-		setPinOutput((LEDColour % 2 > 0), 3);  					// 2s, and 3 as 1s. Pin on for 1 & off for 0.
-																// If # is > 7, the binary # overflows.
+        setPinOutput(Intake.intakeState == 2 ? true : false, 0);	// Set first bit for chasing pattern if in cargo intake mode
+		setPinOutput((LEDColour % 8 > 3), 1);			  			// checks what each digit of the state # is
+		setPinOutput((LEDColour % 4 > 1), 2);  						// in binary, with pin 1 as a 4s place, 2 as
+		setPinOutput((LEDColour % 2 > 0), 3);  						// 2s, and 3 as 1s. Pin on for 1 & off for 0.
+																	// If # is > 7, the binary # overflows.
     }
 
     @Override
