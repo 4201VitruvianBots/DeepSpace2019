@@ -59,13 +59,16 @@ public class Elevator extends Subsystem {
     boolean limitDebounce = false;
     
     private int encoderHealthState = -1;
-
+    
+    private TalonSRX masterMotor;
+    private int masterIndex;
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.leftElevatorA),
         new TalonSRX(RobotMap.leftElevatorB),
         new TalonSRX(RobotMap.rightElevatorA),
 //        new TalonSRX(RobotMap.rightElevatorB),
     };
+    private List<int> healthyEncoderIndicies
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
@@ -111,8 +114,9 @@ public class Elevator extends Subsystem {
             //motor.configReverseSoftLimitEnable(true);
             //motor.configReverseSoftLimitThreshold(lowerLimitEncoderCounts);
         }
-        elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-        elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+        setMasterMotor(elevatorMotors[0]);
+//        elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+//        elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
 //        elevatorMotors[0].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 //        elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
 //        elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
@@ -155,6 +159,16 @@ public class Elevator extends Subsystem {
     private double getMaxAccelPer100msEncoderUnits() {
     	return maxAcceleration * encoderCountsPerInch * 10;
     }
+    
+    private void setMasterMotor(TalonSRX masterMotor) {
+    	for(int i = 0; i < elevatorMotors.length; i++)
+    		if(elevatorMotors[i].getDeviceID() != masterMotor.getDeviceID())
+    			motor.set(ControlMode.Follower, msterMotor.getDeviceId());
+    		else {
+    	    	this.masterMotor = masterMotor;
+    			masterIndex = i;
+    		}
+    }
 
     public void setEncoderZeroOffset(double hieght) {
         for (int i = 0; i < elevatorMotors.length; i++) {
@@ -192,13 +206,8 @@ public class Elevator extends Subsystem {
         return elevatorMotors[encoderIndex].getSensorCollection().getPulseWidthRiseToFallUs() != 0;
     }
 
-    public int getPosition() {
-        if (encoderHealthState == -1)
-            return Math.round((getEncoderPosition(0) + getEncoderPosition(2))/ 2);
-        else if (encoderHealthState == 3)
-        	return 0;
-        else
-            return getEncoderPosition(encoderHealthState);
+    public int getPosition() { 
+        return getEncoderPosition(masterIndex);
     }
 
     public double getHeight() {
@@ -206,12 +215,7 @@ public class Elevator extends Subsystem {
     }
 
     public int getVelocity(){
-        if (encoderHealthState == -1)
-            return Math.round((elevatorMotors[0].getSelectedSensorVelocity() + elevatorMotors[2].getSelectedSensorVelocity()) / 2);
-        else if (encoderHealthState == 3)
-        	return 0;
-        else
-            return elevatorMotors[encoderHealthState].getSelectedSensorVelocity();
+        return elevatorMotors[masterIndex].getSelectedSensorVelocity();
     }
 
     private double encoderCountsToInches(double encoderCounts){
@@ -219,48 +223,20 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
-        if(Robot.climber.climbMode == 1) {
-            elevatorMotors[1].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
-            elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
-        }
+    	if(Robot.climber.climbMode != 1)
+    		masterMotor.set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
+        else
+        	for(TalonSRX motor:elevatorMotors)
+        		motor.set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
         //        elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setCurrentOutput(double current){
-        elevatorMotors[0].set(ControlMode.Current, current, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
-        if(Robot.climber.climbMode == 1) {
-            elevatorMotors[1].set(ControlMode.PercentOutput, current/12, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
-            elevatorMotors[2].set(ControlMode.PercentOutput, current/12, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
-        }
+    	if(Robot.climber.climbMode != 1)
+    		masterMotor.set(ControlMode.Current, current, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
+    	else
+        	motor.set(ControlMode.PercentOutput, current/12, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
         //        elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
-    }
-
-    //PID(feedback loop)
-    private double setClosedLoopPositionStep(double setPoint) {
-        double velocity = (setPoint-elevatorPreviousError)/(elevatorPreviousTime - Timer.getFPGATimestamp());
-        double error = setPoint-encoderCountsToInches(getPosition());
-        double voltage = 0;
-        voltage = kP*error+kD*(error-elevatorPreviousError)/((elevatorPreviousTime - Timer.getFPGATimestamp())- velocity);
-        elevatorPreviousError = error;
-        elevatorPreviousTime = Timer.getFPGATimestamp();
-        return voltage;
-    }
-
-    //feed forward loop
-    private double setClosedLoopFeedForward(double setPoint) {
-        double voltage = 0;
-        double error = setPoint-encoderCountsToInches(getPosition()); //gives you the difference between your angle and the desired angle.
-        double velocity = encoderCountsToInches(getVelocity());
-
-        if (velocity <= maxVelocity && error >= velocity*velocity/(2*(maxAcceleration))) {
-            voltage = kS + kV * velocity + kA * maxAcceleration;
-        } else if (error <= velocity*velocity/(2*(maxAcceleration))) {
-            voltage = kS + kV * velocity + kA * -maxAcceleration;
-        } else {
-            voltage = kS + kV * velocity;
-        }
-        return voltage;
     }
 
     public void setClosedLoopOutput(double setPoint){
@@ -268,27 +244,17 @@ public class Elevator extends Subsystem {
     }
 
     public void setCurrentPositionHold() {
-        elevatorMotors[0].set(ControlMode.Position, getPosition());
+        masterMotor.set(ControlMode.Position, getPosition());
     }
 
     public void setIncrementedHeight(double inches) {
         double currentPosition = getPosition();
-        
-        double[] encoderCounts = {0, 0, 0, 0};
-        for(int i = 0; i < elevatorMotors.length; i++) {
-	        encoderCounts[i] = (inches * encoderCountsPerInch) + currentPosition;
+	    double encoderCounts = (inches * encoderCountsPerInch) + currentPosition;
 	        
-	        // TODO: Improve this logic for variance in limits due to variance in encoders
-	        encoderCounts[i] = encoderCounts[i] > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts[i];
-	        encoderCounts[i] = encoderCounts[i] < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts[i];
-        }
+        encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
+        encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
         
-
-        if (encoderHealthState == -1) {
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts[i], DemandType.ArbitraryFeedForward, encoderCounts[i] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts[i], DemandType.ArbitraryFeedForward, encoderCounts[i] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-        } else if (encoderHealthState != 3)
-            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts[encoderHealthState], DemandType.ArbitraryFeedForward, encoderCounts[encoderHealthState] > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+    	masterMotor.set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setAbsoluteHeight(double inches) {
@@ -299,11 +265,7 @@ public class Elevator extends Subsystem {
 
         Shuffleboard.putNumber("Elevator", "Setpoint", encoderCounts);
 
-        if (encoderHealthState == -1) {
-            elevatorMotors[0].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-//            elevatorMotors[2].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
-        } else if (encoderHealthState  != 3)
-            elevatorMotors[encoderHealthState].set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
+    	masterMotor.set(ControlMode.MotionMagic, encoderCounts, DemandType.ArbitraryFeedForward, encoderCounts > getPosition() ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setCurrentLimits(int config) {
@@ -346,9 +308,10 @@ public class Elevator extends Subsystem {
     }
     
     public void checkEncoderHealth() {
+    	
     	if (getEncoderHealth(0) && getEncoderHealth(2) && encoderHealthState != -1) {
     		encoderHealthState = -1;
-            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
+    		setMasterMotor(elevatorMotors[0]);
 //            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
     	} else if (getEncoderHealth(0) && !getEncoderHealth(2) && encoderHealthState != 0) {
     		encoderHealthState = 0;
