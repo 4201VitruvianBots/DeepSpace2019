@@ -46,7 +46,7 @@ public class Elevator extends Subsystem {
 //    public int upperLimitEncoderCounts = 42551; // Silicon, ~65.26 in.
     public int upperLimitEncoderCounts = 19886; // Carbon, ~30.5 in.	
     public int lowerLimitEncoderCounts = 0;
-    public static int[] zeroOffset = { 0, 0, 0, 0};
+    public static int[] zeroOffset = { 0, 0};
     private int encoderCountsPerInch = 652;
     
     private double arbitraryFFUp = 1 / 12;
@@ -172,9 +172,11 @@ public class Elevator extends Subsystem {
     }
 
     public void setEncoderZeroOffset(double hieght) {
-        for (int i = 0; i < elevatorMotors.length; i++) {
-        	zeroOffset[i] = -elevatorMotors[i].getSelectedSensotPosition + (int) Math.round(zeroAngle * encoderCountsPerInch);
-        	Robot.controls.writeIniFile("Elevator", "Encoder_Calibration_" + String.valueOf(i), String.valueOf(zeroOffset[i]));
+        for (int i = 0; i < encoderList.length; i++) {
+        	if(!getEncoderHealth(encoderList[i])) {
+	        	zeroOffset[i] = -elevatorMotors[encoderList[i]].getSelectedSensotPosition + (int) Math.round(zeroAngle * encoderCountsPerInch);
+	        	Robot.controls.writeIniFile("Elevator", "Encoder_Calibration_" + String.valueOf(encoderList[i]), String.valueOf(zeroOffset[i]));
+        	}
         }
     }
     
