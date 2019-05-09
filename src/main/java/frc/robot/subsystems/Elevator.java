@@ -68,7 +68,8 @@ public class Elevator extends Subsystem {
         new TalonSRX(RobotMap.rightElevatorA),
 //        new TalonSRX(RobotMap.rightElevatorB),
     };
-    private List<int> healthyEncoderIndicies
+    private int encoderIndex = 0;
+    private int[] encoderList = {0, 2};
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.elevatorBottom),
@@ -308,25 +309,22 @@ public class Elevator extends Subsystem {
     }
     
     public void checkEncoderHealth() {
-    	
-    	if (getEncoderHealth(0) && getEncoderHealth(2) && encoderHealthState != -1) {
-    		encoderHealthState = -1;
-    		setMasterMotor(elevatorMotors[0]);
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-    	} else if (getEncoderHealth(0) && !getEncoderHealth(2) && encoderHealthState != 0) {
-    		encoderHealthState = 0;
-            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-            elevatorMotors[2].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[0].getDeviceID()); 
-    	} else if (!getEncoderHealth(0) && getEncoderHealth(2) && encoderHealthState != 2) {
-    		encoderHealthState = 2;
-            elevatorMotors[0].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-//            elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
-    	} else if (!getEncoderHealth(0) && !getEncoderHealth(2) && encoderHealthState != 3) {
-    		encoderHealthState = 3;
-            elevatorMotors[1].set(ControlMode.Follower, elevatorMotors[0].getDeviceID());
-//          elevatorMotors[3].set(ControlMode.Follower, elevatorMotors[2].getDeviceID());
+    	if (!getEncoderHealth(encoderList[encoderIndex])) {
+    		encoderIndex = encoderIndex++;
+    		if(encoderIndex > encoderList.length - 1)
+    			encoderIndex = -1;
+    		
+    		switch(encoderList[encoderIndex]) {
+    			case 1:
+    				setMasterMotor(elevatorMotors[2]);
+    				break;
+    			case -1:
+    				controlMode = 0;
+    			default:
+    			case 0:
+    				setMasterMotor(elevatorMotors[0]);
+    				break;
+    		}
     	}
     }
     
