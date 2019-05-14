@@ -164,7 +164,7 @@ public class Elevator extends Subsystem {
     private void setMasterMotor(TalonSRX masterMotor) {
     	for(int i = 0; i < elevatorMotors.length; i++)
     		if(elevatorMotors[i].getDeviceID() != masterMotor.getDeviceID())
-    			motor.set(ControlMode.Follower, msterMotor.getDeviceId());
+                elevatorMotors[i].set(ControlMode.Follower, masterMotor.getDeviceID());
     		else {
     	    	this.masterMotor = masterMotor;
     			masterIndex = i;
@@ -174,7 +174,7 @@ public class Elevator extends Subsystem {
     public void setEncoderZeroOffset(double hieght) {
         for (int i = 0; i < encoderList.length; i++) {
         	if(!getEncoderHealth(encoderList[i])) {
-	        	zeroOffset[i] = -elevatorMotors[encoderList[i]].getSelectedSensotPosition + (int) Math.round(zeroAngle * encoderCountsPerInch);
+	        	zeroOffset[i] = -elevatorMotors[encoderList[i]].getSelectedSensorPosition() + (int) Math.round(hieght * encoderCountsPerInch);
 	        	Robot.controls.writeIniFile("Elevator", "Encoder_Calibration_" + String.valueOf(encoderList[i]), String.valueOf(zeroOffset[i]));
         	}
         }
@@ -238,12 +238,12 @@ public class Elevator extends Subsystem {
     	if(Robot.climber.climbMode != 1)
     		masterMotor.set(ControlMode.Current, current, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
     	else
-        	motor.set(ControlMode.PercentOutput, current/12, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
+            masterMotor.set(ControlMode.PercentOutput, current/12, DemandType.ArbitraryFeedForward, current >= 0 ? arbitraryFFUp : arbitraryFFDown);
         //        elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
     public void setClosedLoopOutput(double setPoint){
-        setOpenLoopOutput(setClosedLoopFeedForward(setPoint) + setClosedLoopPositionStep(setPoint));
+        //setOpenLoopOutput(setClosedLoopFeedForward(setPoint) + setClosedLoopPositionStep(setPoint));
     }
 
     public void setCurrentPositionHold() {

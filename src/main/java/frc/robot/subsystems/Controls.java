@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap.PDP;
 import frc.robot.commands.SaveMe;
@@ -45,8 +46,8 @@ public class Controls extends Subsystem {
                 for (int i = 0; i < 4; i++)
                 	Robot.elevator.zeroOffset[i] = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration_" + String.valueOf(i)));
                 Robot.wrist.zeroOffset = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
-                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
-                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
+//                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
+//                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
 //                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
 //                Wrist.calibrationValue = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
 //                Robot.elevator.setEncoderPosition(Elevator.calibrationValue);

@@ -13,6 +13,8 @@ public class ZeroElevatorEncoder extends InstantCommand {
     @Override
     protected void initialize() {
         Robot.elevator.setEncoderZeroOffset(0);
+    }
+
     @Override
     protected void end() {
     }

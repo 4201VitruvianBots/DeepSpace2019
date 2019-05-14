@@ -27,7 +27,7 @@ public class ToggleElevatorState extends InstantCommand {
         if(Robot.elevator.controlMode == 1)
             Robot.elevator.controlMode = 0;
         else {
-            Robot.elevator.setEncoderPosition(0);
+            //Robot.elevator.setEncoderPosition(0);
             Robot.elevator.controlMode = 1;
         }
         Robot.m_oi.enableXBoxRumbleTimed(0.2);

@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap.LED_CHANNELS;
 import frc.robot.RobotMap.LED_COLORS;
-import frc.robot.commands.LEDReaction;
+import frc.robot.commands.UpdateLEDState;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
