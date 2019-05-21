@@ -1,18 +1,18 @@
 package frc.vitruvianlib.drivers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 /**
- * This class is a thin wrapper around the TalonSRX class that reduces CAN bus / CPU overhead by skipping duplicate 
+ * This class is a thin wrapper around the VictorSPX class that reduces CAN bus / CPU overhead by skipping duplicate 
  * set commands. (By default the Talon flushes the Tx buffer on every set call).
- * This was taken from team 254's LazyTalonSRX implementation and renamed to match our other inspired implementations.
+ * This was inspired from team 254's LazyTalonSRX implementation.
  */
-public class CachedTalonSRX extends TalonSRX {
+public class CachedVictorSPX extends VictorSPX {
     protected double mLastSet = Double.NaN;
     protected ControlMode mLastControlMode = null;
 
-    public CachedTalonSRX(int deviceNumber) {
+    public CachedVictorSPX(int deviceNumber) {
         super(deviceNumber);
         super.configFactoryDefault();
     }

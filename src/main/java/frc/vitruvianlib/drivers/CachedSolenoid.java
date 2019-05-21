@@ -11,22 +11,26 @@ import edu.wpi.first.wpilibj.Value;
  * This was inspired from team 254's LazyTalonSRX implementation.
  */
 public class CachedSolenoid extends Solenoid {
-	protected boolean mLastState = false;
+	protected boolean mLastState = null;
 
 	public CachedSolenoid(int channel) {
 		super(SensorUtil.getDefaultSolenoidModule(), channel);
 		// TODO Auto-generated constructor stub
+		mLastState = super.get();
 	}
 
 	public CachedSolenoid(int moduleNumber, int channel) {
 		super(moduleNumber, channel);
 		// TODO Auto-generated constructor stub
+		mLastState = super.get();
 	}
 
 	@Override
 	public void set(boolean on) {
-		super.set(on);
-		mLastState = super.get();
+		if(on != mLastState) {
+			super.set(on);
+			mLastState = super.get();
+		}
 	}
 
 	@Override

@@ -14,6 +14,7 @@ public class CachedDoubleSolenoid extends DoubleSolenoid {
 	protected Value mLastValue = null;
 	public CachedDoubleSolenoid(int forwardChannel, int reverseChannel) {
 		super(SensorUtil.getDefaultSolenoidModule(), forwardChannel, reverseChannel);
+		mLastValue = super.get();
 	}
 
 	public CachedDoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel) {
