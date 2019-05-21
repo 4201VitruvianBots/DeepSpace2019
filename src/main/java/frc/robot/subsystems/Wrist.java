@@ -21,6 +21,7 @@ import frc.robot.RobotMap.PDP;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import static frc.robot.subsystems.Controls.getPdpCurrent;
@@ -47,7 +48,7 @@ public class Wrist extends Subsystem {
     
     public int controlMode = 1;
     static boolean limitDebounce = false;
-    private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
+    private CachedTalonSRX wristMotor = new CachedTalonSRX(RobotMap.wristMotor);
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.wristBottom),

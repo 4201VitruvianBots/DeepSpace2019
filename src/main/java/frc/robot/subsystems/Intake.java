@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap.INTAKE_SPEED;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 public class Intake extends Subsystem {
@@ -27,6 +28,11 @@ public class Intake extends Subsystem {
     public static int intakeState = 0;
     public static int outtakeState = 0;
 
+    /* Indicators for which mode you are in
+     * 0: Hatch
+     * 1: Hatch Ground (Depreciated)
+     * 2: Cargo
+     */
     public boolean[] intakeIndicator = {false, false, false};
 
     public static boolean overridePassive = false;
@@ -36,9 +42,9 @@ public class Intake extends Subsystem {
 //    DoubleSolenoid harpoonExtend = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeExtendForward, RobotMap.hatchIntakeExtendReverse);
     //DoubleSolenoid harpoonSecure = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.hatchIntakeSecureForward, RobotMap.hatchIntakeSecureReverse);
 
-    private TalonSRX[] intakeMotors = {
-        new TalonSRX(RobotMap.cargoIntakeMotor),
-        new TalonSRX(RobotMap.hatchIntakeMotor)
+    private CachedTalonSRX[] intakeMotors = {
+        new CachedTalonSRX(RobotMap.cargoIntakeMotor),
+        new CachedTalonSRX(RobotMap.hatchIntakeMotor)
     };
 
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
@@ -47,7 +53,7 @@ public class Intake extends Subsystem {
     public Intake() {
         super("Intake");
 
-        for(TalonSRX intakeMotor:intakeMotors) {
+        for(CachedTalonSRX intakeMotor:intakeMotors) {
             intakeMotor.configFactoryDefault();
             intakeMotor.setNeutralMode(NeutralMode.Coast);
             intakeMotor.configContinuousCurrentLimit(30);

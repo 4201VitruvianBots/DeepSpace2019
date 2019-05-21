@@ -25,6 +25,7 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import static frc.robot.subsystems.Controls.getPdpCurrent;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -60,12 +61,12 @@ public class Elevator extends Subsystem {
     
     private int encoderHealthState = -1;
     
-    private TalonSRX masterMotor;
+    private CachedTalonSRX masterMotor;
     private int masterIndex;
-    private TalonSRX[] elevatorMotors = {
-        new TalonSRX(RobotMap.leftElevatorA),
-        new TalonSRX(RobotMap.leftElevatorB),
-        new TalonSRX(RobotMap.rightElevatorA),
+    private CachedTalonSRX[] elevatorMotors = {
+        new CachedTalonSRX(RobotMap.leftElevatorA),
+        new CachedTalonSRX(RobotMap.leftElevatorB),
+        new CachedTalonSRX(RobotMap.rightElevatorA),
 //        new TalonSRX(RobotMap.rightElevatorB),
     };
     private int encoderIndex = 0;
@@ -88,7 +89,7 @@ public class Elevator extends Subsystem {
         elevatorMotors[0].setSensorPhase(false); // For whatever reason, Silicon is inverted
         elevatorMotors[2].setSensorPhase(true);
 
-        for (TalonSRX motor : elevatorMotors) {
+        for (CachedTalonSRX motor : elevatorMotors) {
             motor.configFactoryDefault();
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
             motor.config_kP(0, kP, 30);
@@ -161,7 +162,7 @@ public class Elevator extends Subsystem {
     	return maxAcceleration * encoderCountsPerInch * 10;
     }
     
-    private void setMasterMotor(TalonSRX masterMotor) {
+    private void setMasterMotor(CachedTalonSRX masterMotor) {
     	for(int i = 0; i < elevatorMotors.length; i++)
     		if(elevatorMotors[i].getDeviceID() != masterMotor.getDeviceID())
                 elevatorMotors[i].set(ControlMode.Follower, masterMotor.getDeviceID());
@@ -182,7 +183,7 @@ public class Elevator extends Subsystem {
     
     public void resetEncoderPosition() {
         if(getLimitSwitchState(0)) {
-            for (TalonSRX motor : elevatorMotors)
+            for (CachedTalonSRX motor : elevatorMotors)
                 motor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
             limitDebounce = true;
 //        } else if(getLimitSwitchState(1)) {
@@ -276,7 +277,7 @@ public class Elevator extends Subsystem {
 
             case 0:
             default:
-                for(TalonSRX motor: elevatorMotors) {
+                for(CachedTalonSRX motor: elevatorMotors) {
                     motor.configContinuousCurrentLimit(30);
                     motor.configPeakCurrentLimit(40);
                     motor.configPeakCurrentDuration(2000);
@@ -297,7 +298,7 @@ public class Elevator extends Subsystem {
             arbitraryFFUp = 0;
             arbitraryFFDown = 0;
         } else {
-            for (TalonSRX motor : elevatorMotors) {
+            for (CachedTalonSRX motor : elevatorMotors) {
 //                motor.enableCurrentLimit(true);
                 motor.configContinuousCurrentLimit(30);
                 motor.configPeakCurrentLimit(40);

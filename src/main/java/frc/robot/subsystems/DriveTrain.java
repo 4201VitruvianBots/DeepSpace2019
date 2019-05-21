@@ -13,12 +13,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap.PCM_ONE;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
+import frc.vitruvianlib.drivers.CachedDoubleSolenoid;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
@@ -27,15 +30,15 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 public class DriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private TalonSRX[] driveMotors = {
-        new TalonSRX(RobotMap.leftFrontDriveMotor),
-        new TalonSRX(RobotMap.leftRearDriveMotor),
-        new TalonSRX(RobotMap.rightFrontDriveMotor),
-        new TalonSRX(RobotMap.rightRearDriveMotor),
-        new TalonSRX(RobotMap.climbDriveMotor)
+    private CachedTalonSRX[] driveMotors = {
+        new CachedTalonSRX(RobotMap.leftFrontDriveMotor),
+        new CachedTalonSRX(RobotMap.leftRearDriveMotor),
+        new CachedTalonSRX(RobotMap.rightFrontDriveMotor),
+        new CachedTalonSRX(RobotMap.rightRearDriveMotor),
+        new CachedTalonSRX(RobotMap.climbDriveMotor)
     };
 
-    DoubleSolenoid driveTrainShifters = new DoubleSolenoid(PCM_ONE.ADDRESS, PCM_ONE.DRIVETRAIN_SIFTER.FORWARD, PCM_ONE.DRIVETRAIN_SIFTER.REVERSE);
+    CachedDoubleSolenoid driveTrainShifters = new CachedDoubleSolenoid(PCM_ONE.CAN_ADDRESS, PCM_ONE.DRIVETRAIN_SIFTER.FORWARD, PCM_ONE.DRIVETRAIN_SIFTER.REVERSE);
     public AHRS navX = new AHRS(SerialPort.Port.kMXP);
 
     public int controlMode = 0;
@@ -43,7 +46,7 @@ public class DriveTrain extends Subsystem {
     public DriveTrain() {
         super("DriveTrain");
 
-        for (TalonSRX motor : driveMotors) {
+        for (CachedTalonSRX motor : driveMotors) {
             motor.configFactoryDefault();
             motor.config_kP(0, 0.25, 30);
             motor.config_kI(0, 0, 30);
@@ -112,8 +115,9 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveMotorsState(boolean state) {
-        for (TalonSRX driveMotor : driveMotors)
-            driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
+        for (CachedTalonSRX driveMotor : driveMotors)
+        	if(driveMotor.getDeviceID() != driveMotors[4].getDeviceID())	//Don't ever make the climb drive motor go to coast
+        		driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
     }
 
     public void setMotorArcadeDrive(double throttle, double turn) {
@@ -208,11 +212,11 @@ public class DriveTrain extends Subsystem {
     }
 
     public boolean getDriveShifterStatus() {
-        return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
+        return (driveTrainShifters.get() == Value.kForward) ? true : false;
     }
 
     public void setDriveShifterStatus(boolean state) {
-        driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        driveTrainShifters.set(state ? Value.kForward : Value.kReverse);
     }
 
     public void updateShuffleboard() {

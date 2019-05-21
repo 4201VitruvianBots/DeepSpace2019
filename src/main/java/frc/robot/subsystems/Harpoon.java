@@ -7,14 +7,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.CachedDoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap.PCM_ONE;
+import frc.vitruvianlib.drivers.CachedDoubleSolenoid;
 
 public class Harpoon extends Subsystem {
 
-    DoubleSolenoid harpoon = new DoubleSolenoid(PCM_ONE.ADDRESS, PCM_ONE.HATCH_EXTEND.FORWARD, PCM_ONE.HATCH_EXTEND.REVERSE);
+    CachedDoubleSolenoid harpoon = new CachedDoubleSolenoid(PCM_ONE.CAN_ADDRESS, PCM_ONE.HATCH_EXTEND.FORWARD, PCM_ONE.HATCH_EXTEND.REVERSE);
 
     public Harpoon() {
         super("harpoon");
@@ -22,11 +24,11 @@ public class Harpoon extends Subsystem {
     }
 
     public boolean getHarpoonExtendStatus(){
-        return harpoon.get() == DoubleSolenoid.Value.kForward ? true : false;
+        return harpoon.get() == Value.kForward ? true : false;
     }
 
     public void setHarpoonExtend(boolean state){
-        harpoon.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        harpoon.set(state ? Value.kForward : Value.kReverse);
     }
 
     public void updateShuffleboard() {

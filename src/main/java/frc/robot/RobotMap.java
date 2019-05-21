@@ -50,7 +50,7 @@ public class RobotMap {
     		this.REVERSE = reverse;
     	}
     	
-    	public static int ADDRESS = 11;
+    	public static int CAN_ADDRESS = 11;
     }
     
     public static class LED_CHANNELS {

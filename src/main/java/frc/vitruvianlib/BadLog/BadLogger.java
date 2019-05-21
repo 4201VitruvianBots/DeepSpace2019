@@ -18,7 +18,9 @@ public class BadLogger {
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-	
+	/* This is a wrapper class for team 1014's BadLog logging framework. This is so that we can use their
+	 * logging library, while maintaining the coding structure of our previous logging framework.
+	 */
 	private BadLogger() {
 
     }
@@ -67,6 +69,7 @@ public class BadLogger {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             logName = dateFormat.format(timestamp) + ".bag";
         } else {
+        	// TODO: Debug this section - match logs aren't generated 
             isMatch = true;
             String eventString = DriverStation.getInstance().getEventName();
             logPath += eventString + "/";
