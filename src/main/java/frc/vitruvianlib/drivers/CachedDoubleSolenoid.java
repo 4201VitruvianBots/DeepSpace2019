@@ -2,8 +2,8 @@ package frc.vitruvianlib.drivers;
 
 import edu.wpi.first.hal.SolenoidJNI;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SensorUtil;
-import edu.wpi.first.wpilibj.Value;
 
 /**
  * This class is a thin wrapper around the DoubleSolenoid class that reduces CAN bus / CPU overhead by skipping 
