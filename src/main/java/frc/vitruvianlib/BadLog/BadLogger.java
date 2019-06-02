@@ -1,5 +1,6 @@
 package frc.vitruvianlib.BadLog;
 
+import badlog.lib.BadLog;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
