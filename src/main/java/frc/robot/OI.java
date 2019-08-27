@@ -108,7 +108,7 @@ public class OI {
             3 (?) - Left Button: DriveTrain turn -90
         */
         rightButtons[0].whileHeld(new IntakeRelease());
-        rightButtons[1].whileHeld(new FollowVisionTarget());
+        rightButtons[1].whileHeld(new AutoSteer());
         // TODO: Test this version of limelight auto-correction
         //rightButtons[1].whileHeld(new HoldToAlignWithTarget());
 
