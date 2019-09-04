@@ -204,11 +204,15 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
+        if(getLimitSwitchState(0)&&voltage<=0){
+            voltage = 0;
+        }
         elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
         if(Robot.climber.climbMode == 1) {
             elevatorMotors[1].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
             elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
         }
+
         //        elevatorMotors[2].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
     }
 
