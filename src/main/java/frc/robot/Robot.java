@@ -102,6 +102,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        Robot.elevator.checkLimitSwitch();
 //        driveTrain.updateSmartDashboard();
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
@@ -252,7 +253,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-
     }
 
     /**

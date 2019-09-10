@@ -55,7 +55,7 @@ public class Elevator extends Subsystem {
     public int controlMode = 1;
 
     public static boolean initialCalibration = false;
-    boolean limitDebounce = false;
+    boolean[] limitDebounce = {false, false, false};
 
     private TalonSRX[] elevatorMotors = {
         new TalonSRX(RobotMap.rightElevatorA),
@@ -143,17 +143,26 @@ public class Elevator extends Subsystem {
         return elevatorMotors[motorIndex].getMotorOutputPercent();
     }
 
+    public void checkLimitSwitch(){
+        if(getLimitSwitchState(0) && !limitDebounce[0]){
+            limitDebounce[0] = true;
+            elevatorMotors[0].setSelectedSensorPosition(0);
+        } else if(!getLimitSwitchState(0) && limitDebounce[0]) {
+            limitDebounce[0] = false;
+        }
+    }
+
     public void zeroEncoder() {
         if(getLimitSwitchState(0)) {
             for (TalonSRX motor : elevatorMotors)
                 motor.setSelectedSensorPosition(lowerLimitEncoderCounts,0,0);
-            limitDebounce = true;
+            limitDebounce[0] = true;
 //        } else if(getLimitSwitchState(1)) {
 //            for (TalonSRX motor : elevatorMotors)
 //                motor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
 //            limitDebounce = true;
         } else
-            limitDebounce = false;
+            limitDebounce[0] = false;
     }
 
     public void setEncoderPosition(int position) {
@@ -204,9 +213,6 @@ public class Elevator extends Subsystem {
     }
 
     public void setOpenLoopOutput(double voltage){
-        if(getLimitSwitchState(0)&&voltage<=0){
-            voltage = 0;
-        }
         elevatorMotors[0].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
         if(Robot.climber.climbMode == 1) {
             elevatorMotors[1].set(ControlMode.PercentOutput, voltage/12, DemandType.ArbitraryFeedForward, voltage >= 0 ? arbitraryFFUp : arbitraryFFDown);
@@ -346,7 +352,7 @@ public class Elevator extends Subsystem {
         Shuffleboard.putBoolean("Elevator", "Left Encoder Health", getEncoderHealth(0));
         Shuffleboard.putBoolean("Elevator", "Right Encoder Health", getEncoderHealth(2));
 //        Shuffleboard.putBoolean("Elevator", "Upper Limit Switch", getLimitSwitchState(1));
-//        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
+        Shuffleboard.putBoolean("Elevator", "Lower Limit Switch", getLimitSwitchState(0));
 //        Shuffleboard.putBoolean("Elevator", "Mid Limit Switch", getLimitSwitchState(2));
         Shuffleboard.putNumber("Elevator", "Elevator Enc Count", getPosition());
         Shuffleboard.putNumber("Elevator", "Elevator Left Enc Count", getEncoderPosition(0));

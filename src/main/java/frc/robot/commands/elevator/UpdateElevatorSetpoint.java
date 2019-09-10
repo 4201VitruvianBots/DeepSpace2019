@@ -86,10 +86,10 @@ public class UpdateElevatorSetpoint extends Command {
             }
             
         } else {
-            if(Robot.climber.climbMode == 2) {
-                double current = 25 * joystickOutput;
-                current = Robot.elevator.getHeight() < 10 ? Math.max(current, -15) : current;
-                Robot.elevator.setCurrentOutput(current);
+            if(Robot.climber.climbMode == 1) {
+                double voltage = 12 * joystickOutput;
+                voltage = Robot.elevator.getLimitSwitchState(0) ? Math.max(voltage, -1/12) : voltage;
+                Robot.elevator.setOpenLoopOutput(voltage);
             } else {
                 double voltage = 12 * joystickOutput;
                 Robot.elevator.setOpenLoopOutput(voltage);
