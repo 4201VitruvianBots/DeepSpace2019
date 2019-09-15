@@ -57,7 +57,8 @@ repositories {
 // Also defines JUnit 4.
 dependencies {
     compile group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
-    compile "com.github.dominikWin:badlog:v0.1.1"
+    compile "com.github.jonathandao0:badlog:v0.1.2.4"
+//    compile "com.github.dominikWin:badlog:v0.1.1"
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     

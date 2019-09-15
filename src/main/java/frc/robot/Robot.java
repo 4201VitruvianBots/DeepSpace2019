@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        BadLogger.startLogger();
         m_oi = new OI();
 
         Elevator.initialCalibration = false;
@@ -151,6 +150,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        BadLogger.startLogger();
         shuffleboardTransition = false;
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
@@ -179,6 +179,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        BadLogger.startLogger();
         Robot.vision.setPipeline(0);
         driveTrain.setDriveMotorsState(true);
 //        if(Robot.elevator.controlMode == 1)
@@ -219,6 +220,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        BadLogger.startLogger();
         Robot.vision.setPipeline(0);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
