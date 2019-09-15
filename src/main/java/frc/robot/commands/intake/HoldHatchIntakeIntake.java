@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.INTAKE_SPEED;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -44,7 +45,7 @@ public class HoldHatchIntakeIntake extends Command {
                 break;
             case 0:
             default:
-                Robot.intake.setHatchIntakeOutput(RobotMap.HATCH_INTAKE_SPEED);
+                Robot.intake.setHatchIntakeOutput(INTAKE_SPEED.HATCH_INTAKE);
                 break;
         }
     }

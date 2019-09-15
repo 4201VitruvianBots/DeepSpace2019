@@ -9,10 +9,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PCM_ONE;
+import frc.vitruvianlib.drivers.CachedDoubleSolenoid;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
@@ -22,7 +24,7 @@ public class Climber extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    DoubleSolenoid climbPistons = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.climbPistonForward, RobotMap.climbPistonReverse);
+    CachedDoubleSolenoid climbPistons = new CachedDoubleSolenoid(PCM_ONE.CAN_ADDRESS, PCM_ONE.CLIMB_PISTONS.FORWARD, PCM_ONE.CLIMB_PISTONS.REVERSE);
 
     public int climbMode = 0;
     public static boolean initClimb = false;
@@ -32,15 +34,15 @@ public class Climber extends Subsystem {
     }
 
     public void setClimbPistonState(boolean state) {
-        climbPistons.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        climbPistons.set(state ? Value.kForward : Value.kReverse);
     }
 
     public boolean getClimbPistonState() {
-        return climbPistons.get() == DoubleSolenoid.Value.kForward;
+        return climbPistons.get() == Value.kForward;
     }
 
     public void updateShuffleboard() {
-        Shuffleboard.putBoolean("Controls","Climb Mode", climbMode == 1);
+        Shuffleboard.putBoolean("Controls", "Climb Mode", climbMode == 1);
     }
 
     @Override

@@ -7,18 +7,22 @@
 
 package frc.robot.subsystems;
 
+import badlog.lib.BadLog;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PCM_ONE;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
+import frc.vitruvianlib.drivers.CachedDoubleSolenoid;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 /**
@@ -27,15 +31,15 @@ import frc.vitruvianlib.driverstation.Shuffleboard;
 public class DriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    private TalonSRX[] driveMotors = {
-        new TalonSRX(RobotMap.leftFrontDriveMotor),
-        new TalonSRX(RobotMap.leftRearDriveMotor),
-        new TalonSRX(RobotMap.rightFrontDriveMotor),
-        new TalonSRX(RobotMap.rightRearDriveMotor),
-        new TalonSRX(RobotMap.climbDriveMotor)
+    private CachedTalonSRX[] driveMotors = {
+        new CachedTalonSRX(RobotMap.leftFrontDriveMotor),
+        new CachedTalonSRX(RobotMap.leftRearDriveMotor),
+        new CachedTalonSRX(RobotMap.rightFrontDriveMotor),
+        new CachedTalonSRX(RobotMap.rightRearDriveMotor),
+        new CachedTalonSRX(RobotMap.climbDriveMotor)
     };
 
-    DoubleSolenoid driveTrainShifters = new DoubleSolenoid(RobotMap.PCMOne, RobotMap.driveTrainShifterForward, RobotMap.driveTrainShifterReverse);
+    CachedDoubleSolenoid driveTrainShifters = new CachedDoubleSolenoid(PCM_ONE.CAN_ADDRESS, PCM_ONE.DRIVETRAIN_SIFTER.FORWARD, PCM_ONE.DRIVETRAIN_SIFTER.REVERSE);
     public AHRS navX = new AHRS(SerialPort.Port.kMXP);
 
     public int controlMode = 0;
@@ -43,7 +47,7 @@ public class DriveTrain extends Subsystem {
     public DriveTrain() {
         super("DriveTrain");
 
-        for (TalonSRX motor : driveMotors) {
+        for (CachedTalonSRX motor : driveMotors) {
             motor.configFactoryDefault();
             motor.config_kP(0, 0.25, 30);
             motor.config_kI(0, 0, 30);
@@ -55,7 +59,8 @@ public class DriveTrain extends Subsystem {
             motor.configPeakCurrentLimit(40);
             motor.configPeakCurrentDuration(2000);
             motor.enableCurrentLimit(true);
-            motor.configOpenloopRamp(0.6);
+            motor.configOpenloopRamp(0.1);
+            motor.configClosedloopRamp(0.1);
             motor.setNeutralMode(NeutralMode.Coast);
             motor.configForwardSoftLimitEnable(false);
             motor.configReverseSoftLimitEnable(false);
@@ -74,17 +79,6 @@ public class DriveTrain extends Subsystem {
         driveMotors[3].set(ControlMode.Follower, driveMotors[2].getDeviceID());
 
         driveMotors[4].configPeakOutputReverse(0);
-
-//        VitruvianLog drivetrainLog = new VitruvianLog("DriveTrain", 0.5);
-//        drivetrainLog.addLogField("drivetrainPdpLeftFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftForward));
-//        drivetrainLog.addLogField("drivetrainPdpLeftRearCurrent",  () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainLeftReverse));
-//        drivetrainLog.addLogField("drivetrainPdpRightFrontCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightForward));
-//        drivetrainLog.addLogField("drivetrainPdpRightRearCurrent", () -> Controls.pdp.getCurrent(RobotMap.pdpChannelDriveTrainRightReverse));
-//        drivetrainLog.addLogField("drivetrainTalonLeftFrontCurrent", () -> driveMotors[0].getOutputCurrent());
-//        drivetrainLog.addLogField("drivetrainTalonLeftRearCurrent", () -> driveMotors[1].getOutputCurrent());
-//        drivetrainLog.addLogField("drivetrainTalonRightFrontCurrent", () -> driveMotors[2].getOutputCurrent());
-//        drivetrainLog.addLogField("drivetrainTalonRightRearCurrent", () -> driveMotors[3].getOutputCurrent());
-//        VitruvianLogger.getInstance().addLog(drivetrainLog);
     }
 
     public int getEncoderCount(int sensorIndex) {
@@ -111,8 +105,9 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveMotorsState(boolean state) {
-        for (TalonSRX driveMotor : driveMotors)
-            driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
+        for (CachedTalonSRX driveMotor : driveMotors)
+        	if(driveMotor.getDeviceID() != driveMotors[4].getDeviceID())	//Don't ever make the climb drive motor go to coast
+        		driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
     }
 
     public void setMotorArcadeDrive(double throttle, double turn) {
@@ -207,11 +202,11 @@ public class DriveTrain extends Subsystem {
     }
 
     public boolean getDriveShifterStatus() {
-        return (driveTrainShifters.get() == DoubleSolenoid.Value.kForward) ? true : false;
+        return (driveTrainShifters.get() == Value.kForward) ? true : false;
     }
 
     public void setDriveShifterStatus(boolean state) {
-        driveTrainShifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        driveTrainShifters.set(state ? Value.kForward : Value.kReverse);
     }
 
     public void updateShuffleboard() {
@@ -230,6 +225,19 @@ public class DriveTrain extends Subsystem {
 
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("Robot Angle", navX.getAngle());
+    }
+
+    public void initLogging() {
+        BadLog.createTopic("Drivetrain/Left Forward Output Current", "A", () -> driveMotors[0].getOutputCurrent(),
+                "hide", "join:Drivetrain/Output Currents");
+        BadLog.createTopic("Drivetrain/Left Rear Output Current", "A", () -> driveMotors[1].getOutputCurrent(),
+                "hide", "join:Drivetrain/Output Currents");
+        BadLog.createTopic("Drivetrain/Right Forward Output Current", "A", () -> driveMotors[2].getOutputCurrent(),
+                "hide", "join:Drivetrain/Output Currents");
+        BadLog.createTopic("Drivetrain/Right Rear Output Current", "A", () -> driveMotors[3].getOutputCurrent(),
+                "hide", "join:Drivetrain/Output Currents");
+        BadLog.createTopic("Drivetrain/Climb Driver Output Current", "A", () -> driveMotors[4].getOutputCurrent(),
+                "hide", "join:Drivetrain/Output Currents");
     }
 
     @Override

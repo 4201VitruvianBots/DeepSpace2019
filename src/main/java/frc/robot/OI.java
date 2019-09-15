@@ -66,6 +66,14 @@ public class OI {
     public Button xBoxLeftTrigger, xBoxRightTrigger;
     public MultiButton enableClimbButton, disableClimbButton;
 
+    /* Indicators for which setpoint you selected
+     * 0: Stowed
+     * 1: Intake
+     * 2: Cargo Ship
+     * 3: Rocket Low
+     * 4: Rocket Mid
+     * 5: Rocket High
+     */
     public static int positionIndex = 0;
     boolean[] positionIndicator = {false, false, false, false, false, false};
 
@@ -91,24 +99,21 @@ public class OI {
         disableClimbButton = new MultiButton(rightButtons[2],xBoxButtons[5]);
 
         /*  Left Joystick Buttons:
-            0 - Trigger: Intake Game Piece
-            1 (?) - Center Button: Home all mechanisms
-            2 (?) - Right Button: Set DriveTrain Low Gear
-            3 (?) - Left Button: Set DriveTrain High Gear
+            3 - Right Button: Set DriveTrain Low Gear
+            4 - Left Button: Set DriveTrain High Gear
         */
         //leftButtons[0].whileHeld(new IntakeIntake());
-//        leftButtons[1].whenPressed(new ToggleClimbPistons());
         leftButtons[3].whenPressed(new SetDriveShifters(true));
         leftButtons[4].whenPressed(new SetDriveShifters(false));
 
         /*  Right Joystick Buttons:
-            0 - Trigger: Deploy/Score Game Piece
-            1 (?) - Center Button: DriveTrain Turn 180
-            2 (?) - Right Button: DriveTrain turn 90
-            3 (?) - Left Button: DriveTrain turn -90
+            0 - Trigger: Release/Score Game Piece
+            1 - Center Button: Use Limelight drive assist
         */
+
         rightButtons[0].whileHeld(new IntakeRelease());
-        rightButtons[1].whileHeld(new AutoSteer());
+        rightButtons[1].whileHeld(new FollowVisionTarget());
+//        rightButtons[1].whileHeld(new AutoSteer());
         // TODO: Test this version of limelight auto-correction
         //rightButtons[1].whileHeld(new HoldToAlignWithTarget());
 
@@ -121,16 +126,6 @@ public class OI {
             1 - B Button: Set Mechanisms to Rocket Medium
             3 - Y Button: Set Mechanisms to Rocket High
             2 - X Button: Set Mechanisms to Cargo Ship
-
-            4 Left Button: Elevator Increment Up 5 (?) inches
-            LeftTrigger: Elevator Increment Down 5 (?) inches
-
-            RightTrigger: Select Intake Cargo State
-            POV 1: Set Intake State Hatch Ground
-            5 - Right Button: Select Intake Hatch State
-
-            7 - Start: KillAll
-            9 - R3: Home all mechanisms
         */
 
         /* Game Piece
@@ -153,9 +148,16 @@ public class OI {
         xBoxButtons[1].whenPressed(new SetAllMechanismSetpoints(4));
         xBoxButtons[2].whenPressed(new SetAllMechanismSetpoints(2));
         xBoxButtons[3].whenPressed(new SetAllMechanismSetpoints(5));
-
-        //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
-        //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
+        
+        /*  xBox Controller Buttons:
+         	Cargo Mode:
+	        LeftTrigger: Move to Cargo Ground Setpoint & Intake
+	        4 Left Button: Move to Cargo Depot Setpoint & Intake
+	        
+         	Cargo Mode:
+	        LeftTrigger: Move to Harpoon Intake Setpoint & Intake
+	        4 Left Button: Extend Harpoon
+         */
 
         xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
             @Override
@@ -166,7 +168,17 @@ public class OI {
         xBoxLeftTrigger.whenPressed(new SetAllMechanismSetpoints(1));
         xBoxButtons[4].whileHeld(new IntakeIntake());
         xBoxButtons[4].whenPressed(new SetAllMechanismSetpoints(-1));
-
+        
+        /*  xBox Controller Buttons:
+	        RightTrigger: Select Intake Cargo State
+	        5 - Right Button: Select Intake Hatch State
+	
+	        POV UP: Zero all encoders
+	        POV Left, Right, Down: Set stowed position
+	        6 - Start (?): Toggle Elevator Control Mode
+	        7 - Select (?): Toggle Wrist Control Mode
+	     */
+        
         xBoxRightTrigger.whenPressed(new SetIntakeState(2));
         xBoxButtons[5].whenPressed(new SetIntakeState(0));
 
@@ -184,6 +196,12 @@ public class OI {
 
         //xBoxButtons[0].whileHeld(new IntakeControl(true));
         //xBoxButtons[1].whileHeld(new IntakeControl(false));
+        
+        /* Climb Mode Enable: Both the center button on the left joystick and the right trigger 
+         * on the xBox controller must be pressed in order to enable climb mode
+         * Climb Mode Disable: Both the center button on the right joystick and the right button 
+         * on the xBox controller must be pressed in order to disable climb mode
+         */
         enableClimbButton.whenPressed(new EnableClimbSequence());
         disableClimbButton.whenPressed(new DisableClimbSequence());
     }

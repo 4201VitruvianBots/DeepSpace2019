@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.LEDReaction;
+import frc.robot.RobotMap.LED_CHANNELS;
+import frc.robot.RobotMap.LED_COLORS;
+import frc.robot.commands.UpdateLEDState;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -31,10 +33,10 @@ public class LEDOutput extends Subsystem {
     public static boolean climbState = false;
 
     private DigitalOutput[] digitalOutput = {  //array that creates digitalOutput0-4, I think.
-            new DigitalOutput(RobotMap.ledCh0),  //actual pin numbers defined in RobotMap
-            new DigitalOutput(RobotMap.ledCh1),
-            new DigitalOutput(RobotMap.ledCh2),
-            new DigitalOutput(RobotMap.ledCh3),
+        new DigitalOutput(LED_CHANNELS.CH0),  //actual pin numbers defined in RobotMap
+        new DigitalOutput(LED_CHANNELS.CH1),
+        new DigitalOutput(LED_CHANNELS.CH2),
+        new DigitalOutput(LED_CHANNELS.CH3),
     };
 
     public LEDOutput(){
@@ -45,35 +47,26 @@ public class LEDOutput extends Subsystem {
         digitalOutput[pin].set(state);  //uses the digitalOutput to actually write the new state
     }
 
-    public void updateLEDState() {  //called in RobotPeriodic to, well, update LED state.
-//        getShifterState = Robot.driveTrain.getDriveShifterStatus();    //so we can tell if it's in low (false) or lower (true) gear
-
+    public void updateLEDState() {
         if(climbState)
-            LEDColour = RobotMap.LED_RED;
+            LEDColour = LED_COLORS.RED;
         else if(Robot.m_oi.rightButtons[1].get())
-            LEDColour = RobotMap.LED_GREEN;
+            LEDColour = LED_COLORS.GREEN;
         else if(Robot.vision.isValidTarget())
-            LEDColour = RobotMap.LED_BLUE;
+            LEDColour = LED_COLORS.BLUE;
         else
-            LEDColour = RobotMap.LED_YELLOW;
-
-//        if(Robot.wrist.controlMode == 0){ //if wrist is in manual mode
-//            LEDColour = 1;
-//        }
-//        else if(Intake.intakeState == 2){   //if robot is in cargo intake mode
-//            LEDColour = 2;
-//        }
-//      /*  else if(truen't){ //This spot reserved for current-spike hatch intake detection
-//            LEDColour = 4;
-//        }*/
-//        else if (Intake.intakeState <2){    //if robot is in hatch intake mode
-//            LEDColour = 3;
-//        }
+            LEDColour = LED_COLORS.YELLOW;
+        
+        setPinOutput(Intake.intakeState == 2 ? true : false, 0);	// Set first bit for chasing pattern if in cargo intake mode
+		setPinOutput((LEDColour % 8 > 3), 1);			  			// checks what each digit of the state # is
+		setPinOutput((LEDColour % 4 > 1), 2);  						// in binary, with pin 1 as a 4s place, 2 as
+		setPinOutput((LEDColour % 2 > 0), 3);  						// 2s, and 3 as 1s. Pin on for 1 & off for 0.
+																	// If # is > 7, the binary # overflows.
     }
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new LEDReaction());
+        setDefaultCommand(new UpdateLEDState());
     }
 }
 

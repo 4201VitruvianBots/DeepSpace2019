@@ -15,10 +15,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PDP;
 import frc.robot.commands.wrist.UpdateWristSetpoint;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLog;
 import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.drivers.CachedTalonSRX;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import static frc.robot.subsystems.Controls.getPdpCurrent;
@@ -40,12 +43,12 @@ public class Wrist extends Subsystem {
                                                       //-682; // -682 -20 degrees, 4096 * (1/18) * 3
     public static int upperLimitEncoderCounts = 5772; // 5400 155 degrees, 4096 * (155/360) * (72/22)
     public static int lowerLimitEncoderCounts = -372; // -372 -10 degrees, 4096 * (-10/360) * (72/22)
-    public static int calibrationValue = 0;
+    public static int zeroOffset = 0;
     double encoderCountsPerAngle = 37.236;            // 1 degree, 4096 * (1/360) * (72/22)
-
+    
     public int controlMode = 1;
     static boolean limitDebounce = false;
-    private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
+    private CachedTalonSRX wristMotor = new CachedTalonSRX(RobotMap.wristMotor);
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.wristBottom),
@@ -61,25 +64,26 @@ public class Wrist extends Subsystem {
         wristMotor.configPeakCurrentLimit(30);
         wristMotor.configPeakCurrentDuration(2000);
         wristMotor.enableCurrentLimit(true);
-//        wristMotor.configVoltageCompSaturation(12);
-//        wristMotor.enableVoltageCompensation(true);
+        wristMotor.configVoltageCompSaturation(12);
+        wristMotor.enableVoltageCompensation(true);
         wristMotor.configForwardSoftLimitEnable(false);
         wristMotor.configReverseSoftLimitEnable(false);
+        wristMotor.configOpenloopRamp(0.1);
+        wristMotor.configClosedloopRamp(0.1);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
-        wristMotor.configClosedloopRamp(0.1, 100);
-
-        VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
-        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelWrist));
-        wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
-        VitruvianLogger.getInstance().addLog(wristLog);
+        
+//        VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
+//        wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(PDP.WRIST));
+//        wristLog.addLogField("wristTalonCurrent", () -> wristMotor.getOutputCurrent());
+//        VitruvianLogger.getInstance().addLog(wristLog);
     }
 
     public int getPosition() {
-        return wristMotor.getSelectedSensorPosition() + calibrationValue;
+        return wristMotor.getSelectedSensorPosition() - zeroOffset;
     }
 
     public double getVelocity() {
@@ -102,15 +106,9 @@ public class Wrist extends Subsystem {
         return !limitSwitches[limitSwitchIndex].get();
     }
 
-    public void zeroEncoder() {
-        if(getLimitSwitchState(0)) {
-            wristMotor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
-            limitDebounce = true;
-        } else if(getLimitSwitchState(1)) {
-            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
-            limitDebounce = true;
-        } else
-            limitDebounce = false;
+    public void setEncoderZeroOffset(double zeroAngle) {
+    	zeroOffset = -wristMotor.getSelectedSensorPosition() + (int) Math.round(zeroAngle * encoderCountsPerAngle);
+        Robot.controls.writeIniFile("Wrist", "Encoder_Calibration", String.valueOf(zeroOffset));
     }
 
     public void setEncoderPosition(int position) {
@@ -133,7 +131,7 @@ public class Wrist extends Subsystem {
     
     public void setIncrementedAngle(double angle) {
         double currentPosition = getPosition();
-        double encoderCounts = angle * encoderCountsPerAngle + currentPosition;
+        double encoderCounts = angle * encoderCountsPerAngle + currentPosition + zeroOffset;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
@@ -143,7 +141,7 @@ public class Wrist extends Subsystem {
     }
 
     public void setAbsoluteAngle(double angle) {
-        double encoderCounts = angle * encoderCountsPerAngle;
+        double encoderCounts = angle * encoderCountsPerAngle + zeroOffset;
 
         encoderCounts = encoderCounts > upperLimitEncoderCounts ? upperLimitEncoderCounts : encoderCounts;
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;

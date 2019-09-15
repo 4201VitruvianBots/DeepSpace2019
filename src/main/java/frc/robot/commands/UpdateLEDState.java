@@ -12,9 +12,9 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDOutput;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class LEDReaction extends Command {
+public class UpdateLEDState extends Command {
 
-    public LEDReaction() {
+    public UpdateLEDState() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.ledOutput);
     }
@@ -27,13 +27,8 @@ public class LEDReaction extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
-        Robot.ledOutput.setPinOutput(Intake.intakeState == 2 ? true : false,0);  // Set first bit for chasing pattern
-                                                                                     // if in cargo intake mode
-        Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 8 > 3), 1);  //checks what each digit of the state # is
-        Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 4 > 1), 2);  //in binary, with pin 1 as a 4s place, 2 as
-        Robot.ledOutput.setPinOutput((LEDOutput.LEDColour % 2 > 0), 3);  //2s, and 3 as 1s. Pin on for 1 & off for 0.
-    }                                                                        //If # is > 7, the binary # overflows.
+    	Robot.ledOutput.updateLEDState();
+    }                                                                        
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
@@ -44,16 +39,16 @@ public class LEDReaction extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.ledOutput.setPinOutput(false, 0);  //should turn everything off if another LED command is used
+        Robot.ledOutput.setPinOutput(false, 1);
+        Robot.ledOutput.setPinOutput(false, 2);
+        Robot.ledOutput.setPinOutput(false, 3);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Robot.ledOutput.setPinOutput(false,0);  //should turn everything off if another LED command is used
-        Robot.ledOutput.setPinOutput(false,1);
-        Robot.ledOutput.setPinOutput(false,2);
-        Robot.ledOutput.setPinOutput(false,3);
         end();
     }
 }

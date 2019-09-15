@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.PDP;
 import frc.robot.commands.SaveMe;
 import frc.robot.commands.climber.DisableClimbSequence;
 import frc.robot.commands.climber.EnableClimbSequence;
@@ -17,7 +19,7 @@ import java.io.File;
 
 public class Controls extends Subsystem {
 
-    public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.pdp);
+    public static PowerDistributionPanel pdp = new PowerDistributionPanel(PDP.CAN_ADDRESS);
 
     Compressor compressor = new Compressor();
 
@@ -30,20 +32,22 @@ public class Controls extends Subsystem {
     public void readIniFile() {
         try {
             File iniFile = new File("/home/lvuser/4201Robot/DeepSpace2019.ini");
-            if(!iniFile.exists()) {
+            if(!iniFile.exists() && !iniFile.isDirectory()) {
                 iniFile.mkdirs();
                 iniFile.createNewFile();
 
                 Wini robotIni = new Wini(iniFile);
-                robotIni.put("Elevator", "Encoder_Calibration", 0);
+                for (int i = 0; i < 4; i++)
+                	robotIni.put("Elevator", "Encoder_Calibration_" + String.valueOf(i), 0);
                 robotIni.put("Wrist", "Encoder_Calibration", 0);
                 robotIni.store(iniFile);
             } else {
                 Wini robotIni = new Wini(iniFile);
-                int elevatorCalibration = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
-                int wristCalibration = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
-                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
-                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
+                for (int i = 0; i < 4; i++)
+                	Robot.elevator.zeroOffset[i] = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration_" + String.valueOf(i)));
+                Robot.wrist.zeroOffset = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
+//                Shuffleboard.putNumber("Controls", "Initial Elevator Calibration", elevatorCalibration);
+//                Shuffleboard.putNumber("Controls", "Initial Wrist Calibration", elevatorCalibration);
 //                Elevator.calibrationValue = Integer.getInteger(robotIni.get("Elevator", "Encoder_Calibration"));
 //                Wrist.calibrationValue = Integer.getInteger(robotIni.get("Wrist", "Encoder_Calibration"));
 //                Robot.elevator.setEncoderPosition(Elevator.calibrationValue);

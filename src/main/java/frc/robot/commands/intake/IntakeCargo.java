@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.INTAKE_SPEED;
+import frc.robot.RobotMap.WRIST_SETPOINTS;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCargo extends Command {
@@ -23,7 +25,7 @@ public class IntakeCargo extends Command {
     @Override
     protected void execute() {
         if(Intake.intakeState == 2)
-            Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_INTAKE_SPEED);
+            Robot.intake.setCargoIntakeOutput(INTAKE_SPEED.CARGO_INTAKE);
     }
 
     @Override
@@ -44,9 +46,9 @@ public class IntakeCargo extends Command {
 
                 }
                 stopwatch.stop();
-                Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
+                Robot.wrist.setAbsoluteAngle(WRIST_SETPOINTS.CARGO_RETRACTED);
 //                    Timer.delay(0.1);
-                Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                Robot.intake.setCargoIntakeOutput(INTAKE_SPEED.CARGO_HOLD);
             } else {
                 Robot.intake.setCargoIntakeOutput(0);
             }

@@ -10,7 +10,7 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import frc.robot.RobotMap.*;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -51,7 +51,7 @@ public class IntakePassive extends Command {
 //                }
                 break;
             case 1:
-                Robot.intake.setHatchGroundIntakeOutput(RobotMap.HATCH_GROUND_INTAKE_SPEED);
+                Robot.intake.setHatchGroundIntakeOutput(INTAKE_SPEED.HATCH_GROUND_INTAKE);
                 break;
             case 0:
             default:

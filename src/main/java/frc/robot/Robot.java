@@ -21,7 +21,9 @@ import frc.robot.commands.auto.routines.PathfinderCalibration;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.*;
-import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
+import frc.vitruvianlib.BadLog.BadLogger;
+
+import java.util.logging.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,12 +33,10 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
  * project.
  */
 public class Robot extends TimedRobot {
-//    public static Climber climber = new Climber();
     public static Climber climber = new Climber();
     public static Controls controls = new Controls();
     public static DriveTrain driveTrain = new DriveTrain();
-    public static Elevator elevator = new Elevator();
-    //public static NerdyElevator nerdyElevator = new NerdyElevator();
+    public static Elevator elevator  = new Elevator();
     public static Harpoon harpoon = new Harpoon();
     public static Intake intake = new Intake();
     public static Vision vision = new Vision();
@@ -59,8 +59,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        Elevator.initialCalibration = false;
+        BadLogger.startLogger();
         m_oi = new OI();
+
+        Elevator.initialCalibration = false;
         m_autoChooser.addOption("Pathfinder Calibration", new PathfinderCalibration());
         m_autoChooser.addOption("Get Off Level 1", new PathfinderReadLevel1("getOffLevel1"));
         m_autoChooser.addOption("Left Level 1 To Rocket", new LeftLevel1ToRocket());
@@ -102,7 +104,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        Robot.elevator.checkLimitSwitch();
+        elevator.checkLimitSwitch();
+    	elevator.checkEncoderHealth();
+
 //        driveTrain.updateSmartDashboard();
         elevator.updateSmartDashboard();
         wrist.updateSmartDashboard();
@@ -125,6 +129,7 @@ public class Robot extends TimedRobot {
 
         @Override
         public void run() {
+            BadLogger.updateLogs();
             driveTrain.updateShuffleboard();
             elevator.updateShuffleBoard();
             wrist.updateShuffleboard();
@@ -149,7 +154,6 @@ public class Robot extends TimedRobot {
         shuffleboardTransition = false;
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
-        VitruvianLogger.getInstance().startLogger();
 
         // Default VP Pipeline
         vision.setPipeline(0);
@@ -200,7 +204,6 @@ public class Robot extends TimedRobot {
         }
         Scheduler.getInstance().add(new InitIntakeHold());
 
-        VitruvianLogger.getInstance().startLogger();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.stopRecording();
         edu.wpi.first.wpilibj.shuffleboard.Shuffleboard.startRecording();
         shuffleboardTransition = true;
@@ -234,8 +237,6 @@ public class Robot extends TimedRobot {
            elevator.setAbsoluteHeight(elevator.getHeight());
         if(Robot.wrist.controlMode == 1)
             wrist.setAbsoluteAngle(wrist.getAngle());
-
-        VitruvianLogger.getInstance().startLogger();
 
         Climber.initClimb = false;
         climber.setClimbPistonState(false);

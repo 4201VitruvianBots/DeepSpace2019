@@ -22,18 +22,51 @@ public class RobotMap {
     public static int rightJoystick = 1;
     public static int xBoxController = 2;
 
-    // Pneumatics
-    public static int pdp = 0;
-    public static int PCMOne = 11;
-        public static int driveTrainShifterForward = 0;
-        public static int driveTrainShifterReverse = 1;
-        public static int hatchIntakeExtendForward = 4;
-        public static int hatchIntakeExtendReverse = 5;
-//        public static int hatchIntakeSecureForward = 4;
-//        public static int hatchIntakeSecureReverse = 5;
-        public static int climbPistonForward = 2;
-        public static int climbPistonReverse = 3;
-
+    public static class PDP {
+    	public static int CAN_ADDRESS = 0;
+    	public static int DRIVETRAIN_LEFT_FRONT = 14;
+    	public static int DRIVETRAIN_LEFT_REAR = 15;
+    	public static int DRIVETRAIN_RIGHT_FRONT = 1;
+    	public static int DRIVETRAIN_RIGHT_REAR = 0;
+    	public static int ELEVATOR_LEFT_A = 13;
+    	public static int ELEVATOR_LEFT_B = 12;
+    	public static int ELEVATOR_RIGHT_A = 2;
+    	public static int ELEVATOR_RIGHT_B = 3;
+    	public static int WRIST = 12;
+    	public static int LIMELIGHT = 10;
+    }
+    
+    public static enum PCM_ONE {
+    	DRIVETRAIN_SIFTER (0, 1),
+    	HATCH_EXTEND (4, 5),
+//    	HATCH_SECURE (4, 5),
+    	CLIMB_PISTONS (2, 3);
+    	
+    	public int FORWARD;
+    	public int REVERSE;
+    	
+    	private PCM_ONE(int forward, int reverse){
+    		this.FORWARD = forward;
+    		this.REVERSE = reverse;
+    	}
+    	
+    	public static int CAN_ADDRESS = 11;
+    }
+    
+    public static class LED_CHANNELS {
+    	public static int CH0 = 23;	//LED info channels start from 9 on NavX    Arduino port 12     
+    	public static int CH1 = 22;	//and go down                               Arduino port 11     
+    	public static int CH2 = 21;	//                                          Arduino port 10     
+    	public static int CH3 = 20;	//                                          Arduino port 9      
+    }
+    
+    public static class LED_COLORS {
+    	public static int BLUE = 1;
+    	public static int RED = 2;
+    	public static int YELLOW = 3;
+    	public static int GREEN = 4;
+    }
+    
     // Drivetrain
     public static int leftFrontDriveMotor = 20;
     public static int leftRearDriveMotor = 21;
@@ -63,66 +96,53 @@ public class RobotMap {
     public static int wristTop = 6;
     public static int robotSwitch = 9;
 
-    public static int ledCh0 = 23;  //LED info channels start from 9 on NavX    Arduino port 12
-    public static int ledCh1 = 22;  //and go down                               Arduino port 11
-    public static int ledCh2 = 21;  //                                          Arduino port 10
-    public static int ledCh3 = 20;  //                                          Arduino port 9
 
-    public static int LED_BLUE = 1;
-    public static int LED_RED = 2;
-    public static int LED_YELLOW = 3;
-    public static int LED_GREEN = 4;
-
-    // PDP Channels
-    public static int pdpChannelDriveTrainLeftForward = 14;
-    public static int pdpChannelDriveTrainLeftReverse = 15;
-    public static int pdpChannelDriveTrainRightForward = 1;
-    public static int pdpChannelDriveTrainRightReverse = 0;
-    public static int pdpChannelElevatorLeft = 13;
-    public static int pdpChannelElevatorRight = 2;
-    public static int pdpChannelWrist = 12;
-
-    // Setpoints (Units in inches or degrees)
-    public static double WRIST_RETRACTED_ANGLE = 165; //165;
-    public static double WRIST_RETRACTED_CARGO_ANGLE = 135;
-    public static double WRIST_EXTENDED_ANGLE = 0;
-    public static double WRIST_CLIMB_ANGLE = -10;
-    public static double WRIST_CARGO_ANGLE = 45;
-    public static double WRIST_CARGO_SHIP_INTAKE_ANGLE = 30;
-    public static double WRIST_CARGO_SHIP_ANGLE = 0;
-    public static double WRIST_CARGO_INTAKE_STATION_ANGLE = 90;
-    public static double WRIST_CARGO_HIGH_ANGLE = 40;
-    public static double WRIST_HATCH_LOW_ANGLE = 45;
-    public static double WRIST_HATCH_ANGLE = 85;
-    public static double ELEVATOR_HOME_POSITION = 0;
-//    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
-    //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
-    public static double ELEVATOR_HATCH_LOW_POSITION = 7.75;
-    public static double ELEVATOR_HATCH_MID_POSITION = 37;
-    public static double ELEVATOR_HATCH_HIGH_POSITION = 60;
-    public static double ELEVATOR_HATCH_GROUND_LOW_POSITION = 0;
-    public static double ELEVATOR_HATCH_GROUND_MID_POSITION = 20;
-    public static double ELEVATOR_HATCH_GROUND_HIGH_POSITION = 47;
-    public static double ELEVATOR_CARGO_INTAKE_DEPOT_POSITION = 2; // 2
-    public static double ELEVATOR_CARGO_INTAKE_STATION_POSITION = 10.5;
-    public static double ELEVATOR_CARGO_AUTO_INTAKE_POSITION = 3.5;
-    public static double ELEVATOR_CARGO_LOW_POSITION = 10;
-    public static double ELEVATOR_CARGO_MID_POSITION = 36;
-    public static double ELEVATOR_CARGO_HIGH_POSITION = 63;
-    public static double ELEVATOR_CARGO_SHIP_POSITION = 35;
-    public static double ELEVATOR_CLIMB_POSITION = 28;
-
-    //
-    public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp
-    public static double CARGO_OUTTAKE_SPEED = 0.7;
-    public static double CARGO_HOLD_SPEED = -0.2;
-    public static double HATCH_INTAKE_SPEED = -1;
-    public static double HATCH_HOLD_SPEED = 0;
-    public static double HATCH_OUTTAKE_SPEED = 1;
-    public static double HATCH_GROUND_INTAKE_SPEED = -0.8;
-    public static double HATCH_GROUND_HOLD_SPEED = -0.1;
-    public static double HATCH_GROUND_OUTTAKE_SPEED = 1;
-
+    public static class WRIST_SETPOINTS {
+	    // Setpoints (Units in inches or degrees)
+	    public static double RETRACTED = 165; //165;
+	    public static double EXTENDED = 0;
+	    public static double CLIMB = -10;
+	    public static double CARGO = 45;
+	    public static double CARGO_RETRACTED = 135;
+	    public static double CARGO_SHIP_INTAKE = 30;
+	    public static double CARGO_INTAKE_STATION = 90;
+	    public static double CARGO_HIGH = 40;
+	    public static double HATCH_LOW = 45;
+	    public static double HATCH = 85;
+    }
+    
+    public static class ELEVATOR_SETPOINTS {
+	    public static double HOME = 0;
+	//    public static double ELEVATOR_HATCH_INTAKE_POSITION = 10.5;
+	    //public static double ELEVATOR_HATCH_LOW_POSITION = 10;
+	    public static double HATCH_LOW = 7.75;
+	    public static double HATCH_MID = 37;
+	    public static double HATCH_HIGH = 60;
+	    public static double HATCH_GROUND_LOW = 0;
+	    public static double HATCH_GROUND_MID = 20;
+	    public static double HATCH_GROUND_HIGH = 47;
+	    public static double CARGO_INTAKE_DEPOT = 2; // 2
+	    public static double CARGO_INTAKE_STATION = 10.5;
+	    public static double CARGO_AUTO_INTAKE = 3.5;
+	    public static double CARGO_LOW = 10;
+	    public static double CARGO_MID = 36;
+	    public static double CARGO_HIGH = 63;
+	    public static double CARGO_SHIP = 35;
+	    public static double CLIMB = 28;
+    }
+    
+    public static class INTAKE_SPEED {
+	    public static double CARGO_INTAKE = -0.7; // Change back to -0.7 for comp
+	    public static double CARGO_OUTTAKE = 0.7;
+	    public static double CARGO_HOLD = -0.2;
+	    public static double HATCH_INTAKE = -1;
+	    public static double HATCH_OUTTAKE = 1;
+	    public static double HATCH_HOLD = 0;
+	    public static double HATCH_GROUND_INTAKE = -0.8;
+	    public static double HATCH_GROUND_OUTTAKE = 1;
+	    public static double HATCH_GROUND_HOLD = -0.1;
+    }
+    
     // Pathfinder (Units in feet)
     public static double wheel_diameter = 0.5104167;
     public static double wheelbase = 2.20833;
