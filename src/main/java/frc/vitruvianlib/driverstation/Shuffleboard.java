@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilderImpl;
  */
 public class Shuffleboard {
     private static final NetworkTable table = NetworkTableInstance.getDefault().getTable("");
+    private static Map<String,NetworkTable> tables = new HashMap<>();
 
     /**
      * Returns the boolean the key maps to. If the key does not exist or is of
@@ -29,7 +30,9 @@ public class Shuffleboard {
      * if there is no value associated with the key
      */
     public static boolean getBoolean(String tabName, String key, boolean defaultValue) {
-        return table.getSubTable(tabName).getEntry(key).getBoolean(defaultValue);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).getBoolean(defaultValue);
+//        return table.getSubTable(tabName).getEntry(key).getBoolean(defaultValue);
     }
 
     /**
@@ -60,7 +63,9 @@ public class Shuffleboard {
      * if there is no value associated with the key
      */
     public static double getNumber(String tabName, String key, double defaultValue) {
-        return table.getSubTable(tabName).getEntry(key).getDouble(defaultValue);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).getDouble(defaultValue);
+//        return table.getSubTable(tabName).getEntry(key).getDouble(defaultValue);
     }
 
     /**
@@ -74,7 +79,9 @@ public class Shuffleboard {
      * if there is no value associated with the key
      */
     public static double[] getNumberArray(String tabName, String key, double[] defaultValue) {
-        return table.getSubTable(tabName).getEntry(key).getDoubleArray(defaultValue);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).getDoubleArray(defaultValue);
+//        return table.getSubTable(tabName).getEntry(key).getNumberArray(defaultValue);
     }
 
     /**
@@ -88,7 +95,9 @@ public class Shuffleboard {
      * if there is no value associated with the key
      */
     public static String getString(String tabName, String key, String defaultValue) {
-        return table.getSubTable(tabName).getEntry(key).getString(defaultValue);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).getString(defaultValue);
+//        return table.getSubTable(tabName).getEntry(key).getString(defaultValue);
     }
 
     /**
@@ -100,7 +109,9 @@ public class Shuffleboard {
      * @return False if the table key already exists with a different type
      */
     public static boolean putBoolean(String tabName, String key, boolean value) {
-        return table.getSubTable(tabName).getEntry(key).setBoolean(value);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).setBoolean(value);
+//        return table.getSubTable(tabName).getEntry(key).setBoolean(value);
     }
 
     /**
@@ -152,7 +163,9 @@ public class Shuffleboard {
      * @return False if the table key already exists with a different type
      */
     public static boolean putNumber(String tabName, String key, double value) {
-        return table.getSubTable(tabName).getEntry(key).setDouble(value);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).setDouble(value);
+//        return table.getSubTable(tabName).getEntry(key).setDouble(value);
     }
 
     /**
@@ -166,7 +179,9 @@ public class Shuffleboard {
      * if there is no value associated with the key
      */
     public static boolean putNumberArray(String tabName, String key, double value[]) {
-        return table.getSubTable(tabName).getEntry(key).setDoubleArray(value);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).setDefaultDoubleArray(value);
+//        return table.getSubTable(tabName).getEntry(key).setDoubleArray(value);
     }
 
     /**
@@ -178,7 +193,9 @@ public class Shuffleboard {
      * @return False if the table key already exists with a different type
      */
     public static boolean putString(String tabName, String key, String value) {
-        return table.getSubTable(tabName).getEntry(key).setString(value);
+        initTableMap(tabName);
+        return tables.get(tabName).getEntry(key).setString(value);
+//        return table.getSubTable(tabName).getEntry(key).setString(value);
     }
 
     private static class Data {
@@ -191,4 +208,9 @@ public class Shuffleboard {
     }
 
     private static final Map<String, Data> tablesToData = new HashMap<>();
+
+    private static void initTableMap(String tabName) {
+        if(!tables.containsKey(tabName))
+            tables.put(tabName, table.getSubTable(tabName));
+    }
 }
