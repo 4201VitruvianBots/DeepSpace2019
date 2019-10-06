@@ -18,6 +18,7 @@ import frc.robot.subsystems.Intake;
  */
 public class IntakeIntake extends Command {
     Timer stopwatch = new Timer();
+    private static boolean isTripped = false;
 
     public IntakeIntake() {
         // Use requires() here to declare subsystem dependencies
@@ -29,6 +30,7 @@ public class IntakeIntake extends Command {
     protected void initialize() {
         switch (Intake.intakeState) {
             case 2:
+                isTripped = false;
             case 1:
             case 0:
             default:
@@ -57,26 +59,31 @@ public class IntakeIntake extends Command {
 
     @Override
     protected boolean isFinished() {
-        if(Intake.intakeState == 2)
-            return Robot.intake.bannerIR.get() && Intake.enableBannerSensor;
-        else
-            return false;
+        if(Intake.intakeState == 2) {
+            if (Robot.intake.bannerIR.get() && Intake.enableBannerSensor && !isTripped) {
+                isTripped = true;
+                stopwatch.reset();
+                stopwatch.start();
+            } else if(isTripped && !Robot.intake.bannerIR.get()) {
+                isTripped = false;
+                stopwatch.stop();
+            }
+
+            if (stopwatch.get() > 0.5)
+                return true;
+        }
+        return false;
     }
     // Called once after isFinished returns true
     @Override
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if (Robot.intake.bannerIR.get()) {
-                    stopwatch.reset();
-                    stopwatch.start();
-                    while (stopwatch.get() < 0.5) {
-
-                    }
-                    stopwatch.stop();
+                if (Robot.intake.bannerIR.get() && isTripped) {
                     Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
 //                    Timer.delay(0.1);
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
+                    isTripped = false;
                 } else
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
