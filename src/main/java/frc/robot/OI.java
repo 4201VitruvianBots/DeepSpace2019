@@ -157,7 +157,7 @@ public class OI {
         //xBoxButtons[6].whileHeld(new SetClimberOutput(0.5));
         //xBoxButtons[7].whileHeld(new SetClimberOutput(-0.5));
 
-        xBoxLeftTrigger.whileHeld(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
+        xBoxLeftTrigger.whileActive(new ConditionalCommand(new IntakeIntake(), new HoldHarpoonExtend()) {
             @Override
             protected boolean condition() {
                 return Robot.intake.intakeState == 2;
