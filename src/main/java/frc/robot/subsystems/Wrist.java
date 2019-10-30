@@ -43,7 +43,7 @@ public class Wrist extends Subsystem {
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;            // 1 degree, 4096 * (1/360) * (72/22)
 
-    public int controlMode = 1;
+    public int controlMode = 0;
     static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
 

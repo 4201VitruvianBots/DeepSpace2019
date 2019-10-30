@@ -56,6 +56,7 @@ public class OI {
     // Start the command when the button is released and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+    public final boolean usingExpensiveJoysticks = true;
     Joystick leftJoystick = new Joystick(RobotMap.leftJoystick);
     Joystick rightJoystick = new Joystick(RobotMap.rightJoystick);
     Joystick xBoxController = new Joystick(RobotMap.xBoxController);
@@ -87,8 +88,8 @@ public class OI {
 
         xBoxLeftTrigger = new XBoxTrigger(xBoxController, 2);
         xBoxRightTrigger = new XBoxTrigger(xBoxController, 3);
-        enableClimbButton = new MultiButton(leftButtons[2],xBoxRightTrigger);
-        disableClimbButton = new MultiButton(rightButtons[2],xBoxButtons[5]);
+        enableClimbButton = new MultiButton(xBoxButtons[5],xBoxRightTrigger);
+        //disableClimbButton = new MultiButton(rightButtons[2],xBoxButtons[5]);
 
         /*  Left Joystick Buttons:
             0 - Trigger: Intake Game Piece
@@ -98,17 +99,21 @@ public class OI {
         */
         //leftButtons[0].whileHeld(new IntakeIntake());
 //        leftButtons[1].whenPressed(new ToggleClimbPistons());
-        leftButtons[3].whenPressed(new SetDriveShifters(true));
-        leftButtons[4].whenPressed(new SetDriveShifters(false));
-
+        if(usingExpensiveJoysticks) {
+            leftButtons[1].whenPressed(new SetDriveShifters(true)); //1 if using the expensive joysticks, 3 if not
+            leftButtons[0].whenPressed(new SetDriveShifters(false)); //0 if using the expensive joysticks, 4 if not
+        } else {
+            leftButtons[3].whenPressed(new SetDriveShifters(true)); //1 if using the expensive joysticks, 3 if not
+            leftButtons[4].whenPressed(new SetDriveShifters(false)); //0 if using the expensive joysticks, 4 if not
+        }
         /*  Right Joystick Buttons:
             0 - Trigger: Deploy/Score Game Piece
             1 (?) - Center Button: DriveTrain Turn 180
             2 (?) - Right Button: DriveTrain turn 90
             3 (?) - Left Button: DriveTrain turn -90
         */
-        rightButtons[0].whileHeld(new IntakeRelease());
-        rightButtons[1].whileHeld(new AutoSteer());
+        rightButtons[1].whileHeld(new IntakeRelease());
+        rightButtons[0].whileHeld(new AutoSteer());
         // TODO: Test this version of limelight auto-correction
         //rightButtons[1].whileHeld(new HoldToAlignWithTarget());
 
@@ -185,7 +190,7 @@ public class OI {
         //xBoxButtons[0].whileHeld(new IntakeControl(true));
         //xBoxButtons[1].whileHeld(new IntakeControl(false));
         enableClimbButton.whenPressed(new EnableClimbSequence());
-        disableClimbButton.whenPressed(new DisableClimbSequence());
+        //disableClimbButton.whenPressed(new DisableClimbSequence());
     }
 
     public void updateSetpointIndicator(){
@@ -204,30 +209,51 @@ public class OI {
     }
 
     public double getLeftJoystickX() {
-        return leftJoystick.getX();
+        if(usingExpensiveJoysticks) {
+            return -leftJoystick.getX();
+        } else {
+            return leftJoystick.getX();
+        }
     }
 
     public double getLeftJoystickY() {
-        return -leftJoystick.getY();
+        if(usingExpensiveJoysticks) {
+            return leftJoystick.getY();
+        } else {
+            return -leftJoystick.getY();
+        }
     }
 
     public double getLeftJoystickZ() {
-        return -leftJoystick.getZ();
+        if(usingExpensiveJoysticks) {
+            return leftJoystick.getZ();
+        } else {
+            return -leftJoystick.getZ();
+        }
     }
 
-    public double getLeftRotation(){
-        return leftJoystick.getZ();
-    }
     public double getRightJoystickX() {
-        return rightJoystick.getX();
+        if(usingExpensiveJoysticks) {
+            return -rightJoystick.getX();
+        } else {
+            return rightJoystick.getX();
+        }
     }
 
     public double getRightJoystickY() {
-        return -rightJoystick.getY();
+        if(usingExpensiveJoysticks) {
+            return rightJoystick.getY();
+        } else {
+            return -rightJoystick.getY();
+        }
     }
 
     public double getRightJoystickZ() {
-        return -rightJoystick.getY();
+        if(usingExpensiveJoysticks) {
+            return rightJoystick.getZ();
+        } else {
+            return -rightJoystick.getZ();
+        }
     }
 
     public double getRawLeftJoystickX() {
