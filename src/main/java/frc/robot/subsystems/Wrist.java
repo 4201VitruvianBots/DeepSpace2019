@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,8 @@ import frc.vitruvianlib.VitruvianLogger.VitruvianLogger;
 import frc.vitruvianlib.driverstation.Shuffleboard;
 
 import static frc.robot.subsystems.Controls.getPdpCurrent;
+
+import com.revrobotics.CANSparkMax;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -45,7 +48,7 @@ public class Wrist extends Subsystem {
 
     public int controlMode = 0;
     static boolean limitDebounce = false;
-    private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
+    private CANSparkMax wristMotor = new CANSparkMax(RobotMap.wristMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.wristBottom),
@@ -53,6 +56,7 @@ public class Wrist extends Subsystem {
     };
 
     public Wrist() {
+        /* TalonSRX Motor Code
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
         wristMotor.setInverted(true);
@@ -71,6 +75,13 @@ public class Wrist extends Subsystem {
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
         wristMotor.configClosedloopRamp(0.1, 100);
+*/
+        // CANSparkMax code
+        wristMotor.restoreFactoryDefaults();
+        wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        wristMotor.setInverted(true);
+        wristMotor.setSmartCurrentLimit(30);
+
 
         VitruvianLog wristLog = new VitruvianLog("Wrist", 0.5);
         wristLog.addLogField("wristPdpCurrent", () ->  getPdpCurrent(RobotMap.pdpChannelWrist));
@@ -79,23 +90,28 @@ public class Wrist extends Subsystem {
     }
 
     public int getPosition() {
-        return wristMotor.getSelectedSensorPosition() + calibrationValue;
+        return (int) (wristMotor.getEncoder().getPosition() + calibrationValue);
     }
 
     public double getVelocity() {
-        return wristMotor.getSelectedSensorVelocity();
+        return wristMotor.getEncoder().getVelocity();
     }
 
     public double getOutputCurrent() {
         return  wristMotor.getOutputCurrent();
     }
+
+    /* There doesn't seem to be an alternative to getControlMode for CANSparkMax
     public ControlMode getTalonControlMode() {
         return wristMotor.getControlMode();
     }
+     */
 
     // Using the pulse width measurement, check if the encoders are healthy
+    // Not sure how to implement this with Spark Max, will always return true for now
     public boolean getEncoderHealthy() {
-        return wristMotor.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        // return wristMotor.getEncoder().getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        return true;
     }
 
     public boolean getLimitSwitchState(int limitSwitchIndex){
@@ -104,17 +120,17 @@ public class Wrist extends Subsystem {
 
     public void zeroEncoder() {
         if(getLimitSwitchState(0)) {
-            wristMotor.setSelectedSensorPosition(lowerLimitEncoderCounts, 0, 0);
+            wristMotor.getEncoder().setPosition(lowerLimitEncoderCounts);
             limitDebounce = true;
         } else if(getLimitSwitchState(1)) {
-            wristMotor.setSelectedSensorPosition(upperLimitEncoderCounts, 0, 0);
+            wristMotor.getEncoder().setPosition(upperLimitEncoderCounts);
             limitDebounce = true;
         } else
             limitDebounce = false;
     }
 
     public void setEncoderPosition(int position) {
-        wristMotor.setSelectedSensorPosition(position, 0, 0);
+        wristMotor.getEncoder().setPosition(position);
     }
 
     public double getAngle() {
@@ -124,13 +140,19 @@ public class Wrist extends Subsystem {
     public void setDirectOutput(double output) {
         if (output == 0) {
             if(getEncoderHealthy())
-                wristMotor.set(ControlMode.Position, getPosition(), DemandType.ArbitraryFeedForward, arbitraryFF);
+                wristMotor.set(0);
             else
-                wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
+                wristMotor.set(output);
         } else
-            wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
+            wristMotor.set(output);
     }
-    
+
+    public void setSparkMaxPosition(double position) {
+        while (getPosition() != position) {
+            wristMotor.set(1);
+        }
+    }
+
     public void setIncrementedAngle(double angle) {
         double currentPosition = getPosition();
         double encoderCounts = angle * encoderCountsPerAngle + currentPosition;
@@ -139,7 +161,7 @@ public class Wrist extends Subsystem {
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
-        wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
+        setSparkMaxPosition(encoderCounts);
     }
 
     public void setAbsoluteAngle(double angle) {
@@ -149,7 +171,7 @@ public class Wrist extends Subsystem {
         encoderCounts = encoderCounts < lowerLimitEncoderCounts ? lowerLimitEncoderCounts : encoderCounts;
 
         Shuffleboard.putNumber("Wrist", "Setpoint", encoderCounts);
-        wristMotor.set(ControlMode.Position, encoderCounts, DemandType.ArbitraryFeedForward, arbitraryFF);
+        setSparkMaxPosition(encoderCounts);
     }
 
     public void updateShuffleboard() {
