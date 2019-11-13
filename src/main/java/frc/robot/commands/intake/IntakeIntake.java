@@ -79,12 +79,12 @@ public class IntakeIntake extends Command {
     protected void end() {
         switch (Intake.intakeState) {
             case 2:
-                if (Robot.intake.bannerIR.get() && isTripped) {
+                /*if (Robot.intake.bannerIR.get() && isTripped) {
                     Robot.wrist.setAbsoluteAngle(RobotMap.WRIST_RETRACTED_CARGO_ANGLE);
 //                    Timer.delay(0.1);
                     Robot.intake.setCargoIntakeOutput(RobotMap.CARGO_HOLD_SPEED);
                     isTripped = false;
-                } else
+                } else*/
                     Robot.intake.setCargoIntakeOutput(0);
                 break;
             case 1:

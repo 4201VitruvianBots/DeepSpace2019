@@ -111,8 +111,13 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setDriveMotorsState(boolean state) {
-        for (TalonSRX driveMotor : driveMotors)
-            driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);
+        driveMotors[0].setNeutralMode(NeutralMode.Brake);
+        driveMotors[1].setNeutralMode(NeutralMode.Coast);
+        driveMotors[2].setNeutralMode(NeutralMode.Brake);
+        driveMotors[3].setNeutralMode(NeutralMode.Coast);
+        driveMotors[4].setNeutralMode(NeutralMode.Coast);
+        /*for (TalonSRX driveMotor : driveMotors)
+            driveMotor.setNeutralMode((state) ? NeutralMode.Coast : NeutralMode.Brake);*/
     }
 
     public void setMotorArcadeDrive(double throttle, double turn) {

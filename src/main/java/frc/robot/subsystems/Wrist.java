@@ -43,9 +43,10 @@ public class Wrist extends Subsystem {
     public static int calibrationValue = 0;
     double encoderCountsPerAngle = 37.236;            // 1 degree, 4096 * (1/360) * (72/22)
 
-    public int controlMode = 0;
+    public int controlMode = 1;
     static boolean limitDebounce = false;
     private TalonSRX wristMotor = new TalonSRX(RobotMap.wristMotor);
+    double wristOutput;
 
     private DigitalInput[] limitSwitches = {
         new DigitalInput(RobotMap.wristBottom),
@@ -55,7 +56,7 @@ public class Wrist extends Subsystem {
     public Wrist() {
         wristMotor.configFactoryDefault();
         wristMotor.setNeutralMode(NeutralMode.Brake);
-        wristMotor.setInverted(true);
+        wristMotor.setInverted(false);
         wristMotor.setSensorPhase(false);
         wristMotor.configContinuousCurrentLimit(20);
         wristMotor.configPeakCurrentLimit(30);
@@ -67,6 +68,7 @@ public class Wrist extends Subsystem {
         wristMotor.configReverseSoftLimitEnable(false);
 
         wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        wristMotor.setSensorPhase(true);
         wristMotor.config_kP(0, kP, 30);
         wristMotor.config_kI(0, kI, 30);
         wristMotor.config_kD(0, kD, 30);
@@ -129,6 +131,8 @@ public class Wrist extends Subsystem {
                 wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
         } else
             wristMotor.set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, arbitraryFF);
+
+        wristOutput = output;
     }
     
     public void setIncrementedAngle(double angle) {
@@ -162,6 +166,7 @@ public class Wrist extends Subsystem {
 //        Shuffleboard.putBoolean("Wrist","Upper Limit Switch", getLimitSwitchState(1));
 
         Shuffleboard.putNumber("Controls","Wrist Angle", getAngle());
+        Shuffleboard.putNumber("Controls","Wrist Output", wristOutput);
         Shuffleboard.putNumber("Controls","Wrist Control Mode", controlMode);
 
         Shuffleboard.putBoolean("Controls","Wrist Encoder Health", getEncoderHealthy());

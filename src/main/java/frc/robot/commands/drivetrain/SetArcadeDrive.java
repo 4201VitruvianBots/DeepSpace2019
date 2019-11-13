@@ -32,8 +32,9 @@ public class SetArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double joystickY = (Math.abs(Robot.m_oi.getLeftJoystickY()) > 0.05) ? Robot.m_oi.getLeftJoystickY() : 0;
-        double joystickX = (Math.abs(Robot.m_oi.getRightJoystickX()) > 0.05) ? Robot.m_oi.getRightJoystickX() : 0;
+        Robot.driveTrain.setMotorArcadeDrive(Robot.m_oi.getLeftJoystickY(),0.375*Robot.m_oi.getRightJoystickX());
+/*        double joystickY = (Math.abs(Robot.m_oi.getLeftJoystickY()) > 0.0) ? Robot.m_oi.getLeftJoystickY() : 0;
+        double joystickX = (Math.abs(Robot.m_oi.getRightJoystickX()) > 0.0) ? Robot.m_oi.getRightJoystickX() : 0;
 
 //        double throttle = 0.5 * (joystickY + Math.pow(joystickY, 3));
 //        throttle = throttle < 0 ? Math.max( -0.7, throttle) : throttle;
@@ -43,6 +44,7 @@ public class SetArcadeDrive extends Command {
         if(Robot.elevator.controlMode == 1)
             throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5): throttle;
         double turn = (Robot.driveTrain.getDriveShifterStatus() ? 0.5 : 0.35) * joystickX;
+        turn = (Robot.driveTrain.getDriveShifterStatus() ? Math.max(turn, 0.5) : Math.max(turn, 0.35));
 
         if (Robot.climber.climbMode == 1) {
             double operatorThrottle = Math.abs(Robot.m_oi.getXBoxRightY()) > 0.05 ? Robot.m_oi.getXBoxRightY() : 0;
@@ -56,6 +58,7 @@ public class SetArcadeDrive extends Command {
                 throttle = Robot.elevator.getHeight() > 30 ? Math.min(Math.max(throttle, -0.4), 0.5) : throttle;
             Robot.driveTrain.setMotorArcadeDrive(throttle, turn);
         }
+        */
     }
     // Make this return true when this Command no longer needs to run execute()
     @Override
