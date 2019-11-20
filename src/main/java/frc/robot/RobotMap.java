@@ -51,6 +51,7 @@ public class RobotMap {
     public static int climbMotor = 50;
 
     public static int cargoIntakeMotor = 60;
+    public static int cargoNeoIntakeMotor = 50;
     public static int hatchIntakeMotor = 61;
 
     // DIOs
@@ -113,9 +114,9 @@ public class RobotMap {
     public static double ELEVATOR_CLIMB_POSITION = 28;
 
     //
-    public static double CARGO_INTAKE_SPEED = -0.7; // Change back to -0.7 for comp
-    public static double CARGO_OUTTAKE_SPEED = 0.7;
-    public static double CARGO_HOLD_SPEED = -0.2;
+    public static double CARGO_INTAKE_SPEED = -0.35; // Change back to -0.7 for comp
+    public static double CARGO_OUTTAKE_SPEED = 0.35;
+    public static double CARGO_HOLD_SPEED = -0.1;
     public static double HATCH_INTAKE_SPEED = -1;
     public static double HATCH_HOLD_SPEED = 0;
     public static double HATCH_OUTTAKE_SPEED = 1;

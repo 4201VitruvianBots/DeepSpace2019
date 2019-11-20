@@ -10,6 +10,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -41,6 +44,10 @@ public class Intake extends Subsystem {
         new TalonSRX(RobotMap.hatchIntakeMotor)
     };
 
+    private CANSparkMax cargoIntakeMotor = new CANSparkMax(RobotMap.cargoNeoIntakeMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    CANEncoder cargoIntakeEncoder = cargoIntakeMotor.getEncoder();
+
     public DigitalInput bannerIR = new DigitalInput(RobotMap.bannerIR);
     // TODO: Add sensor for hatch intake
 
@@ -55,17 +62,17 @@ public class Intake extends Subsystem {
 //            intakeMotor.configPeakCurrentDuration(2000);
             intakeMotor.enableCurrentLimit(true);
         }
-        intakeMotors[0].setInverted(false);
+        cargoIntakeMotor.setInverted(false);
         intakeMotors[1].setInverted(true);
-        //intakeMotors[1].set(ControlMode.Follower, intakeMotors[0].getDeviceID());
+        //intakeMotors[1].set(ControlMode.Follower, cargoIntakeMotor.getDeviceID());
     }
 
     public void setCargoIntakeOutput(double output){
-        intakeMotors[0].set(ControlMode.PercentOutput, output);
+        cargoIntakeMotor.set(output);
     }
 
     public void setHatchGroundIntakeOutput(double output){
-        intakeMotors[0].set(ControlMode.PercentOutput, -output);
+        cargoIntakeMotor.set(-output);
     }
 
 //    public boolean getHarpoonSecureStatus(){

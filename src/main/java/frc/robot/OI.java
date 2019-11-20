@@ -56,7 +56,7 @@ public class OI {
     // Start the command when the button is released and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
-    public final boolean usingExpensiveJoysticks = true;
+    public final boolean usingExpensiveJoysticks = false;
     Joystick leftJoystick = new Joystick(RobotMap.leftJoystick);
     Joystick rightJoystick = new Joystick(RobotMap.rightJoystick);
     Joystick xBoxController = new Joystick(RobotMap.xBoxController);
